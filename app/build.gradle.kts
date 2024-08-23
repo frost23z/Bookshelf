@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(kotlinx.plugins.kotlin)
     alias(kotlinx.plugins.compose.compiler)
+    alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -74,4 +75,18 @@ dependencies {
     androidTestImplementation(compose.ui.test.junit4)
     debugImplementation(compose.ui.tooling)
     debugImplementation(compose.ui.test.manifest)
+
+    // sqldelight
+    implementation(libs.sqldelight.driver)
+    implementation(libs.sqldelight.coroutines.extensions)
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.frost23z.bookshelf.data")
+            // Additional configuration options if required
+            // https://cashapp.github.io/sqldelight/2.1.0-SNAPSHOT/android_sqlite/gradle/
+        }
+    }
 }
