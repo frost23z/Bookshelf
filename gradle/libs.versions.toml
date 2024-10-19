@@ -2,11 +2,22 @@
 agp = "8.7.1"
 kotlin = "2.0.20"
 junit = "4.13.2"
+sqldelight = "2.0.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+# sqldelight
+sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines-extensions = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-paging-extensions = { group = "app.cash.sqldelight", name = "androidx-paging3-extensions", version.ref = "sqldelight" }
+sqldelight-dialects-sql = { group = "app.cash.sqldelight", name = "sqlite-3-38-dialect", version.ref = "sqldelight" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+
+[bundles]
+sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-dialects-sql", "sqldelight-paging-extensions"]

@@ -1,0 +1,90 @@
+import kotlin.Boolean;
+
+CREATE TABLE books (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    favorite INTEGER AS Boolean NOT NULL DEFAULT 0,
+    dateAdded INTEGER NOT NULL,
+    -- -------------------
+    titlePrefix TEXT,
+    title TEXT NOT NULL,
+    titleSuffix TEXT,
+    -- -------------------
+    coverUrl TEXT,
+    summary TEXT,
+    -- -------------------
+    publisher TEXT,
+    language TEXT,
+    pages INTEGER,
+    format TEXT,
+    -- -------------------
+    acquiredSource TEXT,
+    price INTEGER,
+    acquiredDate INTEGER,
+    -- -------------------
+    status TEXT,
+    readPages INTEGER,
+    -- -------------------
+    series TEXT DEFAULT NULL,
+    volume INTEGER DEFAULT NULL
+    -- -------------------
+);
+
+getBookById:
+SELECT *
+FROM books
+WHERE id = :id;
+
+getFavoriteBooks:
+SELECT *
+FROM books
+WHERE favorite = 1;
+
+getAllBooks:
+SELECT *
+FROM books;
+
+getLastInsertedRowId:
+SELECT last_insert_rowid();
+
+insert:
+INSERT INTO books(
+    favorite, dateAdded,
+    titlePrefix, title, titleSuffix,
+    coverUrl, summary,
+    publisher, language, pages, format,
+    acquiredSource, price, acquiredDate,
+    status, readPages,
+    series, volume
+)
+VALUES (
+    :favorite, :dateAdded,
+    :titlePrefix, :title, :titleSuffix,
+    :coverUrl, :summary,
+    :publisher, :language, :pages, :format,
+    :acquiredSource, :price, :acquiredDate,
+    :status, :readPages,
+    :series, :volume
+);
+
+
+update:
+UPDATE books SET
+    favorite = coalesce(:favorite, favorite),
+    dateAdded = coalesce(:dateAdded, dateAdded),
+    titlePrefix = coalesce(:titlePrefix, titlePrefix),
+    title = coalesce(:title, title),
+    titleSuffix = coalesce(:titleSuffix, titleSuffix),
+    coverUrl = coalesce(:coverUrl, coverUrl),
+    summary = coalesce(:summary, summary),
+    publisher = coalesce(:publisher, publisher),
+    language = coalesce(:language, language),
+    pages = coalesce(:pages, pages),
+    format = coalesce(:format, format),
+    acquiredSource = coalesce(:acquiredSource, acquiredSource),
+    price = coalesce(:price, price),
+    acquiredDate = coalesce(:acquiredDate, acquiredDate),
+    status = coalesce(:status, status),
+    readPages = coalesce(:readPages, readPages),
+    series = coalesce(:series, series),
+    volume = coalesce(:volume, volume)
+WHERE id = :id;
