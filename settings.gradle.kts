@@ -17,6 +17,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("jetpack") {
+            from(files("gradle/jetpack.versions.toml"))
+        }
+    }
 }
 
 rootProject.name = "Bookshelf"
