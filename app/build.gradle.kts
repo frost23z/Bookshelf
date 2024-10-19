@@ -47,8 +47,9 @@ dependencies {
     implementation(jetpack.bundles.jetpack)
     implementation(platform(jetpack.compose.bom))
     implementation(jetpack.bundles.compose)
-
     implementation(libs.bundles.sqldelight)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin)
 
     testImplementation(libs.junit)
     androidTestImplementation(jetpack.bundles.androidTest)
