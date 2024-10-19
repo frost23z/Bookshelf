@@ -34,14 +34,14 @@ SELECT *
 FROM books
 WHERE id = :id;
 
+getAllBooks:
+SELECT *
+FROM books;
+
 getFavoriteBooks:
 SELECT *
 FROM books
 WHERE favorite = 1;
-
-getAllBooks:
-SELECT *
-FROM books;
 
 getLastInsertedRowId:
 SELECT last_insert_rowid();
