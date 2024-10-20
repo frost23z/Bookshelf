@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.bundles.sqldelight)
     implementation(platform(libs.koin.bom))
     implementation(libs.bundles.koin)
+    implementation(libs.bundles.voyager)
 
     testImplementation(libs.junit)
     androidTestImplementation(jetpack.bundles.androidTest)
