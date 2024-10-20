@@ -9,9 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
 class BooksRepositoryImpl(
-    private val db : AppDatabase,
+    private val db: AppDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-): BooksRepository {
+) : BooksRepository {
     override suspend fun getBookById(id: Long): Books {
         return db.booksQueries.getBookById(id).executeAsOne()
     }

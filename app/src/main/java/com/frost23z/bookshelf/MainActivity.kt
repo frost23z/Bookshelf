@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import cafe.adriel.voyager.navigator.Navigator
+import com.frost23z.bookshelf.ui.home.HomeScreen
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BookshelfTheme {
-
+                Navigator(HomeScreen())
             }
         }
     }
