@@ -17,9 +17,9 @@ CREATE TABLE books (
     pages INTEGER,
     format TEXT,
     -- -------------------
-    acquiredSource TEXT,
-    price INTEGER,
-    acquiredDate INTEGER,
+    purchaseFrom TEXT,
+    purchasePrice INTEGER,
+    purchaseDate INTEGER,
     -- -------------------
     status TEXT,
     readPages INTEGER,
@@ -52,7 +52,7 @@ INSERT INTO books(
     titlePrefix, title, titleSuffix,
     coverUrl, summary,
     publisher, language, pages, format,
-    acquiredSource, price, acquiredDate,
+    purchaseFrom, purchasePrice, purchaseDate,
     status, readPages,
     series, volume
 )
@@ -61,7 +61,7 @@ VALUES (
     :titlePrefix, :title, :titleSuffix,
     :coverUrl, :summary,
     :publisher, :language, :pages, :format,
-    :acquiredSource, :price, :acquiredDate,
+    :purchaseFrom, :purchasePrice, :purchaseDate,
     :status, :readPages,
     :series, :volume
 );
@@ -80,9 +80,9 @@ UPDATE books SET
     language = coalesce(:language, language),
     pages = coalesce(:pages, pages),
     format = coalesce(:format, format),
-    acquiredSource = coalesce(:acquiredSource, acquiredSource),
-    price = coalesce(:price, price),
-    acquiredDate = coalesce(:acquiredDate, acquiredDate),
+    purchaseFrom = coalesce(:purchaseFrom, purchaseFrom),
+    purchasePrice = coalesce(:purchasePrice, purchasePrice),
+    purchaseDate = coalesce(:purchaseDate, purchaseDate),
     status = coalesce(:status, status),
     readPages = coalesce(:readPages, readPages),
     series = coalesce(:series, series),
