@@ -1,9 +1,44 @@
 package com.frost23z.bookshelf.ui.addedit
 
 import cafe.adriel.voyager.core.model.StateScreenModel
+import com.frost23z.bookshelf.data.Books
+import com.frost23z.bookshelf.domain.interactor.AddBook
 import kotlinx.coroutines.flow.update
 
-class AddEditScreenModel : StateScreenModel<AddEditScreenModel.State>(State()) {
+class AddEditScreenModel(
+    private val addBook: AddBook
+) : StateScreenModel<AddEditScreenModel.State>(State()) {
+
+    suspend fun addBook() {
+        addBook.insertBook(
+            Books(
+                id = state.value.id,
+                favorite = state.value.favorite,
+                dateAdded = state.value.dateAdded,
+                titlePrefix = state.value.titlePrefix,
+                title = state.value.title,
+                titleSuffix = state.value.titleSuffix,
+                coverUrl = state.value.coverUrl,
+                summary = state.value.summary,
+                publisher = state.value.publisher,
+                language = state.value.language,
+                pages = state.value.pages?.toLongOrNull(),
+                format = state.value.format,
+                purchaseFrom = state.value.purchaseFrom,
+                purchasePrice = state.value.purchasePrice?.toLongOrNull(),
+                purchaseDate = state.value.purchaseDate?.toLongOrNull(),
+                status = state.value.status,
+                readPages = state.value.readPages,
+                series = state.value.series,
+                volume = state.value.volume,
+            )
+        )
+    }
+
+    fun reset() {
+        mutableState.update { State() }
+    }
+
     data class State(
         var id: Long = 0,
         var favorite: Boolean = false,

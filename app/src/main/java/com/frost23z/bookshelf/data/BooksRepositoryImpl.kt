@@ -27,4 +27,27 @@ class BooksRepositoryImpl(
     override fun getAllBooksAsFlow(): Flow<List<Books>> {
         return db.booksQueries.getAllBooks().asFlow().mapToList(dispatcher)
     }
+
+    override suspend fun insertBook(book: Books) {
+        db.booksQueries.insert(
+            favorite = book.favorite,
+            dateAdded = book.dateAdded,
+            title = book.title,
+            titlePrefix = book.titlePrefix,
+            titleSuffix = book.titleSuffix,
+            coverUrl = book.coverUrl,
+            summary = book.summary,
+            publisher = book.publisher,
+            language = book.language,
+            pages = book.pages,
+            format = book.format,
+            purchaseFrom = book.purchaseFrom,
+            purchasePrice = book.purchasePrice,
+            purchaseDate = book.purchaseDate,
+            status = book.status,
+            readPages = book.readPages,
+            series = book.series,
+            volume = book.volume
+        )
+    }
 }

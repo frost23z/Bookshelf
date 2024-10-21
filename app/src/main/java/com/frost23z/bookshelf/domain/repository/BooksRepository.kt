@@ -11,4 +11,6 @@ interface BooksRepository {
     suspend fun getAllBooks(): List<Books>
 
     fun getAllBooksAsFlow(): Flow<List<Books>>
+
+    suspend fun insertBook(book: Books)
 }

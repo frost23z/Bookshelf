@@ -1,6 +1,7 @@
 package com.frost23z.bookshelf.di
 
 import com.frost23z.bookshelf.data.BooksRepositoryImpl
+import com.frost23z.bookshelf.domain.interactor.AddBook
 import com.frost23z.bookshelf.domain.repository.BooksRepository
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.home.HomeScreenModel
@@ -10,7 +11,9 @@ val domainModule = module {
 
     single<BooksRepository> { BooksRepositoryImpl(db = get()) }
 
+    factory { AddBook(booksRepository = get()) }
+
     factory { HomeScreenModel() }
-    factory { AddEditScreenModel() }
+    factory { AddEditScreenModel(addBook = get()) }
 
 }
