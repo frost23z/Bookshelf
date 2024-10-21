@@ -36,7 +36,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.frost23z.bookshelf.ui.addedit.components.core.AddEditTab
+import com.frost23z.bookshelf.ui.addedit.AddEditTab
 import com.frost23z.bookshelf.ui.library.LibraryTab
 
 class HomeScreen : Screen {

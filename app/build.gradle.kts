@@ -47,6 +47,7 @@ dependencies {
     implementation(jetpack.bundles.jetpack)
     implementation(platform(jetpack.compose.bom))
     implementation(jetpack.bundles.compose)
+    implementation(libs.bundles.kotlinx)
     implementation(libs.bundles.sqldelight)
     implementation(platform(libs.koin.bom))
     implementation(libs.bundles.koin)
