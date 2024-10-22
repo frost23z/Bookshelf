@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Publish
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.core.text.isDigitsOnly
 import com.frost23z.bookshelf.ui.addedit.components.core.FormField
 import com.frost23z.bookshelf.ui.addedit.components.core.FormFields
 import com.frost23z.bookshelf.ui.core.components.Icon
@@ -58,7 +59,7 @@ fun InfoSection(
             ),
             FormField(
                 value = pages,
-                onValueChange = { it -> if (it.length <= 4) onPagesChange(it) },
+                onValueChange = { it -> if (it.length <= 4 && it.isDigitsOnly()) onPagesChange(it) },
                 placeholder = "Pages",
                 label = "Pages",
                 keyboardOptions = KeyboardOptions.Default.copy(
