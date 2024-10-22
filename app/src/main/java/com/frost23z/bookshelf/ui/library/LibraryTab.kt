@@ -70,7 +70,9 @@ object LibraryTab : Tab {
                         verticalArrangement = Arrangement.Top
                     ) {
                         items(state.library) { book ->
-                            LibraryBookItem(book = book)
+                            LibraryBookItem(book = book, onClick = {
+                                navigator.push(DetailsScreen(book))
+                            })
                         }
                     }
                 }

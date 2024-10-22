@@ -19,6 +19,7 @@ val domainModule = module {
 
     factory { HomeScreenModel() }
     factory { LibraryScreenModel(getLibraryBooks = get()) }
+    factory { DetailsScreenModel(book = get()) }
     factory { AddEditScreenModel(addBook = get()) }
 
 }
