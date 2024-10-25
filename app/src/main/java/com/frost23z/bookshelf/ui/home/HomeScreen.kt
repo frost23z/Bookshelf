@@ -24,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.util.fastForEach
@@ -32,26 +34,34 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.frost23z.bookshelf.ui.addedit.AddEditTab
+import com.frost23z.bookshelf.ui.addedit.AddOptionsBottomsheet
 import com.frost23z.bookshelf.ui.library.LibraryTab
+import com.frost23z.bookshelf.ui.more.MoreTab
 
 class HomeScreen : Screen {
 
     private val tabs = listOf(
         LibraryTab,
-        AddEditTab
+        AddEditTab,
+        MoreTab
     )
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         val screenModel = koinScreenModel<HomeScreenModel>()
         val state by screenModel.state.collectAsStateWithLifecycle()
+
+        var previousTab by remember { mutableStateOf<Tab?>(null) }
+        var currentTab by remember { mutableStateOf<Tab>(LibraryTab) }
 
         TabNavigator(
             tab = LibraryTab
@@ -65,8 +75,24 @@ class HomeScreen : Screen {
                             exit = shrinkVertically(),
                         ) {
                             NavigationBar {
-                                tabs.fastForEach {
-                                    NavigationBarItem(it)
+                                tabs.fastForEach { tab ->
+                                    NavigationBarItem(
+                                        tab = tab,
+                                        selectedTab = currentTab,
+                                        onTabSelected = { selectedTab ->
+                                            if (selectedTab == currentTab) {
+                                                onReselectTab(currentTab, bottomSheetNavigator)
+                                            } else {
+                                                previousTab = currentTab
+                                                currentTab = selectedTab
+                                                tabNavigator.current = selectedTab
+                                                if (selectedTab == AddEditTab) {
+                                                    AddEditTab.previousTab = previousTab
+                                                    bottomSheetNavigator.show(AddOptionsBottomsheet())
+                                                }
+                                            }
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -101,17 +127,16 @@ class HomeScreen : Screen {
     }
 
     @Composable
-    private fun RowScope.NavigationBarItem(tab: Tab) {
-        val tabNavigator = LocalTabNavigator.current
-        LocalNavigator.currentOrThrow
-        rememberCoroutineScope()
-        val selected = tabNavigator.current::class == tab::class
+    private fun RowScope.NavigationBarItem(
+        tab: Tab,
+        selectedTab: Tab,
+        onTabSelected: (Tab) -> Unit
+    ) {
+        val selected = selectedTab::class == tab::class
         NavigationBarItem(
             selected = selected,
             onClick = {
-                if (!selected) {
-                    tabNavigator.current = tab
-                }
+                onTabSelected(tab)
             },
             icon = {
                 Icon(
@@ -130,5 +155,13 @@ class HomeScreen : Screen {
             },
             alwaysShowLabel = true,
         )
+    }
+
+    private fun onReselectTab(selectedTab: Tab, bottomSheetNavigator: BottomSheetNavigator) {
+        when (selectedTab) {
+            AddEditTab -> {
+                bottomSheetNavigator.show(AddOptionsBottomsheet())
+            }
+        }
     }
 }

@@ -8,6 +8,8 @@ koin = "4.0.0"
 sqlite-android = "3.45.0"
 voyager = "1.1.0-beta03"
 datetime = "0.6.0"
+coil = "3.0.0-rc01"
+ucrop = "2.2.8"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -38,6 +40,12 @@ voyager-bottomsheet-navigator = { group = "cafe.adriel.voyager", name = "voyager
 voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
 voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
 
+coil-bom = { group = "io.coil-kt.coil3", name = "coil-bom", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp" }
+
+ucrop = { group = "com.github.yalantis", name = "ucrop", version.ref = "ucrop" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -49,3 +57,5 @@ kotlinx = ["datetime"]
 sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-dialects-sql", "sqldelight-paging-extensions", "sqlite-framework", "sqlite-ktx", "sqlite-android"]
 koin = ["koin-android", "koin-androidx-startup", "koin-androidx-compose"]
 voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-tab-navigator", "voyager-bottomsheet-navigator", "voyager-transitions", "voyager-koin"]
+coil = ["coil-compose", "coil-network-okhttp"]
+others = ["ucrop"]

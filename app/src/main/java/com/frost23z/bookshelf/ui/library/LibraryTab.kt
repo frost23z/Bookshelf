@@ -32,7 +32,6 @@ object LibraryTab : Tab {
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable get() {
-            LocalTabNavigator.current.current.key == key
             return TabOptions(
                 index = 0u, title = "Library", icon = rememberAnimatedVectorPainter(
                     animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_select),
