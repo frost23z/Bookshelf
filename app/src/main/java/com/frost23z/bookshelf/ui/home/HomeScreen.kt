@@ -118,10 +118,11 @@ class HomeScreen : Screen {
                     }
                 }
             }
-            BackHandler(
-                enabled = tabNavigator.current != LibraryTab,
-                onBack = { tabNavigator.current = LibraryTab }
-            )
+            BackHandler(enabled = tabNavigator.current != LibraryTab,
+                onBack = {
+                    tabNavigator.current = LibraryTab
+                    currentTab = LibraryTab
+                })
         }
 
     }

@@ -20,7 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keep,allowoptimization class frost23z.**
+
 # Ucrop
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
+
+-dontwarn com.intellij.icons.AllIcons$Providers
+-dontwarn javax.swing.Icon
