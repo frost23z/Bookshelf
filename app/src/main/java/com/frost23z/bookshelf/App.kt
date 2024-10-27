@@ -16,8 +16,4 @@ class App : Application() {
             modules(appModule, domainModule)
         }
     }
-
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

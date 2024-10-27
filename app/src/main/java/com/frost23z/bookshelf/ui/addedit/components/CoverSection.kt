@@ -33,6 +33,7 @@ import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
 import com.frost23z.bookshelf.ui.addedit.components.core.ImagePickDialog
+import com.frost23z.bookshelf.ui.addedit.components.core.ImageUrlInputDialog
 
 @Composable
 fun CoverSection(
@@ -41,7 +42,8 @@ fun CoverSection(
     val context = LocalContext.current
     var showImagePickerDialog by rememberSaveable { mutableStateOf(false) }
     var crop by rememberSaveable { mutableStateOf(false) }
-    var capturedImageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+    var selectedImageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+    var showUrlInputDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
@@ -95,7 +97,7 @@ fun CoverSection(
             ImagePickDialog(onDismiss = { showImagePickerDialog = false }, onTakePhoto = {
                 showImagePickerDialog = false
                 navigator.push(CameraScreen(onImageCaptured = { uri ->
-                    capturedImageUri = uri
+                    selectedImageUri = uri
                     navigator.pop()
                     crop = true
                 }, onError = { error ->
@@ -106,16 +108,27 @@ fun CoverSection(
                 showImagePickerDialog = false
             }, onSelectUrl = {
                 showImagePickerDialog = false
+                showUrlInputDialog = true
             })
         }
-        if (crop && capturedImageUri != null) {
+        if (crop && selectedImageUri != null) {
             CropImage(
                 context = context,
-                imageUri = capturedImageUri!!,
+                imageUri = selectedImageUri!!,
                 onImageCropped = { uri ->
                     onCoverUriChange(uri)
-                    capturedImageUri = null
+                    selectedImageUri = null
                     crop = false
+                }
+            )
+        }
+        if (showUrlInputDialog) {
+            ImageUrlInputDialog(
+                onDismiss = { showUrlInputDialog = false },
+                onUriEntered = { enteredUrl ->
+                    selectedImageUri = Uri.parse(enteredUrl)
+                    showUrlInputDialog = false
+                    crop = true
                 }
             )
         }

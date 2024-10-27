@@ -91,9 +91,13 @@ private fun captureImage(
     onImageCaptured: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ) {
-    val cacheDir = context.cacheDir
-    val name = "BookShelf_${System.currentTimeMillis()}.jpg"
-    val file = File(cacheDir, name)
+    val imgCacheDir = File(context.cacheDir, "temp_images").apply {
+        if (!exists()) {
+            mkdirs()
+        }
+    }
+    val name = "Camera_${System.currentTimeMillis()}.jpg"
+    val file = File(imgCacheDir, name)
 
     val outputOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
@@ -111,4 +115,11 @@ private fun captureImage(
             }
         }
     )
+}
+
+fun clearTempImageCache(context: Context) {
+    val cameraCacheDir = File(context.cacheDir, "temp_images")
+    if (cameraCacheDir.exists()) {
+        cameraCacheDir.deleteRecursively()
+    }
 }

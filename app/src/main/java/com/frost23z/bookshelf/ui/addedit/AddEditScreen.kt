@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
@@ -36,6 +37,8 @@ import com.frost23z.bookshelf.ui.addedit.components.InfoSection
 import com.frost23z.bookshelf.ui.addedit.components.PurchaseSection
 import com.frost23z.bookshelf.ui.addedit.components.StatusSection
 import com.frost23z.bookshelf.ui.addedit.components.TitleSection
+import com.frost23z.bookshelf.ui.addedit.components.camera.clearTempImageCache
+import com.frost23z.bookshelf.ui.addedit.components.camera.moveImageToCoverFolder
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import com.frost23z.bookshelf.ui.theme.padding
 import kotlinx.coroutines.launch
@@ -46,6 +49,7 @@ class AddEditScreen : Screen {
     override fun Content() {
         val screenModel = koinScreenModel<AddEditScreenModel>()
         val state by screenModel.state.collectAsStateWithLifecycle()
+        val context = LocalContext.current
         val scope = rememberCoroutineScope()
 
         val navigator = LocalNavigator.currentOrThrow
@@ -119,6 +123,11 @@ class AddEditScreen : Screen {
                     onClick = {
                         scope.launch {
                             isSaving.value = true
+                            if (state.coverUri != null) {
+                            val newUri = moveImageToCoverFolder(context, state.coverUri!!)
+                            screenModel.updateCoverUri(newUri)}
+                            clearTempImageCache(context)
+
                             screenModel.addBook()
                             snackbarHostState.showSnackbar(
                                 message = "Book saved", withDismissAction = true
