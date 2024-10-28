@@ -33,5 +33,8 @@ interface ContributorsRepository {
 
     suspend fun deleteBookContributorByContributorId(contributorId: Long)
 
-    suspend fun deleteBookContributorByBookIdAndContributorId(bookId: Long, contributorId: Long)
+    suspend fun deleteBookContributorByBookIdAndContributorId(
+        bookId: Long,
+        contributorId: Long
+    )
 }

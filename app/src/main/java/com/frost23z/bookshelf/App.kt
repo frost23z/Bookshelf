@@ -9,7 +9,6 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 class App : Application() {
-
     init {
         onKoinStartup {
             androidContext(this@App)

@@ -8,6 +8,8 @@ class Detail(
     private val contributorsRepository: ContributorsRepository
 ) {
     suspend fun getAllBooks() = booksRepository.getAllBooks()
+
     suspend fun getAllContributors() = contributorsRepository.getAllContributors()
+
     suspend fun getAllMapping() = contributorsRepository.getAllMapping()
 }

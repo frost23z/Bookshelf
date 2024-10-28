@@ -31,28 +31,36 @@ fun LibraryBookItem(
 ) {
     Row(
         verticalAlignment = Alignment.Companion.CenterVertically,
-        modifier = modifier
-            .clickable(onClick = onClick)
-            .fillMaxWidth()
-            .padding(
-                horizontal = MaterialTheme.padding.medium,
-                vertical = MaterialTheme.padding.small
-            )
+        modifier =
+            modifier
+                .clickable(onClick = onClick)
+                .fillMaxWidth()
+                .padding(
+                    horizontal = MaterialTheme.padding.medium,
+                    vertical = MaterialTheme.padding.small
+                )
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
-            modifier = Modifier
-                .size(IconSize)
-                .border(
-                    border = BorderStroke(
-                        width = 1.dp, brush = Brush.Companion.linearGradient(
-                            colors = listOf(
-                                Color.Companion.Magenta, Color.Companion.Cyan
-                            )
-                        )
-                    ), shape = RoundedCornerShape(2.dp)
-                )
+            modifier =
+                Modifier
+                    .size(IconSize)
+                    .border(
+                        border =
+                            BorderStroke(
+                                width = 1.dp,
+                                brush =
+                                    Brush.Companion.linearGradient(
+                                        colors =
+                                            listOf(
+                                                Color.Companion.Magenta,
+                                                Color.Companion.Cyan
+                                            )
+                                    )
+                            ),
+                        shape = RoundedCornerShape(2.dp)
+                    )
         )
         Text(
             text = book.title,

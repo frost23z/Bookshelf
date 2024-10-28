@@ -28,67 +28,84 @@ fun TitleSection(
 ) {
     var detailedTitle by rememberSaveable { mutableStateOf(false) }
     FormFields(
-        fields = listOf(FormField(value = titlePrefix,
-            onValueChange = onTitlePrefixChange,
-            placeholder = "Title Prefix",
-            label = "Title Prefix",
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrectEnabled = false, imeAction = ImeAction.Next
+        fields =
+            listOf(
+                FormField(
+                    value = titlePrefix,
+                    onValueChange = onTitlePrefixChange,
+                    placeholder = "Title Prefix",
+                    label = "Title Prefix",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        ),
+                    leadingIcon = {
+                        if (detailedTitle) {
+                            Icon(
+                                icon = Icons.Outlined.Title,
+                                iconDescription = "Title",
+                            )
+                        }
+                    },
+                    trailingIcon = {
+                        if (detailedTitle) {
+                            IconButton(
+                                icon = Icons.Outlined.ExpandLess,
+                                onClick = { detailedTitle = !detailedTitle },
+                                iconDescription = "Navigate up",
+                                tooltip = "Back"
+                            )
+                        }
+                    }
+                ),
+                FormField(
+                    value = title,
+                    onValueChange = onTitleChange,
+                    placeholder = "Title",
+                    label = "Title",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        ),
+                    leadingIcon =
+                        if (detailedTitle) {
+                            null
+                        } else {
+                            {
+                                Icon(
+                                    icon = Icons.Outlined.Title,
+                                    iconDescription = "Title",
+                                )
+                            }
+                        },
+                    trailingIcon =
+                        if (detailedTitle) {
+                            null
+                        } else {
+                            {
+                                IconButton(
+                                    onClick = { detailedTitle = !detailedTitle },
+                                    icon = Icons.Outlined.ExpandMore,
+                                    iconDescription = "Navigate up",
+                                    tooltip = "Back"
+                                )
+                            }
+                        }
+                ),
+                FormField(
+                    value = titleSuffix,
+                    onValueChange = onTitleSuffixChange,
+                    placeholder = "Title Suffix",
+                    label = "Title Suffix",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        )
+                )
             ),
-            leadingIcon = {
-                if (detailedTitle) {
-                    Icon(
-                        icon = Icons.Outlined.Title,
-                        iconDescription = "Title",
-                    )
-                }
-            },
-            trailingIcon = {
-                if (detailedTitle) {
-                    IconButton(
-                        icon = Icons.Outlined.ExpandLess,
-                        onClick = { detailedTitle = !detailedTitle },
-                        iconDescription = "Navigate up",
-                        tooltip = "Back"
-                    )
-                }
-            }), FormField(value = title,
-            onValueChange = onTitleChange,
-            placeholder = "Title",
-            label = "Title",
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrectEnabled = false, imeAction = ImeAction.Next
-            ),
-            leadingIcon = if (detailedTitle) {
-                null
-            } else {
-                {
-                    Icon(
-                        icon = Icons.Outlined.Title,
-                        iconDescription = "Title",
-                    )
-                }
-            },
-            trailingIcon = if (detailedTitle) {
-                null
-            } else {
-                {
-                    IconButton(
-                        onClick = { detailedTitle = !detailedTitle },
-                        icon = Icons.Outlined.ExpandMore,
-                        iconDescription = "Navigate up",
-                        tooltip = "Back"
-                    )
-                }
-            }), FormField(
-            value = titleSuffix,
-            onValueChange = onTitleSuffixChange,
-            placeholder = "Title Suffix",
-            label = "Title Suffix",
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrectEnabled = false, imeAction = ImeAction.Next
-            )
-        )),
         fieldsVisibility = listOf(detailedTitle, true, detailedTitle),
     )
 }

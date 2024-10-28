@@ -13,18 +13,18 @@ import com.frost23z.bookshelf.ui.home.HomeScreenModel
 import com.frost23z.bookshelf.ui.library.LibraryScreenModel
 import org.koin.dsl.module
 
-val domainModule = module {
+val domainModule =
+    module {
 
-    single<BooksRepository> { BooksRepositoryImpl(db = get()) }
-    single<ContributorsRepository> { ContributorsRepositoryImpl(db = get()) }
+        single<BooksRepository> { BooksRepositoryImpl(db = get()) }
+        single<ContributorsRepository> { ContributorsRepositoryImpl(db = get()) }
 
-    factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
-    factory { GetLibraryBooks(booksRepository = get()) }
-    factory { Detail(booksRepository = get(), contributorsRepository = get()) }
+        factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
+        factory { GetLibraryBooks(booksRepository = get()) }
+        factory { Detail(booksRepository = get(), contributorsRepository = get()) }
 
-    factory { HomeScreenModel() }
-    factory { LibraryScreenModel(getLibraryBooks = get()) }
-    factory { DetailsScreenModel(book = get(), detail = get()) }
-    factory { AddEditScreenModel(addBook = get()) }
-
-}
+        factory { HomeScreenModel() }
+        factory { LibraryScreenModel(getLibraryBooks = get()) }
+        factory { DetailsScreenModel(book = get(), detail = get()) }
+        factory { AddEditScreenModel(addBook = get()) }
+    }

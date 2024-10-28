@@ -16,7 +16,8 @@ class ContributorsRepositoryImpl(
     }
 
     override suspend fun getContributorIdByName(contributorName: String): Long? {
-        return db.contributorsQueries.getContributorsIdByName(contributorName.trim())
+        return db.contributorsQueries
+            .getContributorsIdByName(contributorName.trim())
             .executeAsOneOrNull()
     }
 
@@ -25,7 +26,10 @@ class ContributorsRepositoryImpl(
     }
 
     override fun getAllContributorsAsFlow(): Flow<List<Contributors>> {
-        return db.contributorsQueries.getAllContributors().asFlow().mapToList(dispatcher)
+        return db.contributorsQueries
+            .getAllContributors()
+            .asFlow()
+            .mapToList(dispatcher)
     }
 
     override suspend fun getLastInsertedContributorRowId(): Long {
@@ -76,5 +80,4 @@ class ContributorsRepositoryImpl(
     ) {
         TODO("Not yet implemented")
     }
-
 }

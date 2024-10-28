@@ -20,7 +20,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.frost23z.bookshelf.ui.core.util.IconSize
-import kotlin.String
 
 @Composable
 fun FormFields(
@@ -50,11 +49,11 @@ fun FormFields(
     })
 }
 
-
 @Composable
 fun FieldDivider() {
     HorizontalDivider(
-        modifier = Modifier.padding(start = IconSize), color = MaterialTheme.colorScheme.outline
+        modifier = Modifier.padding(start = IconSize),
+        color = MaterialTheme.colorScheme.outline
     )
 }
 
@@ -67,13 +66,15 @@ fun AddFieldButton(
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clickable(onClick = onClickAdder)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .clickable(onClick = onClickAdder)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             leadingIcon?.invoke() ?: Spacer(modifier = Modifier.size(IconSize))
             Text(
@@ -84,7 +85,6 @@ fun AddFieldButton(
         }
     }
 }
-
 
 @Composable
 fun FormField(field: FormField) {

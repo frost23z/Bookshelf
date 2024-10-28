@@ -45,12 +45,12 @@ import com.frost23z.bookshelf.ui.library.LibraryTab
 import com.frost23z.bookshelf.ui.more.MoreTab
 
 class HomeScreen : Screen {
-
-    private val tabs = listOf(
-        LibraryTab,
-        AddEditTab,
-        MoreTab
-    )
+    private val tabs =
+        listOf(
+            LibraryTab,
+            AddEditTab,
+            MoreTab
+        )
 
     @Composable
     override fun Content() {
@@ -100,16 +100,18 @@ class HomeScreen : Screen {
                     contentWindowInsets = WindowInsets(0),
                 ) { innerPadding ->
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                            .consumeWindowInsets(innerPadding)
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                                .consumeWindowInsets(innerPadding)
                     ) {
                         AnimatedContent(
                             targetState = tabNavigator.current,
                             transitionSpec = {
                                 fadeIn(initialAlpha = 0.5f) togetherWith fadeOut(targetAlpha = 0.5f)
-                            }, label = "Content"
+                            },
+                            label = "Content"
                         ) {
                             tabNavigator.saveableState(key = "currentTab", it) {
                                 it.Content()
@@ -118,13 +120,14 @@ class HomeScreen : Screen {
                     }
                 }
             }
-            BackHandler(enabled = tabNavigator.current != LibraryTab,
+            BackHandler(
+                enabled = tabNavigator.current != LibraryTab,
                 onBack = {
                     tabNavigator.current = LibraryTab
                     currentTab = LibraryTab
-                })
+                }
+            )
         }
-
     }
 
     @Composable
@@ -158,7 +161,10 @@ class HomeScreen : Screen {
         )
     }
 
-    private fun onReselectTab(selectedTab: Tab, bottomSheetNavigator: BottomSheetNavigator) {
+    private fun onReselectTab(
+        selectedTab: Tab,
+        bottomSheetNavigator: BottomSheetNavigator
+    ) {
         when (selectedTab) {
             AddEditTab -> {
                 bottomSheetNavigator.show(AddOptionsBottomsheet())

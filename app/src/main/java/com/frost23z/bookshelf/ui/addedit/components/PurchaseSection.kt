@@ -21,7 +21,6 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-
 @Composable
 fun PurchaseSection(
     purchaseFrom: String,
@@ -33,57 +32,63 @@ fun PurchaseSection(
 ) {
     val isDatePickerVisible = remember { mutableStateOf(false) }
 
-    val formattedDate = if (purchaseDate.isNotEmpty()) {
-        try {
-            Instant.fromEpochMilliseconds(purchaseDate.toLong())
-                .toLocalDateTime(TimeZone.currentSystemDefault())
-                .date.toString()
-        } catch (e: NumberFormatException) {
+    val formattedDate =
+        if (purchaseDate.isNotEmpty()) {
+            try {
+                Instant
+                    .fromEpochMilliseconds(purchaseDate.toLong())
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .toString()
+            } catch (e: NumberFormatException) {
+                ""
+            }
+        } else {
             ""
         }
-    } else {
-        ""
-    }
 
     FormFields(
-        fields = listOf(
-            FormField(
-                value = purchaseFrom,
-                onValueChange = onPurchaseFromChange,
-                placeholder = "Purchase From",
-                label = "Purchase From",
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrectEnabled = false,
-                    imeAction = ImeAction.Next
+        fields =
+            listOf(
+                FormField(
+                    value = purchaseFrom,
+                    onValueChange = onPurchaseFromChange,
+                    placeholder = "Purchase From",
+                    label = "Purchase From",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        )
+                ),
+                FormField(
+                    value = purchasePrice,
+                    onValueChange = onPurchasePriceChange,
+                    placeholder = "Purchase Price",
+                    label = "Purchase Price",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        )
+                ),
+                FormField(
+                    value = formattedDate,
+                    onValueChange = { },
+                    placeholder = "YYYY-MM-DD",
+                    label = "Purchase Date (YYYY-MM-DD)",
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { isDatePickerVisible.value = true },
+                            icon = Icons.Default.DateRange,
+                            iconDescription = "Select Date",
+                            tooltip = "Select Date"
+                        )
+                    },
+                    readOnly = true
                 )
-            ),
-            FormField(
-                value = purchasePrice,
-                onValueChange = onPurchasePriceChange,
-                placeholder = "Purchase Price",
-                label = "Purchase Price",
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrectEnabled = false,
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                )
-            ),
-            FormField(
-                value = formattedDate,
-                onValueChange = { },
-                placeholder = "YYYY-MM-DD",
-                label = "Purchase Date (YYYY-MM-DD)",
-                trailingIcon = {
-                    IconButton(
-                        onClick = { isDatePickerVisible.value = true },
-                        icon = Icons.Default.DateRange,
-                        iconDescription = "Select Date",
-                        tooltip = "Select Date"
-                    )
-                },
-                readOnly = true
             )
-        )
     )
     if (isDatePickerVisible.value) {
         DatePickerModal(
@@ -91,7 +96,6 @@ fun PurchaseSection(
             onDismiss = { isDatePickerVisible.value = false }
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

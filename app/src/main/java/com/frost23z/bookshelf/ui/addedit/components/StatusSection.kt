@@ -10,7 +10,12 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -39,31 +44,34 @@ fun StatusSection(
         status = newStatus
         onStatusChange(newStatus)
 
-        sliderValue = when (newStatus) {
-            "Unread" -> 0f
-            "Read" -> totalPages.toFloat()
-            else -> sliderValue
-        }
+        sliderValue =
+            when (newStatus) {
+                "Unread" -> 0f
+                "Read" -> totalPages.toFloat()
+                else -> sliderValue
+            }
         onReadPagesChange(sliderValue.toLong())
     }
 
     BorderedContainer(content = {
-        FormField(FormField(
-            value = status,
-            onValueChange = {},
-            placeholder = "Select your status...",
-            label = "Status",
-            enabled = false,
-            readOnly = true,
-            trailingIcon = {
-                IconButton(
-                    onClick = { showDropdown = true },
-                    icon = Icons.Default.ModeEdit,
-                    iconDescription = "Edit Reading Status",
-                    tooltip = "Reading Status"
-                )
-            }
-        ))
+        FormField(
+            FormField(
+                value = status,
+                onValueChange = {},
+                placeholder = "Select your status...",
+                label = "Status",
+                enabled = false,
+                readOnly = true,
+                trailingIcon = {
+                    IconButton(
+                        onClick = { showDropdown = true },
+                        icon = Icons.Default.ModeEdit,
+                        iconDescription = "Edit Reading Status",
+                        tooltip = "Reading Status"
+                    )
+                }
+            )
+        )
 
         DropdownMenu(
             expanded = showDropdown,
@@ -82,8 +90,9 @@ fun StatusSection(
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -99,18 +108,20 @@ fun StatusSection(
                     sliderValue = it
                     onReadPagesChange(sliderValue.toLong())
 
-                    status = when {
-                        sliderValue == totalPages.toFloat() -> "Read"
-                        sliderValue == 0f -> "Unread"
-                        else -> "Reading"
-                    }
+                    status =
+                        when {
+                            sliderValue == totalPages.toFloat() -> "Read"
+                            sliderValue == 0f -> "Unread"
+                            else -> "Reading"
+                        }
                     onStatusChange(status)
                 },
-                steps = when (totalPages) {
-                    in 0..1 -> 0
-                    in 2..100 -> totalPages.toInt() - 1
-                    else -> 100
-                },
+                steps =
+                    when (totalPages) {
+                        in 0..1 -> 0
+                        in 2..100 -> totalPages.toInt() - 1
+                        else -> 100
+                    },
                 valueRange = 0f..totalPages.toFloat(),
                 modifier = Modifier.weight(1f)
             )

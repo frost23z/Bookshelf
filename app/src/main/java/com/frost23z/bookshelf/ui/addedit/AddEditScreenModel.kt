@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.update
 class AddEditScreenModel(
     private val addBook: AddBook
 ) : StateScreenModel<AddEditScreenModel.State>(State()) {
-
     suspend fun addBook() {
         addBook.insertBook(
             Books(
@@ -45,22 +44,29 @@ class AddEditScreenModel(
 
         state.value.contributorsMap.forEach { (_, contributor) ->
             try {
-                val contributorId = addBook.getContributorIdByName(contributor.name)
-                    ?: kotlin.runCatching {
-                        addBook.insertContributor(Contributors(id = 0, name = contributor.name))
-                        addBook.getLastInsertedContributorRowId()
-                    }.getOrElse { e ->
-                        if (e is SQLiteConstraintException) {
-                            Log.d(
-                                "DatabaseError",
-                                "Duplicate contributor detected: ${contributor.name}"
-                            )
-                            addBook.getContributorIdByName(contributor.name)
-                        } else {
-                            throw e
-                        }
-                    }
-                    ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
+                val contributorId =
+                    addBook.getContributorIdByName(contributor.name)
+                        ?: kotlin
+                            .runCatching {
+                                addBook.insertContributor(
+                                    Contributors(
+                                        id = 0,
+                                        name = contributor.name
+                                    )
+                                )
+                                addBook.getLastInsertedContributorRowId()
+                            }.getOrElse { e ->
+                                if (e is SQLiteConstraintException) {
+                                    Log.d(
+                                        "DatabaseError",
+                                        "Duplicate contributor detected: ${contributor.name}"
+                                    )
+                                    addBook.getContributorIdByName(contributor.name)
+                                } else {
+                                    throw e
+                                }
+                            }
+                        ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
 
                 addBook.insertBookContributor(
                     Books_Contributors_Map(
@@ -103,14 +109,14 @@ class AddEditScreenModel(
         var readPages: Long? = null,
         var series: String? = null,
         var volume: Long? = null,
-
-        var contributorsMap: MutableMap<Int, Contributor> = linkedMapOf(
-            1 to Contributor(
-                "",
-                Roles.AUTHOR
-            )
-        ),
-
+        var contributorsMap: MutableMap<Int, Contributor> =
+            linkedMapOf(
+                1 to
+                    Contributor(
+                        "",
+                        Roles.AUTHOR
+                    )
+            ),
         var hasUnsavedChanges: Boolean = false
     )
 
@@ -182,30 +188,43 @@ class AddEditScreenModel(
         mutableState.update { it.copy(volume = volume, hasUnsavedChanges = true) }
     }
 
-    fun addContributor(name: String, role: Roles) {
-        val nextId = state.value.contributorsMap.keys.maxOrNull()?.plus(1) ?: 1
+    fun addContributor(
+        name: String,
+        role: Roles
+    ) {
+        val nextId =
+            state.value.contributorsMap.keys
+                .maxOrNull()
+                ?.plus(1) ?: 1
         mutableState.update { currentState ->
-            val updatedMap = currentState.contributorsMap.toMutableMap().apply {
-                put(nextId, Contributor(name, role))
-            }
+            val updatedMap =
+                currentState.contributorsMap.toMutableMap().apply {
+                    put(nextId, Contributor(name, role))
+                }
             currentState.copy(contributorsMap = updatedMap, hasUnsavedChanges = true)
         }
     }
 
-    fun updateContributor(id: Int, name: String, role: Roles) {
+    fun updateContributor(
+        id: Int,
+        name: String,
+        role: Roles
+    ) {
         mutableState.update { currentState ->
-            val updatedMap = currentState.contributorsMap.toMutableMap().apply {
-                this[id] = Contributor(name, role)
-            }
+            val updatedMap =
+                currentState.contributorsMap.toMutableMap().apply {
+                    this[id] = Contributor(name, role)
+                }
             currentState.copy(contributorsMap = updatedMap, hasUnsavedChanges = true)
         }
     }
 
     fun removeContributor(id: Int) {
         mutableState.update { currentState ->
-            val updatedMap = currentState.contributorsMap.toMutableMap().apply {
-                remove(id)
-            }
+            val updatedMap =
+                currentState.contributorsMap.toMutableMap().apply {
+                    remove(id)
+                }
             currentState.copy(contributorsMap = updatedMap, hasUnsavedChanges = true)
         }
     }

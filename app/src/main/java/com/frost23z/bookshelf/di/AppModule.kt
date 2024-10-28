@@ -9,25 +9,28 @@ import com.frost23z.bookshelf.data.AppDatabase
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import org.koin.dsl.module
 
-val appModule = module {
+val appModule =
+    module {
 
-    single<SqlDriver> {
-        AndroidSqliteDriver(
-            schema = AppDatabase.Schema,
-            context = get(),
-            name = "bookshelf.db",
-            factory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                FrameworkSQLiteOpenHelperFactory()
-            } else {
-                RequerySQLiteOpenHelperFactory()
-            },
-            callback = object : AndroidSqliteDriver.Callback(AppDatabase.Schema) {
-                override fun onOpen(db: SupportSQLiteDatabase) {
-                    db.setForeignKeyConstraintsEnabled(true)
-                }
-            }
-        )
+        single<SqlDriver> {
+            AndroidSqliteDriver(
+                schema = AppDatabase.Schema,
+                context = get(),
+                name = "bookshelf.db",
+                factory =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        FrameworkSQLiteOpenHelperFactory()
+                    } else {
+                        RequerySQLiteOpenHelperFactory()
+                    },
+                callback =
+                    object : AndroidSqliteDriver.Callback(AppDatabase.Schema) {
+                        override fun onOpen(db: SupportSQLiteDatabase) {
+                            db.setForeignKeyConstraintsEnabled(true)
+                        }
+                    }
+            )
+        }
+
+        single { AppDatabase(driver = get()) }
     }
-
-    single { AppDatabase(driver = get()) }
-}

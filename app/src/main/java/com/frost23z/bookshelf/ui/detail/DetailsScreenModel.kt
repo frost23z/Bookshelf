@@ -13,10 +13,10 @@ class DetailsScreenModel(
     book: Books,
     detail: Detail
 ) : StateScreenModel<DetailsScreenModel.State>(
-    State(
-        book = book
-    )
-) {
+        State(
+            book = book
+        )
+    ) {
     data class State(
         val book: Books,
         var contributors: List<Contributors> = emptyList(),

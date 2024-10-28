@@ -33,10 +33,13 @@ object LibraryTab : Tab {
     override val options: TabOptions
         @Composable get() {
             return TabOptions(
-                index = 0u, title = "Library", icon = rememberAnimatedVectorPainter(
-                    animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_select),
-                    atEnd = LocalTabNavigator.current.current.key == key
-                )
+                index = 0u,
+                title = "Library",
+                icon =
+                    rememberAnimatedVectorPainter(
+                        animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_select),
+                        atEnd = LocalTabNavigator.current.current.key == key
+                    )
             )
         }
 
@@ -63,9 +66,10 @@ object LibraryTab : Tab {
 
                 else -> {
                     LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
                         verticalArrangement = Arrangement.Top
                     ) {
                         items(state.library) { book ->

@@ -91,11 +91,12 @@ private fun captureImage(
     onImageCaptured: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ) {
-    val imgCacheDir = File(context.cacheDir, "temp_images").apply {
-        if (!exists()) {
-            mkdirs()
+    val imgCacheDir =
+        File(context.cacheDir, "temp_images").apply {
+            if (!exists()) {
+                mkdirs()
+            }
         }
-    }
     val name = "Camera_${System.currentTimeMillis()}.jpg"
     val file = File(imgCacheDir, name)
 

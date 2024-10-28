@@ -36,14 +36,14 @@ fun IconTextButtonVertical(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .clickable(onClick = onClick)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = RoundedCornerShape(8.dp)
+                ).clickable(onClick = onClick)
     ) {
         Icon(
             imageVector = icon,
@@ -53,7 +53,8 @@ fun IconTextButtonVertical(
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(
-            text = text, color = tint ?: LocalContentColor.current
+            text = text,
+            color = tint ?: LocalContentColor.current
         )
     }
 }

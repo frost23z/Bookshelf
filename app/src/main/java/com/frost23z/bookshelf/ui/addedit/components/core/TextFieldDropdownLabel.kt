@@ -35,11 +35,11 @@ fun <T : Enum<T>> TextFieldDropdownLabel(
     Column(modifier = modifier) {
         Text(
             text = (currentValue as? Roles)?.value ?: currentValue?.name ?: "",
-            modifier = Modifier
-                .clickable { expanded = true },
+            modifier =
+                Modifier
+                    .clickable { expanded = true },
             color = MaterialTheme.colorScheme.primary,
             style = GetTextStyle.labelStyle
-
         )
 
         DropdownMenu(

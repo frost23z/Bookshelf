@@ -79,13 +79,16 @@ class AddEditScreen : Screen {
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         ) { innerPadding ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(innerPadding)
-                    .padding(
-                        horizontal = maxCutoutPadding(), vertical = MaterialTheme.padding.small
-                    ), horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(innerPadding)
+                        .padding(
+                            horizontal = maxCutoutPadding(),
+                            vertical = MaterialTheme.padding.small
+                        ),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CoverSection(
                     coverUri = state.coverUri,
@@ -93,12 +96,14 @@ class AddEditScreen : Screen {
                     navigator = navigator
                 )
 
-                TitleSection(titlePrefix = state.titlePrefix ?: "",
+                TitleSection(
+                    titlePrefix = state.titlePrefix ?: "",
                     onTitlePrefixChange = { screenModel.updateTitlePrefix(it) },
                     title = state.title,
                     onTitleChange = { screenModel.updateTitle(it) },
                     titleSuffix = state.titleSuffix ?: "",
-                    onTitleSuffixChange = { screenModel.updateTitleSuffix(it) })
+                    onTitleSuffixChange = { screenModel.updateTitleSuffix(it) }
+                )
 
                 ContributorsSection(
                     contributors = state.contributorsMap,
@@ -115,38 +120,44 @@ class AddEditScreen : Screen {
                             state.contributorsMap[id]?.name ?: "",
                             role
                         )
-                        //Log.d("AddEditScreen", state.contributorsMap.toString())
+                        // Log.d("AddEditScreen", state.contributorsMap.toString())
                     },
                     onAddContributor = {
                         screenModel.addContributor("", Roles.AUTHOR)
-                        //Log.d("AddEditScreen", state.contributorsMap.toString())
+                        // Log.d("AddEditScreen", state.contributorsMap.toString())
                     },
                     onRemoveContributor = { id ->
                         screenModel.removeContributor(id)
-                        //Log.d("AddEditScreen", state.contributorsMap.toString())
+                        // Log.d("AddEditScreen", state.contributorsMap.toString())
                     }
                 )
 
-                InfoSection(publisher = state.publisher ?: "",
+                InfoSection(
+                    publisher = state.publisher ?: "",
                     onPublisherChange = { screenModel.updatePublisher(it) },
                     language = state.language ?: "",
                     onLanguageChange = { screenModel.updateLanguage(it) },
                     pages = state.pages ?: "",
                     onPagesChange = { screenModel.updatePages(it) },
                     format = state.format ?: "",
-                    onFormatChange = { screenModel.updateFormat(it) })
+                    onFormatChange = { screenModel.updateFormat(it) }
+                )
 
-                PurchaseSection(purchaseFrom = state.purchaseFrom ?: "",
+                PurchaseSection(
+                    purchaseFrom = state.purchaseFrom ?: "",
                     onPurchaseFromChange = { screenModel.updatePurchaseFrom(it) },
                     purchasePrice = state.purchasePrice ?: "",
                     onPurchasePriceChange = { screenModel.updatePurchasePrice(it) },
                     purchaseDate = state.purchaseDate ?: "",
-                    onPurchaseDateChange = { screenModel.updatePurchaseDate(it) })
+                    onPurchaseDateChange = { screenModel.updatePurchaseDate(it) }
+                )
 
-                StatusSection(totalPages = state.pages?.toLongOrNull() ?: 0,
+                StatusSection(
+                    totalPages = state.pages?.toLongOrNull() ?: 0,
                     readPages = state.readPages ?: 0,
                     onStatusChange = { screenModel.updateStatus(it) },
-                    onReadPagesChange = { screenModel.updateReadPages(it) })
+                    onReadPagesChange = { screenModel.updateReadPages(it) }
+                )
 
                 Button(
                     onClick = {
@@ -160,18 +171,22 @@ class AddEditScreen : Screen {
 
                             screenModel.addBook()
                             snackbarHostState.showSnackbar(
-                                message = "Book saved", withDismissAction = true
+                                message = "Book saved",
+                                withDismissAction = true
                             )
                             bottomSheetNavigator.hide()
                         }
-                    }, enabled = !isSaving.value, modifier = Modifier.padding(top = 16.dp)
+                    },
+                    enabled = !isSaving.value,
+                    modifier = Modifier.padding(top = 16.dp)
                 ) {
                     Text(if (isSaving.value) "Saving..." else "Save")
                 }
             }
         }
         if (showDiscardDialog) {
-            AlertDialog(onDismissRequest = { showDiscardDialog = false },
+            AlertDialog(
+                onDismissRequest = { showDiscardDialog = false },
                 title = { Text("Discard Changes?") },
                 text = { Text("You have unsaved changes. Are you sure you want to discard them?") },
                 confirmButton = {
@@ -186,7 +201,8 @@ class AddEditScreen : Screen {
                     TextButton(onClick = { showDiscardDialog = false }) {
                         Text("Cancel")
                     }
-                })
+                }
+            )
         }
     }
 }

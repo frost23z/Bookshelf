@@ -37,7 +37,9 @@ import com.frost23z.bookshelf.ui.addedit.components.core.ImageUrlInputDialog
 
 @Composable
 fun CoverSection(
-    coverUri: Uri?, onCoverUriChange: (Uri?) -> Unit, navigator: Navigator
+    coverUri: Uri?,
+    onCoverUriChange: (Uri?) -> Unit,
+    navigator: Navigator
 ) {
     val context = LocalContext.current
     var showImagePickerDialog by rememberSaveable { mutableStateOf(false) }
@@ -46,22 +48,25 @@ fun CoverSection(
     var showUrlInputDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
         Image(
-            painter = if (coverUri != null) {
-                rememberAsyncImagePainter(
-                    model = coverUri
-                )
-            } else {
-                painterResource(id = R.drawable.ic_launcher_foreground)
-            },
+            painter =
+                if (coverUri != null) {
+                    rememberAsyncImagePainter(
+                        model = coverUri
+                    )
+                } else {
+                    painterResource(id = R.drawable.ic_launcher_foreground)
+                },
             contentDescription = "Select Image",
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(100.dp, 150.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .clickable { showImagePickerDialog = true },
+            modifier =
+                Modifier
+                    .size(100.dp, 150.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { showImagePickerDialog = true },
             colorFilter = if (coverUri == null) ColorFilter.tint(MaterialTheme.colorScheme.primary) else null
         )
 
@@ -96,14 +101,16 @@ fun CoverSection(
         if (showImagePickerDialog) {
             ImagePickDialog(onDismiss = { showImagePickerDialog = false }, onTakePhoto = {
                 showImagePickerDialog = false
-                navigator.push(CameraScreen(onImageCaptured = { uri ->
-                    selectedImageUri = uri
-                    navigator.pop()
-                    crop = true
-                }, onError = { error ->
-                    Log.e("CoverSection", "Camera error: ${error.message}")
-                    error.printStackTrace()
-                }))
+                navigator.push(
+                    CameraScreen(onImageCaptured = { uri ->
+                        selectedImageUri = uri
+                        navigator.pop()
+                        crop = true
+                    }, onError = { error ->
+                        Log.e("CoverSection", "Camera error: ${error.message}")
+                        error.printStackTrace()
+                    })
+                )
             }, onPickFromGallery = {
                 showImagePickerDialog = false
             }, onSelectUrl = {

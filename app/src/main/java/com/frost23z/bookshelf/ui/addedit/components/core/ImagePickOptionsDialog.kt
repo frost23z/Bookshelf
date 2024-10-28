@@ -34,7 +34,6 @@ fun ImagePickDialog(
     iconSize: Dp = 36.dp,
     tint: Color = LocalContentColor.current
 ) {
-
     AlertDialog(onDismissRequest = onDismiss, icon = {
         Icon(
             imageVector = Icons.Default.AddAPhoto,
@@ -43,7 +42,9 @@ fun ImagePickDialog(
         )
     }, title = {
         Text(
-            text = "Select Image", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
+            text = "Select Image",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
     }, text = {
         ImagePickDialogOptions(
@@ -52,7 +53,6 @@ fun ImagePickDialog(
             onUrlOptionSelected = onSelectUrl,
             iconSize = iconSize,
             tint = tint
-
         )
     }, confirmButton = {}, dismissButton = {
         TextButton(onClick = onDismiss) {
@@ -60,7 +60,6 @@ fun ImagePickDialog(
         }
     })
 }
-
 
 @Composable
 fun ImagePickDialogOptions(
@@ -70,24 +69,27 @@ fun ImagePickDialogOptions(
     iconSize: Dp = 36.dp,
     tint: Color = LocalContentColor.current
 ) {
-    val items = listOf(
-        IconTextButtonVerticalItem(
-            icon = Icons.Default.CameraAlt,
-            onClick = onTakePhoto,
-            text = "Camera",
-            iconDescription = "Take Photo",
-        ), IconTextButtonVerticalItem(
-            icon = Icons.Default.Photo,
-            onClick = onPickFromGallery,
-            text = "Gallery",
-            iconDescription = "Pick from Gallery",
-        ), IconTextButtonVerticalItem(
-            icon = Icons.Default.Explore,
-            onClick = onUrlOptionSelected,
-            text = "URL",
-            iconDescription = "Enter URL",
+    val items =
+        listOf(
+            IconTextButtonVerticalItem(
+                icon = Icons.Default.CameraAlt,
+                onClick = onTakePhoto,
+                text = "Camera",
+                iconDescription = "Take Photo",
+            ),
+            IconTextButtonVerticalItem(
+                icon = Icons.Default.Photo,
+                onClick = onPickFromGallery,
+                text = "Gallery",
+                iconDescription = "Pick from Gallery",
+            ),
+            IconTextButtonVerticalItem(
+                icon = Icons.Default.Explore,
+                onClick = onUrlOptionSelected,
+                text = "URL",
+                iconDescription = "Enter URL",
+            )
         )
-    )
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),

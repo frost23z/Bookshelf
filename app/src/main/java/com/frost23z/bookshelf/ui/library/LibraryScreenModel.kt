@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 class LibraryScreenModel(
     private val getLibraryBooks: GetLibraryBooks
 ) : StateScreenModel<LibraryScreenModel.State>(State()) {
-
     init {
         screenModelScope.launch {
             getLibraryBooks.getAllBooksAsFlow().collect { books ->
                 mutableState.update { state ->
                     state.copy(
-                        isLoading = false, library = books
+                        isLoading = false,
+                        library = books
                     )
                 }
             }
@@ -24,6 +24,7 @@ class LibraryScreenModel(
     }
 
     data class State(
-        val library: List<Books> = emptyList(), val isLoading: Boolean = true
+        val library: List<Books> = emptyList(),
+        val isLoading: Boolean = true
     )
 }

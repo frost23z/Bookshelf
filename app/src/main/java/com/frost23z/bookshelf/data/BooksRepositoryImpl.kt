@@ -17,7 +17,10 @@ class BooksRepositoryImpl(
     }
 
     override fun getBookByIdAsFlow(id: Long): Flow<Books> {
-        return db.booksQueries.getBookById(id).asFlow().mapToOne(dispatcher)
+        return db.booksQueries
+            .getBookById(id)
+            .asFlow()
+            .mapToOne(dispatcher)
     }
 
     override suspend fun getAllBooks(): List<Books> {
@@ -25,7 +28,10 @@ class BooksRepositoryImpl(
     }
 
     override fun getAllBooksAsFlow(): Flow<List<Books>> {
-        return db.booksQueries.getAllBooks().asFlow().mapToList(dispatcher)
+        return db.booksQueries
+            .getAllBooks()
+            .asFlow()
+            .mapToList(dispatcher)
     }
 
     override suspend fun insertBook(book: Books) {

@@ -26,69 +26,77 @@ fun InfoSection(
     onFormatChange: (String) -> Unit,
 ) {
     FormFields(
-        fields = listOf(
-            FormField(
-                value = publisher,
-                onValueChange = onPublisherChange,
-                placeholder = "Publisher",
-                label = "Publisher",
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrectEnabled = false, imeAction = ImeAction.Next
+        fields =
+            listOf(
+                FormField(
+                    value = publisher,
+                    onValueChange = onPublisherChange,
+                    placeholder = "Publisher",
+                    label = "Publisher",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        ),
+                    leadingIcon = {
+                        Icon(
+                            icon = Icons.Default.Publish,
+                            iconDescription = "Publisher"
+                        )
+                    }
                 ),
-                leadingIcon = {
-                    Icon(
-                        icon = Icons.Default.Publish,
-                        iconDescription = "Publisher"
-                    )
-                }
-            ),
-            FormField(
-                value = language,
-                onValueChange = onLanguageChange,
-                placeholder = "Language",
-                label = "Language",
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrectEnabled = false, imeAction = ImeAction.Next
+                FormField(
+                    value = language,
+                    onValueChange = onLanguageChange,
+                    placeholder = "Language",
+                    label = "Language",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        ),
+                    leadingIcon = {
+                        Icon(
+                            icon = Icons.Default.Language,
+                            iconDescription = "Language"
+                        )
+                    }
                 ),
-                leadingIcon = {
-                    Icon(
-                        icon = Icons.Default.Language,
-                        iconDescription = "Language"
-                    )
-                }
-            ),
-            FormField(
-                value = pages,
-                onValueChange = { it -> if (it.length <= 4 && it.isDigitsOnly()) onPagesChange(it) },
-                placeholder = "Pages",
-                label = "Pages",
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrectEnabled = false,
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
+                FormField(
+                    value = pages,
+                    onValueChange = { it -> if (it.length <= 4 && it.isDigitsOnly()) onPagesChange(it) },
+                    placeholder = "Pages",
+                    label = "Pages",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                    leadingIcon = {
+                        Icon(
+                            icon = Icons.Default.AutoStories,
+                            iconDescription = "Pages"
+                        )
+                    }
                 ),
-                leadingIcon = {
-                    Icon(
-                        icon = Icons.Default.AutoStories,
-                        iconDescription = "Pages"
-                    )
-                }
-            ),
-            FormField(
-                value = format,
-                onValueChange = onFormatChange,
-                placeholder = "Format",
-                label = "Format",
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrectEnabled = false, imeAction = ImeAction.Next
-                ),
-                leadingIcon = {
-                    Icon(
-                        icon = Icons.Default.CollectionsBookmark,
-                        iconDescription = "Format"
-                    )
-                }
+                FormField(
+                    value = format,
+                    onValueChange = onFormatChange,
+                    placeholder = "Format",
+                    label = "Format",
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            autoCorrectEnabled = false,
+                            imeAction = ImeAction.Next
+                        ),
+                    leadingIcon = {
+                        Icon(
+                            icon = Icons.Default.CollectionsBookmark,
+                            iconDescription = "Format"
+                        )
+                    }
+                )
             )
-        )
     )
 }

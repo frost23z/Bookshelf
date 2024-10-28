@@ -19,13 +19,14 @@ fun BorderedContainer(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Box(
-        modifier = modifier
-            .padding(MaterialTheme.padding.medium, MaterialTheme.padding.small)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(8.dp)
-            )
+        modifier =
+            modifier
+                .padding(MaterialTheme.padding.medium, MaterialTheme.padding.small)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                    shape = RoundedCornerShape(8.dp)
+                )
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),

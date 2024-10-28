@@ -1,10 +1,9 @@
-import org.gradle.kotlin.dsl.sqldelight
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -75,3 +74,36 @@ sqldelight {
         }
     }
 }
+
+spotless {
+    kotlin {
+        target("**/*.kt", "**/*.kts")
+        targetExclude("**/build/**/*.kt")
+        ktlint(
+            libs.ktlint.core
+                .get()
+                .version,
+        ).editorConfigOverride(
+            mapOf(
+                // https://pinterest.github.io/ktlint/latest/rules/code-styles/
+                "ktlint_code_style" to "ktlint_official",
+                // https://pinterest.github.io/ktlint/latest/rules/standard
+                "ktlint_standard_final-newline" to "disabled",
+                "ktlint_standard_function-expression-body" to "disabled",
+                "ktlint_standard_class-signature" to "disabled",
+                "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+                "ktlint_standard_no-trailing-spaces" to "disabled",
+                "ktlint_standard_no-unit-return" to "disabled",
+                "ktlint_standard_trailing-comma-on-call-site" to "disabled",
+                "ktlint_standard_trailing-comma-on-declaration-site" to "disabled",
+            )
+        )
+        trimTrailingWhitespace()
+    }
+    format("xml") {
+        target("**/*.xml")
+        trimTrailingWhitespace()
+    }
+}
+
+tasks.getByName("preBuild").dependsOn(tasks.getByName("spotlessApply"))

@@ -6,47 +6,59 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.io.IOException
 
 @Composable
 fun CropImage(
-    context: Context, imageUri: Uri, onImageCropped: (Uri?) -> Unit
+    context: Context,
+    imageUri: Uri,
+    onImageCropped: (Uri?) -> Unit
 ) {
-    val cropResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val croppedUri = UCrop.getOutput(result.data!!)
-            onImageCropped(croppedUri)
-        } else if (result.resultCode == UCrop.RESULT_ERROR) {
-            val cropError = UCrop.getError(result.data!!)
-            cropError?.printStackTrace()
-        }
-    }
-
-    LaunchedEffect(imageUri) {
-        val imgCacheDir = File(context.cacheDir, "temp_images").apply {
-            if (!exists()) {
-                mkdirs()
+    val cropResultLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val croppedUri = UCrop.getOutput(result.data!!)
+                onImageCropped(croppedUri)
+            } else if (result.resultCode == UCrop.RESULT_ERROR) {
+                val cropError = UCrop.getError(result.data!!)
+                cropError?.printStackTrace()
             }
         }
+
+    LaunchedEffect(imageUri) {
+        val imgCacheDir =
+            File(context.cacheDir, "temp_images").apply {
+                if (!exists()) {
+                    mkdirs()
+                }
+            }
         val name = "Cropped_${System.currentTimeMillis()}.jpg"
         val destinationUri =
             Uri.fromFile(File(imgCacheDir, name))
         val cropIntent =
-            UCrop.of(imageUri, destinationUri).withAspectRatio(2f, 3f)
-                .withMaxResultSize(400, 600).getIntent(context)
+            UCrop
+                .of(imageUri, destinationUri)
+                .withAspectRatio(2f, 3f)
+                .withMaxResultSize(400, 600)
+                .getIntent(context)
         cropResultLauncher.launch(cropIntent)
     }
 }
 
-fun moveImageToCoverFolder(context: Context, cachedUri: Uri): Uri? {
-    val coverDir = File(context.filesDir, "cover").apply {
-        if (!exists()) mkdirs()
-    }
+fun moveImageToCoverFolder(
+    context: Context,
+    cachedUri: Uri
+): Uri? {
+    val coverDir =
+        File(context.filesDir, "cover").apply {
+            if (!exists()) mkdirs()
+        }
     val coverFile = File(coverDir, "Cover_${System.currentTimeMillis()}.jpg")
 
     return try {

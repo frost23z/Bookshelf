@@ -32,10 +32,11 @@ fun IconTextButtonHorizontal(
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick)
-            .padding(8.dp),
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(onClick = onClick)
+                .padding(8.dp),
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = verticalAlignment
     ) {
@@ -47,7 +48,8 @@ fun IconTextButtonHorizontal(
         )
         Spacer(modifier = Modifier.size(16.dp))
         Text(
-            text = text, color = tint ?: LocalContentColor.current
+            text = text,
+            color = tint ?: LocalContentColor.current
         )
     }
 }
