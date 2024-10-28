@@ -1,0 +1,38 @@
+CREATE TABLE books_Contributors_Map (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL,
+    contributor_id INTEGER NOT NULL,
+    role TEXT NOT NULL,
+    FOREIGN KEY(book_id) REFERENCES books (id) ON DELETE CASCADE,
+    FOREIGN KEY(contributor_id) REFERENCES contributors (id) ON DELETE CASCADE
+);
+
+getContributorsByBookId:
+SELECT c.name, m.role
+FROM books_Contributors_Map m
+JOIN contributors c ON m.contributor_id = c.id
+WHERE m.book_id = :bookId;
+
+getAll:
+SELECT *
+FROM books_Contributors_Map;
+
+insertBookContributor:
+INSERT INTO books_Contributors_Map (
+    book_id, contributor_id, role
+)
+VALUES (
+    :bookId, :contributorId, :role
+);
+
+deleteBookContributorByBookId:
+DELETE FROM books_Contributors_Map
+WHERE book_id = :bookId;
+
+deleteBookContributorByContributorId:
+DELETE FROM books_Contributors_Map
+WHERE contributor_id = :contributorId;
+
+deleteBookContributorByBookIdAndContributorId:
+DELETE FROM books_Contributors_Map
+WHERE book_id = :bookId AND contributor_id = :contributorId;

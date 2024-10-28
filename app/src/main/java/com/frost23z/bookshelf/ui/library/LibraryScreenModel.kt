@@ -13,7 +13,7 @@ class LibraryScreenModel(
 
     init {
         screenModelScope.launch {
-            getLibraryBooks.getAllBooksAsFlow().collect() { books ->
+            getLibraryBooks.getAllBooksAsFlow().collect { books ->
                 mutableState.update { state ->
                     state.copy(
                         isLoading = false, library = books

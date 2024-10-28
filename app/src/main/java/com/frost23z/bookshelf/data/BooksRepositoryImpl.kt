@@ -35,8 +35,8 @@ class BooksRepositoryImpl(
             title = book.title,
             titlePrefix = book.titlePrefix,
             titleSuffix = book.titleSuffix,
-            coverUrl = book.coverUrl,
-            summary = book.summary,
+            coverUri = book.coverUri,
+            description = book.description,
             publisher = book.publisher,
             language = book.language,
             pages = book.pages,
@@ -49,5 +49,21 @@ class BooksRepositoryImpl(
             series = book.series,
             volume = book.volume
         )
+    }
+
+    override suspend fun updateBookById(book: Books) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteBookById(id: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFavoriteBooks(): List<Books> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getLastInsertedRowId(): Long {
+        return db.booksQueries.getLastInsertedRowId().executeAsOne()
     }
 }

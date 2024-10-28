@@ -22,6 +22,7 @@ fun TextField(
     placeholder: String?,
     label: String?,
     modifier: Modifier = Modifier,
+    labelCustom: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -31,7 +32,7 @@ fun TextField(
     minLines: Int = 1,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     BasicTextField(
         value = value,
@@ -63,6 +64,7 @@ fun TextField(
                             textStyle = GetTextStyle.labelStyle,
                         )
                     }
+                    labelCustom?.invoke()
                     Box {
                         if (value.isEmpty() && placeholder != null) {
                             TextFieldText(

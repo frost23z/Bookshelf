@@ -13,4 +13,12 @@ interface BooksRepository {
     fun getAllBooksAsFlow(): Flow<List<Books>>
 
     suspend fun insertBook(book: Books)
+
+    suspend fun updateBookById(book: Books)
+
+    suspend fun deleteBookById(id: Long)
+
+    suspend fun getFavoriteBooks(): List<Books>
+
+    suspend fun getLastInsertedRowId(): Long
 }

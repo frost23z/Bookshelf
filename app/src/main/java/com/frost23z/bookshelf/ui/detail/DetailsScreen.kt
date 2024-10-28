@@ -21,7 +21,7 @@ class DetailsScreen(private val book: Books) : Screen {
 
         Scaffold { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
-                Text(text = state.book.toString())
+                Text(text = state.toString())
             }
         }
     }

@@ -32,6 +32,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
+import com.frost23z.bookshelf.data.Roles
+import com.frost23z.bookshelf.ui.addedit.components.ContributorsSection
 import com.frost23z.bookshelf.ui.addedit.components.CoverSection
 import com.frost23z.bookshelf.ui.addedit.components.InfoSection
 import com.frost23z.bookshelf.ui.addedit.components.PurchaseSection
@@ -98,6 +100,33 @@ class AddEditScreen : Screen {
                     titleSuffix = state.titleSuffix ?: "",
                     onTitleSuffixChange = { screenModel.updateTitleSuffix(it) })
 
+                ContributorsSection(
+                    contributors = state.contributorsMap,
+                    onContributorNameChange = { id, name ->
+                        screenModel.updateContributor(
+                            id,
+                            name,
+                            state.contributorsMap[id]?.role ?: Roles.AUTHOR
+                        )
+                    },
+                    onContributorRoleChange = { id, role ->
+                        screenModel.updateContributor(
+                            id,
+                            state.contributorsMap[id]?.name ?: "",
+                            role
+                        )
+                        //Log.d("AddEditScreen", state.contributorsMap.toString())
+                    },
+                    onAddContributor = {
+                        screenModel.addContributor("", Roles.AUTHOR)
+                        //Log.d("AddEditScreen", state.contributorsMap.toString())
+                    },
+                    onRemoveContributor = { id ->
+                        screenModel.removeContributor(id)
+                        //Log.d("AddEditScreen", state.contributorsMap.toString())
+                    }
+                )
+
                 InfoSection(publisher = state.publisher ?: "",
                     onPublisherChange = { screenModel.updatePublisher(it) },
                     language = state.language ?: "",
@@ -124,8 +153,9 @@ class AddEditScreen : Screen {
                         scope.launch {
                             isSaving.value = true
                             if (state.coverUri != null) {
-                            val newUri = moveImageToCoverFolder(context, state.coverUri!!)
-                            screenModel.updateCoverUri(newUri)}
+                                val newUri = moveImageToCoverFolder(context, state.coverUri!!)
+                                screenModel.updateCoverUri(newUri)
+                            }
                             clearTempImageCache(context)
 
                             screenModel.addBook()

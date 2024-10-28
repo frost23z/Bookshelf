@@ -1,8 +1,5 @@
 package com.frost23z.bookshelf.ui.addedit.components.camera
 
-import android.R.attr.maxHeight
-import android.R.attr.maxWidth
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
@@ -13,8 +10,6 @@ import androidx.compose.runtime.*
 import com.yalantis.ucrop.UCrop
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 
 @Composable
 fun CropImage(

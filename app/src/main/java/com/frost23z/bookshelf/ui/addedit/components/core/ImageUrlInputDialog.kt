@@ -1,6 +1,5 @@
 package com.frost23z.bookshelf.ui.addedit.components.core
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

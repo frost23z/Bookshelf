@@ -1,0 +1,33 @@
+CREATE TABLE contributors (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+getContributorById:
+SELECT *
+FROM contributors
+WHERE id = :id;
+
+getContributorsIdByName:
+SELECT id
+FROM contributors
+WHERE name = :contributorName;
+
+getAllContributors:
+SELECT *
+FROM contributors;
+
+getLastInsertedRowId:
+SELECT last_insert_rowid();
+
+insertContributor:
+INSERT INTO contributors(name) VALUES (:name);
+
+updateContributorById:
+UPDATE contributors SET
+name = coalesce(:name, name)
+WHERE id = :id;
+
+deleteContributorById:
+DELETE FROM contributors
+WHERE id = :id;

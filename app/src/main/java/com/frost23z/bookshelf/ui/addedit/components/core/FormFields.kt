@@ -78,7 +78,6 @@ fun AddFieldButton(
             leadingIcon?.invoke() ?: Spacer(modifier = Modifier.size(IconSize))
             Text(
                 text = label,
-                modifier = Modifier.padding(start = 8.dp),
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
                 style = textStyle
             )
@@ -95,6 +94,7 @@ fun FormField(field: FormField) {
         placeholder = field.placeholder,
         label = field.label,
         modifier = field.modifier,
+        labelCustom = field.labelCustom,
         enabled = field.enabled,
         readOnly = field.readOnly,
         keyboardOptions = field.keyboardOptions,
@@ -114,6 +114,7 @@ data class FormField(
     val placeholder: String?,
     val label: String?,
     val modifier: Modifier = Modifier,
+    val labelCustom: @Composable (() -> Unit)? = null,
     val enabled: Boolean = true,
     val readOnly: Boolean = false,
     val keyboardOptions: KeyboardOptions = KeyboardOptions.Default,

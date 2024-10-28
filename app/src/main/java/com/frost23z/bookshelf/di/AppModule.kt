@@ -23,7 +23,6 @@ val appModule = module {
             },
             callback = object : AndroidSqliteDriver.Callback(AppDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
-                    super.onOpen(db)
                     db.setForeignKeyConstraintsEnabled(true)
                 }
             }

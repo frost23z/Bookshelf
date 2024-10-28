@@ -9,8 +9,8 @@ CREATE TABLE books (
     title TEXT NOT NULL,
     titleSuffix TEXT,
     -- -------------------
-    coverUrl TEXT,
-    summary TEXT,
+    coverUri TEXT,
+    description TEXT,
     -- -------------------
     publisher TEXT,
     language TEXT,
@@ -50,7 +50,7 @@ insert:
 INSERT INTO books(
     favorite, dateAdded,
     titlePrefix, title, titleSuffix,
-    coverUrl, summary,
+    coverUri, description,
     publisher, language, pages, format,
     purchaseFrom, purchasePrice, purchaseDate,
     status, readPages,
@@ -59,7 +59,7 @@ INSERT INTO books(
 VALUES (
     :favorite, :dateAdded,
     :titlePrefix, :title, :titleSuffix,
-    :coverUrl, :summary,
+    :coverUri, :description,
     :publisher, :language, :pages, :format,
     :purchaseFrom, :purchasePrice, :purchaseDate,
     :status, :readPages,
@@ -74,8 +74,8 @@ UPDATE books SET
     titlePrefix = coalesce(:titlePrefix, titlePrefix),
     title = coalesce(:title, title),
     titleSuffix = coalesce(:titleSuffix, titleSuffix),
-    coverUrl = coalesce(:coverUrl, coverUrl),
-    summary = coalesce(:summary, summary),
+    coverUri = coalesce(:coverUri, coverUri),
+    description = coalesce(:description, description),
     publisher = coalesce(:publisher, publisher),
     language = coalesce(:language, language),
     pages = coalesce(:pages, pages),
@@ -87,4 +87,8 @@ UPDATE books SET
     readPages = coalesce(:readPages, readPages),
     series = coalesce(:series, series),
     volume = coalesce(:volume, volume)
+WHERE id = :id;
+
+deleteBookById:
+DELETE FROM books
 WHERE id = :id;
