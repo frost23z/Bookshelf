@@ -13,6 +13,8 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 
 object MoreTab : Tab {
+    private fun readResolve(): Any = MoreTab
+
     override val options: TabOptions
         @Composable get() {
             return TabOptions(

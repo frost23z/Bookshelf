@@ -9,6 +9,8 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.frost23z.bookshelf.ui.library.LibraryTab
 
 object AddEditTab : Tab {
+    private fun readResolve(): Any = AddEditTab
+
     var previousTab: Tab? = null
 
     override val options: TabOptions

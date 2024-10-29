@@ -7,11 +7,12 @@ sqlite = "2.4.0"
 koin = "4.0.0"
 sqlite-android = "3.45.0"
 voyager = "1.1.0-beta03"
-datetime = "0.6.0"
-coil = "3.0.0-rc01"
-ucrop = "2.2.8"
+datetime = "0.6.1"
+coil = "3.0.0-rc02"
+ucrop = "2.2.9"
 spotless = "7.0.0.BETA4"
 ktlint = "1.4.0"
+versions = "0.51.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -56,6 +57,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
 
 [bundles]
 kotlinx = ["datetime"]

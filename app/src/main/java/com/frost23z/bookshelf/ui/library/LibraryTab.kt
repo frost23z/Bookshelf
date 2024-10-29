@@ -29,6 +29,8 @@ import com.frost23z.bookshelf.ui.core.screen.LoadingScreen
 import com.frost23z.bookshelf.ui.detail.DetailsScreen
 
 object LibraryTab : Tab {
+    private fun readResolve(): Any = LibraryTab
+
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable get() {

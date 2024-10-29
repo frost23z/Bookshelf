@@ -13,7 +13,7 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import com.frost23z.bookshelf.data.Books
 import org.koin.core.parameter.parametersOf
 
-class DetailsScreen(private val book: Books) : Screen {
+data class DetailsScreen(private val book: Books) : Screen {
     @Composable
     override fun Content() {
         val screenModel = koinScreenModel<DetailsScreenModel> { parametersOf(book) }
