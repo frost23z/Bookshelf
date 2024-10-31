@@ -3,7 +3,7 @@ package com.frost23z.bookshelf.di
 import com.frost23z.bookshelf.data.BooksRepositoryImpl
 import com.frost23z.bookshelf.data.ContributorsRepositoryImpl
 import com.frost23z.bookshelf.domain.interactor.AddBook
-import com.frost23z.bookshelf.domain.interactor.Detail
+import com.frost23z.bookshelf.domain.interactor.GetDetails
 import com.frost23z.bookshelf.domain.interactor.GetLibraryBooks
 import com.frost23z.bookshelf.domain.repository.BooksRepository
 import com.frost23z.bookshelf.domain.repository.ContributorsRepository
@@ -21,10 +21,10 @@ val domainModule =
 
         factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
         factory { GetLibraryBooks(booksRepository = get()) }
-        factory { Detail(booksRepository = get(), contributorsRepository = get()) }
+        factory { GetDetails(booksRepository = get(), contributorsRepository = get()) }
 
         factory { HomeScreenModel() }
         factory { LibraryScreenModel(getLibraryBooks = get()) }
-        factory { DetailsScreenModel(book = get(), detail = get()) }
+        factory { DetailsScreenModel(book = get(), getDetails = get()) }
         factory { AddEditScreenModel(addBook = get()) }
     }

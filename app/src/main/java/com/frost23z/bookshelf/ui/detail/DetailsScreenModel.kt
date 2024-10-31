@@ -5,13 +5,13 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
 import com.frost23z.bookshelf.data.Books_Contributors_Map
 import com.frost23z.bookshelf.data.Contributors
-import com.frost23z.bookshelf.domain.interactor.Detail
+import com.frost23z.bookshelf.domain.interactor.GetDetails
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailsScreenModel(
     book: Books,
-    detail: Detail
+    getDetails: GetDetails
 ) : StateScreenModel<DetailsScreenModel.State>(
         State(
             book = book
@@ -25,8 +25,8 @@ class DetailsScreenModel(
 
     init {
         screenModelScope.launch {
-            val contributors = detail.getAllContributors()
-            val mapping = detail.getAllMapping()
+            val contributors = getDetails.getAllContributors()
+            val mapping = getDetails.getAllMapping()
             mutableState.update { state ->
                 state.copy(
                     contributors = contributors,
