@@ -9,6 +9,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -43,6 +44,7 @@ import com.frost23z.bookshelf.ui.addedit.components.camera.clearTempImageCache
 import com.frost23z.bookshelf.ui.addedit.components.camera.moveImageToCoverFolder
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import com.frost23z.bookshelf.ui.theme.padding
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AddEditScreen : Screen {
@@ -161,20 +163,35 @@ class AddEditScreen : Screen {
 
                 Button(
                     onClick = {
-                        scope.launch {
-                            isSaving.value = true
-                            if (state.coverUri != null) {
-                                val newUri = moveImageToCoverFolder(context, state.coverUri!!)
-                                screenModel.updateCoverUri(newUri)
+                        if (state.title.isBlank()) {
+                            scope.launch {
+                                launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Title cannot be empty",
+                                        duration = SnackbarDuration.Indefinite
+                                    )
+                                }
+                                delay(1000L)
+                                snackbarHostState.currentSnackbarData?.dismiss()
                             }
-                            clearTempImageCache(context)
+                            return@Button
+                        } else {
+                            scope.launch {
+                                isSaving.value = true
+                                if (state.coverUri != null) {
+                                    val newUri =
+                                        moveImageToCoverFolder(context, state.coverUri!!)
+                                    screenModel.updateCoverUri(newUri)
+                                }
+                                clearTempImageCache(context)
 
-                            screenModel.addBook()
-                            snackbarHostState.showSnackbar(
-                                message = "Book saved",
-                                withDismissAction = true
-                            )
-                            bottomSheetNavigator.hide()
+                                screenModel.addBook()
+                                snackbarHostState.showSnackbar(
+                                    message = "Book saved",
+                                    withDismissAction = true
+                                )
+                                bottomSheetNavigator.hide()
+                            }
                         }
                     },
                     enabled = !isSaving.value,
