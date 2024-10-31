@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,8 +29,9 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.data.Books
+import com.frost23z.bookshelf.ui.core.constants.MediumPadding
+import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
-import com.frost23z.bookshelf.ui.theme.padding
 import org.koin.core.parameter.parametersOf
 
 data class DetailsScreen(private val book: Books) : Screen {
@@ -48,14 +48,14 @@ data class DetailsScreen(private val book: Books) : Screen {
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
                         .padding(
-                            maxOf(maxCutoutPadding(), MaterialTheme.padding.medium),
-                            vertical = MaterialTheme.padding.small
+                            maxOf(maxCutoutPadding(), MediumPadding),
+                            vertical = MediumPadding
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Start
+                    horizontalArrangement = Arrangement.spacedBy(SmallPadding)
                 ) {
                     Image(
                         painter =
@@ -75,12 +75,11 @@ data class DetailsScreen(private val book: Books) : Screen {
                                 .clickable { },
                         colorFilter = if (state.book.coverUri == null) ColorFilter.tint(MaterialTheme.colorScheme.primary) else null
                     )
-                    Spacer(modifier = Modifier.size(16.dp))
                     Column {
-                        Text(text = state.book.title, style = MaterialTheme.typography.titleMedium)
+                        Text(text = state.book.title, style = MaterialTheme.typography.titleLarge)
                         val authors = state.contributors["Author"]?.joinToString { it } ?: ""
                         if (authors.isNotEmpty()) {
-                            Text(text = authors, style = MaterialTheme.typography.bodyMedium)
+                            Text(text = authors, style = MaterialTheme.typography.bodyLarge)
                         }
                     }
                 }

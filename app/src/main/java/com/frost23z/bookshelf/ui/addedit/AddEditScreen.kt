@@ -7,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -42,8 +41,8 @@ import com.frost23z.bookshelf.ui.addedit.components.StatusSection
 import com.frost23z.bookshelf.ui.addedit.components.TitleSection
 import com.frost23z.bookshelf.ui.addedit.components.camera.clearTempImageCache
 import com.frost23z.bookshelf.ui.addedit.components.camera.moveImageToCoverFolder
+import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
-import com.frost23z.bookshelf.ui.theme.padding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -88,7 +87,7 @@ class AddEditScreen : Screen {
                         .padding(innerPadding)
                         .padding(
                             horizontal = maxCutoutPadding(),
-                            vertical = MaterialTheme.padding.small
+                            vertical = SmallPadding
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
