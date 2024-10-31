@@ -1,11 +1,12 @@
 [versions]
 coreKtx = "1.13.1"
-lifecycle = "2.8.6"
+lifecycle = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.10.00"
+composeBom = "2024.10.01"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-camera = "1.3.4"
+camera = "1.4.0"
+datastore = "1.1.1"
 
 [libraries]
 # core jetpack libraries
@@ -30,6 +31,8 @@ camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
 camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "camera" }
 
+datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
+
 # testing
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -40,7 +43,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 [plugins]
 
 [bundles]
-jetpack = ["core-ktx", "lifecycle-runtime-ktx", "activity-compose"]
+jetpack = ["core-ktx", "lifecycle-runtime-ktx", "activity-compose", "datastore"]
 compose = ["material", "material3", "materialIcons", "animation", "animation-graphics", "ui", "ui-graphics", "ui-tooling-preview"]
 camera = ["camera", "camera-lifecycle", "camera-view", "camera-extensions"]
 androidTest = ["androidx-junit", "androidx-espresso-core", "ui-test-junit4"]
