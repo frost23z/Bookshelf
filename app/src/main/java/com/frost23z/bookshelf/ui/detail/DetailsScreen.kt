@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +17,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +27,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -39,6 +45,8 @@ data class DetailsScreen(private val book: Books) : Screen {
     override fun Content() {
         val screenModel = koinScreenModel<DetailsScreenModel> { parametersOf(book) }
         val state by screenModel.state.collectAsStateWithLifecycle()
+
+        var coverDialog by remember { mutableStateOf(false) }
 
         Scaffold { innerPadding ->
             Column(
@@ -72,8 +80,15 @@ data class DetailsScreen(private val book: Books) : Screen {
                             Modifier
                                 .size(100.dp, 150.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .clickable { },
-                        colorFilter = if (state.book.coverUri == null) ColorFilter.tint(MaterialTheme.colorScheme.primary) else null
+                                .clickable { coverDialog = true },
+                        colorFilter =
+                            if (state.book.coverUri == null) {
+                                ColorFilter.tint(
+                                    MaterialTheme.colorScheme.primary
+                                )
+                            } else {
+                                null
+                            }
                     )
                     Column {
                         Text(text = state.book.title, style = MaterialTheme.typography.titleLarge)
@@ -83,6 +98,31 @@ data class DetailsScreen(private val book: Books) : Screen {
                         }
                     }
                 }
+            }
+        }
+        if (coverDialog) {
+            Dialog(
+                onDismissRequest = { coverDialog = false },
+                properties =
+                    DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true,
+                        usePlatformDefaultWidth = false
+                    )
+            ) {
+                Image(
+                    painter =
+                        if (book.coverUri != null) {
+                            rememberAsyncImagePainter(
+                                model = book.coverUri
+                            )
+                        } else {
+                            painterResource(id = R.drawable.ic_launcher_foreground)
+                        },
+                    contentDescription = "Cover Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
