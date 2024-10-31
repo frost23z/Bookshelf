@@ -13,6 +13,7 @@ import androidx.core.text.isDigitsOnly
 import com.frost23z.bookshelf.ui.addedit.components.core.FormField
 import com.frost23z.bookshelf.ui.addedit.components.core.FormFields
 import com.frost23z.bookshelf.ui.core.components.Icon
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 
 @Composable
 fun InfoSection(
@@ -41,7 +42,8 @@ fun InfoSection(
                     leadingIcon = {
                         Icon(
                             icon = Icons.Default.Publish,
-                            iconDescription = "Publisher"
+                            iconDescription = "Publisher",
+                            containerSize = LargeIcon
                         )
                     }
                 ),
@@ -58,7 +60,8 @@ fun InfoSection(
                     leadingIcon = {
                         Icon(
                             icon = Icons.Default.Language,
-                            iconDescription = "Language"
+                            iconDescription = "Language",
+                            containerSize = LargeIcon
                         )
                     }
                 ),
@@ -76,7 +79,8 @@ fun InfoSection(
                     leadingIcon = {
                         Icon(
                             icon = Icons.Default.AutoStories,
-                            iconDescription = "Pages"
+                            iconDescription = "Pages",
+                            containerSize = LargeIcon
                         )
                     }
                 ),
@@ -93,7 +97,8 @@ fun InfoSection(
                     leadingIcon = {
                         Icon(
                             icon = Icons.Default.CollectionsBookmark,
-                            iconDescription = "Format"
+                            iconDescription = "Format",
+                            containerSize = LargeIcon
                         )
                     }
                 )

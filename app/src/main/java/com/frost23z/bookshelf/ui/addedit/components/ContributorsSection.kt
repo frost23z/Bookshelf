@@ -12,6 +12,7 @@ import com.frost23z.bookshelf.ui.addedit.components.core.FormFields
 import com.frost23z.bookshelf.ui.addedit.components.core.TextFieldDropdownLabel
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 
 @Composable
 fun ContributorsSection(
@@ -42,7 +43,8 @@ fun ContributorsSection(
                             {
                                 Icon(
                                     icon = Icons.Outlined.Person,
-                                    iconDescription = "Contributor"
+                                    iconDescription = "Contributor",
+                                    containerSize = LargeIcon
                                 )
                             }
                         } else {
@@ -68,7 +70,8 @@ fun ContributorsSection(
                 leadingIcon = {
                     Icon(
                         icon = Icons.Filled.PersonAddAlt,
-                        iconDescription = "Add Contributor"
+                        iconDescription = "Add Contributor",
+                        containerSize = LargeIcon
                     )
                 }
             )

@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,7 +37,9 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.data.Books
+import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
+import com.frost23z.bookshelf.ui.core.constants.SmallIcon
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
@@ -94,7 +98,14 @@ data class DetailsScreen(private val book: Books) : Screen {
                         Text(text = state.book.title, style = MaterialTheme.typography.titleLarge)
                         val authors = state.contributors["Author"]?.joinToString { it } ?: ""
                         if (authors.isNotEmpty()) {
-                            Text(text = authors, style = MaterialTheme.typography.bodyLarge)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(SmallPadding),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(icon = Icons.Default.Person, iconDescription = "Authors", iconSize = SmallIcon)
+                                Text(text = authors, style = MaterialTheme.typography.bodyLarge)
+                            }
                         }
                     }
                 }

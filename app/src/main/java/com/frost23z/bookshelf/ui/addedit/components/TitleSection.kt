@@ -16,6 +16,7 @@ import com.frost23z.bookshelf.ui.addedit.components.core.FormField
 import com.frost23z.bookshelf.ui.addedit.components.core.FormFields
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 
 @Composable
 fun TitleSection(
@@ -45,6 +46,7 @@ fun TitleSection(
                             Icon(
                                 icon = Icons.Outlined.Title,
                                 iconDescription = "Title",
+                                containerSize = LargeIcon
                             )
                         }
                     },
@@ -77,6 +79,7 @@ fun TitleSection(
                                 Icon(
                                     icon = Icons.Outlined.Title,
                                     iconDescription = "Title",
+                                    containerSize = LargeIcon
                                 )
                             }
                         },
