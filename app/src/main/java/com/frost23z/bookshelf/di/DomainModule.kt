@@ -21,7 +21,7 @@ val domainModule =
 
         factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
         factory { GetLibraryBooks(booksRepository = get()) }
-        factory { GetDetails(booksRepository = get(), contributorsRepository = get()) }
+        factory { GetDetails(contributorsRepository = get()) }
 
         factory { HomeScreenModel() }
         factory { LibraryScreenModel(getLibraryBooks = get()) }

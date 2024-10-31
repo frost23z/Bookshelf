@@ -50,8 +50,8 @@ class ContributorsRepositoryImpl(
 
     //  mapper section
 
-    override suspend fun getContributorsByBookId(bookId: Long): List<Books_Contributors_Map> {
-        TODO("Not yet implemented")
+    override suspend fun getContributorsByBookId(bookId: Long): List<GetContributorsByBookId> {
+        return db.books_Contributors_MapQueries.getContributorsByBookId(bookId).executeAsList()
     }
 
     override suspend fun getAllMapping(): List<Books_Contributors_Map> {

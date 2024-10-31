@@ -2,6 +2,7 @@ package com.frost23z.bookshelf.domain.repository
 
 import com.frost23z.bookshelf.data.Books_Contributors_Map
 import com.frost23z.bookshelf.data.Contributors
+import com.frost23z.bookshelf.data.GetContributorsByBookId
 import kotlinx.coroutines.flow.Flow
 
 interface ContributorsRepository {
@@ -23,7 +24,7 @@ interface ContributorsRepository {
 
     //  mapper section
 
-    suspend fun getContributorsByBookId(bookId: Long): List<Books_Contributors_Map>
+    suspend fun getContributorsByBookId(bookId: Long): List<GetContributorsByBookId>
 
     suspend fun getAllMapping(): List<Books_Contributors_Map>
 
