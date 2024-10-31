@@ -3,7 +3,6 @@ package com.frost23z.bookshelf.ui.detail
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
-import com.frost23z.bookshelf.data.GetContributorsByBookId
 import com.frost23z.bookshelf.domain.interactor.GetDetails
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,15 +17,19 @@ class DetailsScreenModel(
     ) {
     data class State(
         val book: Books,
-        var mapping: List<GetContributorsByBookId> = emptyList()
+        var contributors: Map<String, List<String>> = emptyMap(),
     )
 
     init {
         screenModelScope.launch {
-            val mapping = getDetails.getContributorsByBookId(state.value.book.id)
+            val getContributors = getDetails.getContributorsByBookId(state.value.book.id)
             mutableState.update { state ->
                 state.copy(
-                    mapping = mapping
+                    contributors =
+                        getContributors.groupBy(
+                            keySelector = { it.role },
+                            valueTransform = { it.name }
+                        )
                 )
             }
         }
