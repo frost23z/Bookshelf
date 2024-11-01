@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,23 +26,25 @@ import androidx.compose.ui.unit.dp
 fun IconTextButtonVertical(
     icon: ImageVector,
     onClick: () -> Unit,
-    text: String,
+    modifier: Modifier = Modifier,
     iconDescription: String? = null,
     iconSize: Dp = 24.dp,
-    modifier: Modifier = Modifier,
-    tint: Color? = null
+    text: String,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Center,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    tint: Color? = null,
+    spacing: Dp = 4.dp
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier =
             modifier
-                .fillMaxSize()
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.outline,
                     shape = RoundedCornerShape(8.dp)
-                ).clickable(onClick = onClick)
+                ).clickable(onClick = onClick),
+        verticalArrangement = verticalArrangement,
+        horizontalAlignment = horizontalAlignment
     ) {
         Icon(
             imageVector = icon,
@@ -51,23 +52,13 @@ fun IconTextButtonVertical(
             modifier = Modifier.size(iconSize),
             tint = tint ?: LocalContentColor.current
         )
-        Spacer(modifier = Modifier.size(4.dp))
+        Spacer(modifier = Modifier.size(spacing))
         Text(
             text = text,
             color = tint ?: LocalContentColor.current
         )
     }
 }
-
-data class IconTextButtonVerticalItem(
-    val icon: ImageVector,
-    val onClick: () -> Unit,
-    val text: String,
-    val iconDescription: String? = null,
-    val iconSize: Dp = 24.dp,
-    val modifier: Modifier = Modifier,
-    val tint: Color? = null
-)
 
 @Preview
 @Composable

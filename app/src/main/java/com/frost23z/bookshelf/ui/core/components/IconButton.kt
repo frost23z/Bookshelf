@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.ui.core.components
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,9 +26,11 @@ fun IconButton(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    tooltip: String? = null,
     iconDescription: String? = null,
-    iconTint: Color = LocalContentColor.current
+    iconSize: Dp = 24.dp,
+    iconTint: Color = LocalContentColor.current,
+    tooltip: String? = null,
+    buttonSize: Dp = 48.dp
 ) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
@@ -36,11 +41,12 @@ fun IconButton(
     ) {
         IconButton(
             onClick = onClick,
-            modifier = modifier
+            modifier = modifier.size(buttonSize)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = iconDescription,
+                modifier = Modifier.size(iconSize),
                 tint = iconTint
             )
         }

@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Icon(
-    modifier: Modifier = Modifier,
     icon: ImageVector,
+    modifier: Modifier = Modifier,
     iconDescription: String? = null,
     iconSize: Dp = 24.dp,
     iconTint: Color = LocalContentColor.current,

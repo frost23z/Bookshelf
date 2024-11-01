@@ -21,15 +21,16 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun IconTextButtonHorizontal(
-    icon: ImageVector,
     onClick: () -> Unit,
-    text: String,
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
     iconDescription: String? = null,
     iconSize: Dp = 24.dp,
-    modifier: Modifier = Modifier,
-    tint: Color? = null,
+    text: String,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
-    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    spacing: Dp = 16.dp,
+    tint: Color = LocalContentColor.current,
 ) {
     Row(
         modifier =
@@ -44,12 +45,12 @@ fun IconTextButtonHorizontal(
             imageVector = icon,
             contentDescription = iconDescription,
             modifier = Modifier.size(iconSize),
-            tint = tint ?: LocalContentColor.current
+            tint = tint
         )
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(spacing))
         Text(
             text = text,
-            color = tint ?: LocalContentColor.current
+            color = tint
         )
     }
 }

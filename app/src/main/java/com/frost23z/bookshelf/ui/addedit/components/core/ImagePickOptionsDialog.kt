@@ -17,13 +17,16 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.frost23z.bookshelf.ui.core.components.IconTextButtonVertical
-import com.frost23z.bookshelf.ui.core.components.IconTextButtonVerticalItem
+import com.frost23z.bookshelf.ui.core.constants.ExtraSmallPadding
+import com.frost23z.bookshelf.ui.core.constants.MediumIcon
 
 @Composable
 fun ImagePickDialog(
@@ -51,7 +54,6 @@ fun ImagePickDialog(
             onPickFromGallery = onPickFromGallery,
             onTakePhoto = onTakePhoto,
             onUrlOptionSelected = onSelectUrl,
-            iconSize = iconSize,
             tint = tint
         )
     }, confirmButton = {}, dismissButton = {
@@ -66,7 +68,6 @@ fun ImagePickDialogOptions(
     onPickFromGallery: () -> Unit,
     onTakePhoto: () -> Unit,
     onUrlOptionSelected: () -> Unit,
-    iconSize: Dp = 36.dp,
     tint: Color = LocalContentColor.current
 ) {
     val items =
@@ -74,20 +75,20 @@ fun ImagePickDialogOptions(
             IconTextButtonVerticalItem(
                 icon = Icons.Default.CameraAlt,
                 onClick = onTakePhoto,
-                text = "Camera",
                 iconDescription = "Take Photo",
+                text = "Camera"
             ),
             IconTextButtonVerticalItem(
                 icon = Icons.Default.Photo,
                 onClick = onPickFromGallery,
-                text = "Gallery",
                 iconDescription = "Pick from Gallery",
+                text = "Gallery"
             ),
             IconTextButtonVerticalItem(
                 icon = Icons.Default.Explore,
                 onClick = onUrlOptionSelected,
-                text = "URL",
                 iconDescription = "Enter URL",
+                text = "URL"
             )
         )
 
@@ -96,18 +97,28 @@ fun ImagePickDialogOptions(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        items.forEach { (icon, onclick, text, iconDescription) ->
+        items.forEach { (icon, onclick, iconDescription, text) ->
             item {
                 IconTextButtonVertical(
                     icon = icon,
                     onClick = onclick,
-                    text = text,
-                    iconSize = iconSize,
                     modifier = Modifier.aspectRatio(1f),
                     iconDescription = iconDescription,
-                    tint = tint
+                    iconSize = MediumIcon,
+                    text = text,
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    tint = tint,
+                    spacing = ExtraSmallPadding
                 )
             }
         }
     }
 }
+
+data class IconTextButtonVerticalItem(
+    val icon: ImageVector,
+    val onClick: () -> Unit,
+    val iconDescription: String? = null,
+    val text: String
+)
