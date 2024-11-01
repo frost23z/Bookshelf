@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,8 +42,15 @@ import com.frost23z.bookshelf.ui.addedit.AddEditTab
 import com.frost23z.bookshelf.ui.addedit.AddOptionsBottomsheet
 import com.frost23z.bookshelf.ui.library.LibraryTab
 import com.frost23z.bookshelf.ui.more.MoreTab
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 
-class HomeScreen : Screen {
+object HomeScreen : Screen {
+    private fun readResolve(): Any = HomeScreen
+
+    private val showBottomNavigationEvent = Channel<Boolean>()
+
     private val tabs =
         listOf(
             LibraryTab,
@@ -64,8 +72,11 @@ class HomeScreen : Screen {
             CompositionLocalProvider(LocalNavigator provides navigator) {
                 Scaffold(
                     bottomBar = {
+                        val bottomNavigationVisible by produceState(initialValue = true) {
+                            showBottomNavigationEvent.receiveAsFlow().collectLatest { value = it }
+                        }
                         AnimatedVisibility(
-                            visible = state.showBottomNavigation,
+                            visible = bottomNavigationVisible,
                             enter = expandVertically(),
                             exit = shrinkVertically(),
                         ) {
@@ -187,5 +198,9 @@ class HomeScreen : Screen {
                 screenModel.toggleAddOptionsBottomsheet()
             }
         }
+    }
+
+    suspend fun showBottomNavigation(show: Boolean) {
+        showBottomNavigationEvent.send(show)
     }
 }

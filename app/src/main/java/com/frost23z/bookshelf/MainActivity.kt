@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BookshelfTheme {
                 BottomSheetNavigator {
-                    Navigator(HomeScreen())
+                    Navigator(HomeScreen)
                 }
             }
         }

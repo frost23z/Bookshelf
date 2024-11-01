@@ -7,16 +7,11 @@ import kotlinx.coroutines.flow.update
 
 class HomeScreenModel : StateScreenModel<HomeScreenModel.State>(State()) {
     data class State(
-        val showBottomNavigation: Boolean = true,
         val showLibraryBottomsheet: Boolean = false,
         val showAddOptionsBottomsheet: Boolean = false,
         val previousTab: Tab? = null,
         val currentTab: Tab = LibraryTab
     )
-
-    fun toggleBottomNavigation() {
-        mutableState.update { state -> state.copy(showBottomNavigation = !state.showBottomNavigation) }
-    }
 
     fun toggleLibraryBottomsheet() {
         mutableState.update { state -> state.copy(showLibraryBottomsheet = !state.showLibraryBottomsheet) }
