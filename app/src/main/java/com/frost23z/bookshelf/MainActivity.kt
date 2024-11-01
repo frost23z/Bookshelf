@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import com.frost23z.bookshelf.ui.home.HomeScreen
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
 
@@ -37,9 +36,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BookshelfTheme {
-                BottomSheetNavigator {
-                    Navigator(HomeScreen)
-                }
+                Navigator(HomeScreen)
             }
         }
     }

@@ -39,7 +39,6 @@ koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compos
 voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
 voyager-tab-navigator = { group = "cafe.adriel.voyager", name = "voyager-tab-navigator", version.ref = "voyager" }
-voyager-bottomsheet-navigator = { group = "cafe.adriel.voyager", name = "voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
 voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
 
@@ -63,6 +62,6 @@ versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
 kotlinx = ["datetime"]
 sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-dialects-sql", "sqldelight-paging-extensions", "sqlite-framework", "sqlite-ktx", "sqlite-android"]
 koin = ["koin-android", "koin-androidx-startup", "koin-androidx-compose"]
-voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-tab-navigator", "voyager-bottomsheet-navigator", "voyager-transitions", "voyager-koin"]
+voyager = ["voyager-navigator", "voyager-screenmodel", "voyager-tab-navigator", "voyager-transitions", "voyager-koin"]
 coil = ["coil-compose", "coil-network-okhttp"]
 others = ["ucrop"]

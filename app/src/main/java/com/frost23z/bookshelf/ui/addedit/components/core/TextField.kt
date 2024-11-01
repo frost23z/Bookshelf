@@ -46,7 +46,7 @@ fun TextField(
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         readOnly = readOnly,
-        textStyle = GetTextStyle.fieldStyle,
+        textStyle = GetTextStyle.fieldStyle.copy(color = MaterialTheme.colorScheme.onBackground),
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,

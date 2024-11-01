@@ -29,7 +29,6 @@ import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
 import com.frost23z.bookshelf.data.Roles
@@ -56,7 +55,6 @@ class AddEditScreen : Screen {
         val scope = rememberCoroutineScope()
 
         val navigator = LocalNavigator.currentOrThrow
-        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         val snackbarHostState = remember { SnackbarHostState() }
 
@@ -69,7 +67,7 @@ class AddEditScreen : Screen {
             if (state.hasUnsavedChanges) {
                 showDiscardDialog = true
             } else {
-                bottomSheetNavigator.hide()
+                navigator.pop()
             }
         }
 
@@ -189,7 +187,7 @@ class AddEditScreen : Screen {
                                     message = "Book saved",
                                     withDismissAction = true
                                 )
-                                bottomSheetNavigator.hide()
+                                navigator.pop()
                             }
                         }
                     },
@@ -208,7 +206,7 @@ class AddEditScreen : Screen {
                 confirmButton = {
                     TextButton(onClick = {
                         showDiscardDialog = false
-                        bottomSheetNavigator.hide()
+                        navigator.pop()
                     }) {
                         Text("Discard")
                     }
