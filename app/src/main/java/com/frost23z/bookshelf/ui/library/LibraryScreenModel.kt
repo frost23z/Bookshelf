@@ -77,4 +77,34 @@ class LibraryScreenModel(
             )
         }
     }
+
+    fun onClickSelectAll() {
+        screenModelScope.launch {
+            mutableState.update { state ->
+                val updatedSelectedBooks =
+                    if (state.selectedBooks.size == state.library.size) {
+                        emptyList()
+                    } else {
+                        state.library.map { it.id }
+                    }
+                state.copy(
+                    selectedBooks = updatedSelectedBooks,
+                    selectionCounter = updatedSelectedBooks.size
+                )
+            }
+        }
+    }
+
+    fun onClickInvertSelection() {
+        screenModelScope.launch {
+            mutableState.update { state ->
+                val updatedSelectedBooks =
+                    state.library.map { it.id } - state.selectedBooks.toSet()
+                state.copy(
+                    selectedBooks = updatedSelectedBooks,
+                    selectionCounter = updatedSelectedBooks.size
+                )
+            }
+        }
+    }
 }

@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FlipToBack
+import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -16,7 +19,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -26,6 +28,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.frost23z.bookshelf.R
+import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
 import com.frost23z.bookshelf.ui.core.screen.LoadingScreen
@@ -69,7 +72,16 @@ object LibraryTab : Tab {
                     // TODO: Actions
                 },
                 selectionActions = {
-                    // TODO: SelectionActions
+                    IconButton(
+                        onClick = { screenModel.onClickSelectAll() },
+                        icon = Icons.Outlined.SelectAll,
+                        tooltip = "IncreaseSelectionCounter"
+                    )
+                    IconButton(
+                        onClick = { screenModel.onClickInvertSelection() },
+                        icon = Icons.Outlined.FlipToBack,
+                        tooltip = "DecreaseSelectionCounter"
+                    )
                 }
             )
         }, snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { innerPadding ->
