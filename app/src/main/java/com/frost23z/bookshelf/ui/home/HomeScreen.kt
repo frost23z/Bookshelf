@@ -23,10 +23,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.util.fastForEach
@@ -34,7 +33,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.bottomSheet.BottomSheetNavigator
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -60,9 +58,6 @@ class HomeScreen : Screen {
         val screenModel = koinScreenModel<HomeScreenModel>()
         val state by screenModel.state.collectAsStateWithLifecycle()
 
-        var previousTab by remember { mutableStateOf<Tab?>(null) }
-        var currentTab by remember { mutableStateOf<Tab>(LibraryTab) }
-
         TabNavigator(
             tab = LibraryTab
         ) { tabNavigator ->
@@ -78,17 +73,17 @@ class HomeScreen : Screen {
                                 tabs.fastForEach { tab ->
                                     NavigationBarItem(
                                         tab = tab,
-                                        selectedTab = currentTab,
+                                        selectedTab = state.currentTab,
                                         onTabSelected = { selectedTab ->
-                                            if (selectedTab == currentTab) {
-                                                onReselectTab(currentTab, bottomSheetNavigator)
+                                            if (selectedTab == state.currentTab) {
+                                                onReselectTab(state.currentTab, screenModel)
                                             } else {
-                                                previousTab = currentTab
-                                                currentTab = selectedTab
+                                                screenModel.setPreviousTab(state.currentTab)
+                                                screenModel.setCurrentTab(selectedTab)
                                                 tabNavigator.current = selectedTab
                                                 if (selectedTab == AddEditTab) {
-                                                    AddEditTab.previousTab = previousTab
-                                                    bottomSheetNavigator.show(AddOptionsBottomsheet())
+                                                    AddEditTab.previousTab = state.currentTab
+                                                    screenModel.toggleAddOptionsBottomsheet()
                                                 }
                                             }
                                         }
@@ -124,9 +119,31 @@ class HomeScreen : Screen {
                 enabled = tabNavigator.current != LibraryTab,
                 onBack = {
                     tabNavigator.current = LibraryTab
-                    currentTab = LibraryTab
+                    screenModel.setCurrentTab(LibraryTab)
                 }
             )
+        }
+
+        LaunchedEffect(state) {
+            when (state.currentTab) {
+                AddEditTab -> {
+                    if (state.showAddOptionsBottomsheet) {
+                        bottomSheetNavigator.show(AddOptionsBottomsheet())
+                        screenModel.toggleAddOptionsBottomsheet()
+                    }
+                }
+            }
+        }
+
+        LaunchedEffect(bottomSheetNavigator) {
+            snapshotFlow { bottomSheetNavigator.isVisible }
+                .collect { isVisible ->
+                    if (!isVisible) {
+                        if (state.showAddOptionsBottomsheet) {
+                            screenModel.toggleAddOptionsBottomsheet()
+                        }
+                    }
+                }
         }
     }
 
@@ -163,11 +180,11 @@ class HomeScreen : Screen {
 
     private fun onReselectTab(
         selectedTab: Tab,
-        bottomSheetNavigator: BottomSheetNavigator
+        screenModel: HomeScreenModel
     ) {
         when (selectedTab) {
             AddEditTab -> {
-                bottomSheetNavigator.show(AddOptionsBottomsheet())
+                screenModel.toggleAddOptionsBottomsheet()
             }
         }
     }
