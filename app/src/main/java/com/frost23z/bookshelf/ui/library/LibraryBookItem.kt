@@ -1,8 +1,10 @@
 package com.frost23z.bookshelf.ui.library
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,17 +25,27 @@ import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.IconSize
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LibraryBookItem(
     book: Books,
+    isSelected: Boolean = false,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.Companion.CenterVertically,
         modifier =
             modifier
-                .clickable(onClick = onClick)
+                .background(
+                    color =
+                        if (isSelected) {
+                            Color.Companion.LightGray
+                        } else {
+                            Color.Companion.Transparent
+                        }
+                ).combinedClickable(onClick = onClick, onLongClick = onLongClick)
                 .fillMaxWidth()
                 .padding(
                     horizontal = MediumPadding,

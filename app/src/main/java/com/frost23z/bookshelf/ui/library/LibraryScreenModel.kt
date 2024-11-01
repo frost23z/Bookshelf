@@ -16,7 +16,8 @@ class LibraryScreenModel(
                 mutableState.update { state ->
                     state.copy(
                         isLoading = false,
-                        library = books
+                        library = books,
+                        filteredLibrary = books
                     )
                 }
             }
@@ -25,6 +26,55 @@ class LibraryScreenModel(
 
     data class State(
         val library: List<Books> = emptyList(),
-        val isLoading: Boolean = true
+        val filteredLibrary: List<Books> = emptyList(),
+        val selectedBooks: List<Long> = emptyList(),
+        val isLoading: Boolean = true,
+        val searchQuery: String? = null,
+        var selectionCounter: Int = 0
     )
+
+    fun onSearchQueryChange(searchQuery: String?) {
+        screenModelScope.launch {
+            mutableState.update { state ->
+                state.copy(
+                    searchQuery = searchQuery,
+                    filteredLibrary = filterBooks(state.library, searchQuery)
+                )
+            }
+        }
+    }
+
+    private fun filterBooks(
+        books: List<Books>,
+        query: String?
+    ): List<Books> {
+        return if (query.isNullOrEmpty()) {
+            books
+        } else {
+            books.filter { it.title.contains(query, ignoreCase = true) }
+        }
+    }
+
+    fun onCancelSelection() {
+        screenModelScope.launch {
+            mutableState.update { state ->
+                state.copy(selectionCounter = 0, selectedBooks = emptyList())
+            }
+        }
+    }
+
+    fun toggleSelection(bookId: Long) {
+        mutableState.update { state ->
+            val updatedSelectedBooks =
+                if (state.selectedBooks.contains(bookId)) {
+                    state.selectedBooks - bookId
+                } else {
+                    state.selectedBooks + bookId
+                }
+            state.copy(
+                selectedBooks = updatedSelectedBooks,
+                selectionCounter = updatedSelectedBooks.size
+            )
+        }
+    }
 }

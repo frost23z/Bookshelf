@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -24,6 +26,7 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.frost23z.bookshelf.R
+import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
 import com.frost23z.bookshelf.ui.core.screen.LoadingScreen
 import com.frost23z.bookshelf.ui.detail.DetailsScreen
@@ -45,6 +48,7 @@ object LibraryTab : Tab {
             )
         }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -55,7 +59,19 @@ object LibraryTab : Tab {
         val snackbarHostState = remember { SnackbarHostState() }
 
         Scaffold(topBar = {
-            // TODO: TopBar
+            TopBar(
+                title = "Library",
+                searchQuery = state.searchQuery,
+                onSearchQueryChange = { screenModel.onSearchQueryChange(it) },
+                selectionCounter = state.selectionCounter,
+                onCancelSelection = { screenModel.onCancelSelection() },
+                actions = {
+                    // TODO: Actions
+                },
+                selectionActions = {
+                    // TODO: SelectionActions
+                }
+            )
         }, snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { innerPadding ->
             when {
                 state.isLoading -> {
@@ -74,10 +90,25 @@ object LibraryTab : Tab {
                                 .padding(innerPadding),
                         verticalArrangement = Arrangement.Top
                     ) {
-                        items(state.library) { book ->
-                            LibraryBookItem(book = book, onClick = {
-                                navigator.push(DetailsScreen(book))
-                            })
+                        items(
+                            items = state.filteredLibrary,
+                            key = { it.id } // Use book's unique ID as key
+                        ) { book ->
+                            val isSelected = state.selectedBooks.contains(book.id)
+                            LibraryBookItem(
+                                book = book,
+                                isSelected = isSelected, // Show selected state
+                                onClick = {
+                                    if (state.selectionCounter > 0) {
+                                        screenModel.toggleSelection(book.id)
+                                    } else {
+                                        navigator.push(DetailsScreen(book))
+                                    }
+                                },
+                                onLongClick = {
+                                    screenModel.toggleSelection(book.id) // Start selection mode on long-click
+                                }
+                            )
                         }
                     }
                 }
