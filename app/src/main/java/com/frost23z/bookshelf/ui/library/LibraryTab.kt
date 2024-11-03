@@ -92,7 +92,7 @@ object LibraryTab : Tab {
                     LoadingScreen(modifier = Modifier.padding(innerPadding))
                 }
 
-                state.library.isEmpty() -> {
+                state.filteredLibrary.isEmpty() -> {
                     EmptyScreen(modifier = Modifier.padding(innerPadding))
                 }
 
