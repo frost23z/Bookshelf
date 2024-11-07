@@ -96,32 +96,32 @@ class AddEditScreenModel(
     }
 
     data class State(
-        var id: Long = 0,
-        var favorite: Boolean = false,
-        var dateAdded: Long = 0,
-        var titlePrefix: String? = null,
-        var title: String = "",
-        var titleSuffix: String? = null,
-        var coverUri: Uri? = null,
-        var description: String? = null,
-        var publisher: String? = null,
-        var language: String? = null,
-        var pages: String? = null,
-        var format: String? = null,
-        var purchaseFrom: String? = null,
-        var purchasePrice: String? = null,
-        var purchaseDate: String? = null,
-        var readStatus: String? = null,
-        var readPages: Long? = null,
-        var startReadingDate: Long? = 0,
-        var finishedReadingDate: Long? = 0,
-        var series: String? = null,
-        var volume: Long? = null,
-        var isLent: Boolean = false,
-        var lentTo: String? = null,
-        var lentDate: Long? = 0,
-        var lentReturned: Long? = 0,
-        var contributorsMap: MutableMap<Int, Contributor> =
+        val id: Long = 0,
+        val favorite: Boolean = false,
+        val dateAdded: Long = 0,
+        val titlePrefix: String? = null,
+        val title: String = "",
+        val titleSuffix: String? = null,
+        val coverUri: Uri? = null,
+        val description: String? = null,
+        val publisher: String? = null,
+        val language: String? = null,
+        val pages: String? = null,
+        val format: String? = null,
+        val purchaseFrom: String? = null,
+        val purchasePrice: String? = null,
+        val purchaseDate: String? = null,
+        val readStatus: String? = null,
+        val readPages: Long? = null,
+        val startReadingDate: Long? = 0,
+        val finishedReadingDate: Long? = 0,
+        val series: String? = null,
+        val volume: Long? = null,
+        val isLent: Boolean = false,
+        val lentTo: String? = null,
+        val lentDate: Long? = 0,
+        val lentReturned: Long? = 0,
+        val contributorsMap: MutableMap<Int, Contributor> =
             linkedMapOf(
                 1 to
                     Contributor(
@@ -129,7 +129,7 @@ class AddEditScreenModel(
                         Roles.AUTHOR
                     )
             ),
-        var hasUnsavedChanges: Boolean = false
+        val hasUnsavedChanges: Boolean = false
     )
 
     fun updateFavorite(favorite: Boolean) {
