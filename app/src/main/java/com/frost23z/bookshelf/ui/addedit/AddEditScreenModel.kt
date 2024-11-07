@@ -33,10 +33,16 @@ class AddEditScreenModel(
                 purchaseFrom = state.value.purchaseFrom,
                 purchasePrice = state.value.purchasePrice?.toLongOrNull(),
                 purchaseDate = state.value.purchaseDate?.toLongOrNull(),
-                status = state.value.status,
+                readStatus = state.value.readStatus,
                 readPages = state.value.readPages,
+                startReadingDate = state.value.startReadingDate,
+                finishedReadingDate = state.value.finishedReadingDate,
                 series = state.value.series,
                 volume = state.value.volume,
+                isLent = state.value.isLent,
+                lentTo = state.value.lentTo,
+                lentDate = state.value.lentDate,
+                lentReturned = state.value.lentReturned
             )
         )
 
@@ -105,10 +111,16 @@ class AddEditScreenModel(
         var purchaseFrom: String? = null,
         var purchasePrice: String? = null,
         var purchaseDate: String? = null,
-        var status: String? = null,
+        var readStatus: String? = null,
         var readPages: Long? = null,
+        var startReadingDate: Long? = 0,
+        var finishedReadingDate: Long? = 0,
         var series: String? = null,
         var volume: Long? = null,
+        var isLent: Boolean = false,
+        var lentTo: String? = null,
+        var lentDate: Long? = 0,
+        var lentReturned: Long? = 0,
         var contributorsMap: MutableMap<Int, Contributor> =
             linkedMapOf(
                 1 to
@@ -173,7 +185,7 @@ class AddEditScreenModel(
     }
 
     fun updateStatus(status: String) {
-        mutableState.update { it.copy(status = status, hasUnsavedChanges = true) }
+        mutableState.update { it.copy(readStatus = status, hasUnsavedChanges = true) }
     }
 
     fun updateReadPages(readPages: Long) {

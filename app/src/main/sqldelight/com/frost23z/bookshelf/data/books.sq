@@ -21,12 +21,18 @@ CREATE TABLE books (
     purchasePrice INTEGER,
     purchaseDate INTEGER,
     -- -------------------
-    status TEXT,
+    readStatus TEXT,
     readPages INTEGER,
+    startReadingDate INTEGER,
+    finishedReadingDate INTEGER,
     -- -------------------
     series TEXT DEFAULT NULL,
-    volume INTEGER DEFAULT NULL
+    volume INTEGER DEFAULT NULL,
     -- -------------------
+    isLent INTEGER AS Boolean NOT NULL DEFAULT 0,
+    lentTo TEXT,
+    lentDate INTEGER,
+    lentReturned INTEGER
 );
 
 getBookById:
@@ -53,8 +59,9 @@ INSERT INTO books(
     coverUri, description,
     publisher, language, pages, format,
     purchaseFrom, purchasePrice, purchaseDate,
-    status, readPages,
-    series, volume
+    readStatus, readPages, startReadingDate, finishedReadingDate,
+    series, volume,
+    isLent, lentTo, lentDate, lentReturned
 )
 VALUES (
     :favorite, :dateAdded,
@@ -62,8 +69,9 @@ VALUES (
     :coverUri, :description,
     :publisher, :language, :pages, :format,
     :purchaseFrom, :purchasePrice, :purchaseDate,
-    :status, :readPages,
-    :series, :volume
+    :readStatus, :readPages, :startReadingDate, :finishedReadingDate,
+    :series, :volume,
+    :isLent, :lentTo, :lentDate, :lentReturned
 );
 
 
@@ -83,10 +91,16 @@ UPDATE books SET
     purchaseFrom = coalesce(:purchaseFrom, purchaseFrom),
     purchasePrice = coalesce(:purchasePrice, purchasePrice),
     purchaseDate = coalesce(:purchaseDate, purchaseDate),
-    status = coalesce(:status, status),
+    readStatus = coalesce(:readStatus, readStatus),
     readPages = coalesce(:readPages, readPages),
+    startReadingDate = coalesce(:startReadingDate, startReadingDate),
+    finishedReadingDate = coalesce(:finnishedReadingDate, finishedReadingDate),
     series = coalesce(:series, series),
-    volume = coalesce(:volume, volume)
+    volume = coalesce(:volume, volume),
+    isLent = coalesce(:isLent, isLent),
+    lentTo = coalesce(:lentTo, lentTo),
+    lentDate = coalesce(:lentDate, lentDate),
+    lentReturned = coalesce(:lentReturned, lentReturned)
 WHERE id = :id;
 
 deleteBookById:

@@ -50,10 +50,16 @@ class BooksRepositoryImpl(
             purchaseFrom = book.purchaseFrom,
             purchasePrice = book.purchasePrice,
             purchaseDate = book.purchaseDate,
-            status = book.status,
+            readStatus = book.readStatus,
             readPages = book.readPages,
+            startReadingDate = book.startReadingDate,
+            finishedReadingDate = book.finishedReadingDate,
             series = book.series,
-            volume = book.volume
+            volume = book.volume,
+            isLent = book.isLent,
+            lentTo = book.lentTo,
+            lentDate = book.lentDate,
+            lentReturned = book.lentReturned
         )
     }
 
