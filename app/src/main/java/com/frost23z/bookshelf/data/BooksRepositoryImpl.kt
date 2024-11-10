@@ -34,10 +34,26 @@ class BooksRepositoryImpl(
             .mapToList(dispatcher)
     }
 
+    override suspend fun getFavoriteBooks(): List<Books> {
+        return db.booksQueries.getFavoriteBooks().executeAsList()
+    }
+
+    override fun getFavoriteBooksAsFlow(): Flow<List<Books>> {
+        return db.booksQueries
+            .getFavoriteBooks()
+            .asFlow()
+            .mapToList(dispatcher)
+    }
+
+    override suspend fun getLastInsertedRowId(): Long {
+        return db.booksQueries.getLastInsertedRowId().executeAsOne()
+    }
+
     override suspend fun insertBook(book: Books) {
         db.booksQueries.insert(
             favorite = book.favorite,
             dateAdded = book.dateAdded,
+            dateLastUpdated = book.dateLastUpdated,
             title = book.title,
             titlePrefix = book.titlePrefix,
             titleSuffix = book.titleSuffix,
@@ -63,19 +79,41 @@ class BooksRepositoryImpl(
         )
     }
 
-    override suspend fun updateBookById(book: Books) {
-        TODO("Not yet implemented")
+    override suspend fun updateBookById(
+        id: Long,
+        book: Books
+    ) {
+        db.booksQueries.update(
+            id = id,
+            favorite = book.favorite,
+            dateAdded = book.dateAdded,
+            dateLastUpdated = System.currentTimeMillis(),
+            titlePrefix = book.titlePrefix,
+            title = book.title,
+            titleSuffix = book.titleSuffix,
+            coverUri = book.coverUri,
+            description = book.description,
+            publisher = book.publisher,
+            language = book.language,
+            pages = book.pages,
+            format = book.format,
+            purchaseFrom = book.purchaseFrom,
+            purchasePrice = book.purchasePrice,
+            purchaseDate = book.purchaseDate,
+            readStatus = book.readStatus,
+            readPages = book.readPages,
+            startReadingDate = book.startReadingDate,
+            finishedReadingDate = book.finishedReadingDate,
+            series = book.series,
+            volume = book.volume,
+            isLent = book.isLent,
+            lentTo = book.lentTo,
+            lentDate = book.lentDate,
+            lentReturned = book.lentReturned
+        )
     }
 
     override suspend fun deleteBookById(id: Long) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getFavoriteBooks(): List<Books> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getLastInsertedRowId(): Long {
-        return db.booksQueries.getLastInsertedRowId().executeAsOne()
+        db.booksQueries.deleteBookById(id)
     }
 }

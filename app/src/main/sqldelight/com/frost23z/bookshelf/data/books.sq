@@ -4,6 +4,7 @@ CREATE TABLE books (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     favorite INTEGER AS Boolean NOT NULL DEFAULT 0,
     dateAdded INTEGER NOT NULL,
+    dateLastUpdated INTEGER NOT NULL,
     -- -------------------
     titlePrefix TEXT,
     title TEXT NOT NULL,
@@ -54,7 +55,7 @@ SELECT last_insert_rowid();
 
 insert:
 INSERT INTO books(
-    favorite, dateAdded,
+    favorite, dateAdded, dateLastUpdated,
     titlePrefix, title, titleSuffix,
     coverUri, description,
     publisher, language, pages, format,
@@ -64,7 +65,7 @@ INSERT INTO books(
     isLent, lentTo, lentDate, lentReturned
 )
 VALUES (
-    :favorite, :dateAdded,
+    :favorite, :dateAdded, :dateLastUpdated,
     :titlePrefix, :title, :titleSuffix,
     :coverUri, :description,
     :publisher, :language, :pages, :format,
@@ -79,6 +80,7 @@ update:
 UPDATE books SET
     favorite = coalesce(:favorite, favorite),
     dateAdded = coalesce(:dateAdded, dateAdded),
+    dateLastUpdated = coalesce(:dateLastUpdated, dateLastUpdated),
     titlePrefix = coalesce(:titlePrefix, titlePrefix),
     title = coalesce(:title, title),
     titleSuffix = coalesce(:titleSuffix, titleSuffix),
@@ -94,7 +96,7 @@ UPDATE books SET
     readStatus = coalesce(:readStatus, readStatus),
     readPages = coalesce(:readPages, readPages),
     startReadingDate = coalesce(:startReadingDate, startReadingDate),
-    finishedReadingDate = coalesce(:finnishedReadingDate, finishedReadingDate),
+    finishedReadingDate = coalesce(:finishedReadingDate, finishedReadingDate),
     series = coalesce(:series, series),
     volume = coalesce(:volume, volume),
     isLent = coalesce(:isLent, isLent),

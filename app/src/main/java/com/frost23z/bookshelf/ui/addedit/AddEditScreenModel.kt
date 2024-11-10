@@ -21,6 +21,7 @@ class AddEditScreenModel(
                 id = state.value.id,
                 favorite = state.value.favorite,
                 dateAdded = state.value.dateAdded,
+                dateLastUpdated = System.currentTimeMillis(),
                 titlePrefix = state.value.titlePrefix,
                 title = state.value.title,
                 titleSuffix = state.value.titleSuffix,
