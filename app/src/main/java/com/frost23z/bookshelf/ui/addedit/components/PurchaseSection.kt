@@ -27,21 +27,21 @@ fun PurchaseSection(
     onPurchaseFromChange: (String) -> Unit,
     purchasePrice: String,
     onPurchasePriceChange: (String) -> Unit,
-    purchaseDate: String,
-    onPurchaseDateChange: (String) -> Unit
+    purchaseDate: Long,
+    onPurchaseDateChange: (Long) -> Unit
 ) {
     val isDatePickerVisible = remember { mutableStateOf(false) }
 
     val formattedDate =
-        if (purchaseDate.isNotEmpty()) {
+        if (purchaseDate != 0L) {
             try {
                 Instant
-                    .fromEpochMilliseconds(purchaseDate.toLong())
+                    .fromEpochMilliseconds(purchaseDate)
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .date
                     .toString()
-            } catch (e: NumberFormatException) {
-                ""
+            } catch (e: Exception) {
+                "" // In case of any error in conversion, leave it blank
             }
         } else {
             ""
@@ -92,7 +92,7 @@ fun PurchaseSection(
     )
     if (isDatePickerVisible.value) {
         DatePickerModal(
-            onDateSelected = { onPurchaseDateChange(it?.toString() ?: "") },
+            onDateSelected = { onPurchaseDateChange(it ?: 0L) },
             onDismiss = { isDatePickerVisible.value = false }
         )
     }

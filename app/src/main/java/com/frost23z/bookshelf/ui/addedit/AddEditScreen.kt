@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
@@ -90,18 +91,18 @@ class AddEditScreen : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CoverSection(
-                    coverUri = state.coverUri,
-                    onCoverUriChange = { screenModel.updateCoverUri(it) },
+                    coverUri = state.book.coverUri?.toUri(),
+                    onCoverUriChange = { screenModel.updateBook { copy(coverUri = it.toString()) } },
                     navigator = navigator
                 )
 
                 TitleSection(
-                    titlePrefix = state.titlePrefix ?: "",
-                    onTitlePrefixChange = { screenModel.updateTitlePrefix(it) },
-                    title = state.title,
-                    onTitleChange = { screenModel.updateTitle(it) },
-                    titleSuffix = state.titleSuffix ?: "",
-                    onTitleSuffixChange = { screenModel.updateTitleSuffix(it) }
+                    titlePrefix = state.book.titlePrefix ?: "",
+                    onTitlePrefixChange = { screenModel.updateBook { copy(titlePrefix = it) } },
+                    title = state.book.title,
+                    onTitleChange = { screenModel.updateBook { copy(title = it) } },
+                    titleSuffix = state.book.titleSuffix ?: "",
+                    onTitleSuffixChange = { screenModel.updateBook { copy(titleSuffix = it) } }
                 )
 
                 ContributorsSection(
@@ -132,35 +133,35 @@ class AddEditScreen : Screen {
                 )
 
                 InfoSection(
-                    publisher = state.publisher ?: "",
-                    onPublisherChange = { screenModel.updatePublisher(it) },
-                    language = state.language ?: "",
-                    onLanguageChange = { screenModel.updateLanguage(it) },
-                    pages = state.pages ?: "",
-                    onPagesChange = { screenModel.updatePages(it) },
-                    format = state.format ?: "",
-                    onFormatChange = { screenModel.updateFormat(it) }
+                    publisher = state.book.publisher ?: "",
+                    onPublisherChange = { screenModel.updateBook { copy(publisher = it) } },
+                    language = state.book.language ?: "",
+                    onLanguageChange = { screenModel.updateBook { copy(language = it) } },
+                    pages = state.book.pages?.toString() ?: "",
+                    onPagesChange = { screenModel.updateBook { copy(pages = it.toLongOrNull()) } },
+                    format = state.book.format ?: "",
+                    onFormatChange = { screenModel.updateBook { copy(format = it) } }
                 )
 
                 PurchaseSection(
-                    purchaseFrom = state.purchaseFrom ?: "",
-                    onPurchaseFromChange = { screenModel.updatePurchaseFrom(it) },
-                    purchasePrice = state.purchasePrice ?: "",
-                    onPurchasePriceChange = { screenModel.updatePurchasePrice(it) },
-                    purchaseDate = state.purchaseDate ?: "",
-                    onPurchaseDateChange = { screenModel.updatePurchaseDate(it) }
+                    purchaseFrom = state.book.purchaseFrom ?: "",
+                    onPurchaseFromChange = { screenModel.updateBook { copy(purchaseFrom = it) } },
+                    purchasePrice = state.book.purchasePrice?.toString() ?: "",
+                    onPurchasePriceChange = { screenModel.updateBook { copy(purchasePrice = it.toLongOrNull()) } },
+                    purchaseDate = state.book.purchaseDate ?: 0,
+                    onPurchaseDateChange = { screenModel.updateBook { copy(purchaseDate = it) } }
                 )
 
                 StatusSection(
-                    totalPages = state.pages?.toLongOrNull() ?: 0,
-                    readPages = state.readPages ?: 0,
-                    onStatusChange = { screenModel.updateStatus(it) },
-                    onReadPagesChange = { screenModel.updateReadPages(it) }
+                    totalPages = state.book.pages ?: 0,
+                    readPages = state.book.readPages ?: 0,
+                    onStatusChange = { screenModel.updateBook { copy(readStatus = it) } },
+                    onReadPagesChange = { screenModel.updateBook { copy(readPages = it) } },
                 )
 
                 Button(
                     onClick = {
-                        if (state.title.isBlank()) {
+                        if (state.book.title.isBlank()) {
                             scope.launch {
                                 launch {
                                     snackbarHostState.showSnackbar(
@@ -175,10 +176,10 @@ class AddEditScreen : Screen {
                         } else {
                             scope.launch {
                                 isSaving.value = true
-                                if (state.coverUri != null) {
+                                if (state.book.coverUri != null) {
                                     val newUri =
-                                        moveImageToCoverFolder(context, state.coverUri!!)
-                                    screenModel.updateCoverUri(newUri)
+                                        moveImageToCoverFolder(context, state.book.coverUri!!.toUri())
+                                    screenModel.updateBook { copy(coverUri = newUri.toString()) }
                                 }
                                 clearTempImageCache(context)
 

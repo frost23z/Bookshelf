@@ -1,7 +1,6 @@
 package com.frost23z.bookshelf.ui.addedit
 
 import android.database.sqlite.SQLiteConstraintException
-import android.net.Uri
 import android.util.Log
 import cafe.adriel.voyager.core.model.StateScreenModel
 import com.frost23z.bookshelf.data.Books
@@ -16,36 +15,7 @@ class AddEditScreenModel(
     private val addBook: AddBook
 ) : StateScreenModel<AddEditScreenModel.State>(State()) {
     suspend fun addBook() {
-        addBook.insertBook(
-            Books(
-                id = state.value.id,
-                favorite = state.value.favorite,
-                dateAdded = state.value.dateAdded,
-                dateLastUpdated = System.currentTimeMillis(),
-                titlePrefix = state.value.titlePrefix,
-                title = state.value.title,
-                titleSuffix = state.value.titleSuffix,
-                coverUri = state.value.coverUri.toString(),
-                description = state.value.description,
-                publisher = state.value.publisher,
-                language = state.value.language,
-                pages = state.value.pages?.toLongOrNull(),
-                format = state.value.format,
-                purchaseFrom = state.value.purchaseFrom,
-                purchasePrice = state.value.purchasePrice?.toLongOrNull(),
-                purchaseDate = state.value.purchaseDate?.toLongOrNull(),
-                readStatus = state.value.readStatus,
-                readPages = state.value.readPages,
-                startReadingDate = state.value.startReadingDate,
-                finishedReadingDate = state.value.finishedReadingDate,
-                series = state.value.series,
-                volume = state.value.volume,
-                isLent = state.value.isLent,
-                lentTo = state.value.lentTo,
-                lentDate = state.value.lentDate,
-                lentReturned = state.value.lentReturned
-            )
-        )
+        addBook.insertBook(state.value.book)
 
         val bookId = addBook.getLastInsertedBookRowId()
 
@@ -92,36 +62,36 @@ class AddEditScreenModel(
         }
     }
 
-    fun reset() {
-        mutableState.update { State() }
-    }
-
     data class State(
-        val id: Long = 0,
-        val favorite: Boolean = false,
-        val dateAdded: Long = 0,
-        val titlePrefix: String? = null,
-        val title: String = "",
-        val titleSuffix: String? = null,
-        val coverUri: Uri? = null,
-        val description: String? = null,
-        val publisher: String? = null,
-        val language: String? = null,
-        val pages: String? = null,
-        val format: String? = null,
-        val purchaseFrom: String? = null,
-        val purchasePrice: String? = null,
-        val purchaseDate: String? = null,
-        val readStatus: String? = null,
-        val readPages: Long? = null,
-        val startReadingDate: Long? = 0,
-        val finishedReadingDate: Long? = 0,
-        val series: String? = null,
-        val volume: Long? = null,
-        val isLent: Boolean = false,
-        val lentTo: String? = null,
-        val lentDate: Long? = 0,
-        val lentReturned: Long? = 0,
+        val book: Books =
+            Books(
+                id = 0,
+                favorite = false,
+                dateAdded = 0,
+                dateLastUpdated = 0,
+                titlePrefix = null,
+                title = "",
+                titleSuffix = null,
+                coverUri = null,
+                description = null,
+                publisher = null,
+                language = null,
+                pages = null,
+                format = null,
+                purchaseFrom = null,
+                purchasePrice = null,
+                purchaseDate = null,
+                readStatus = null,
+                readPages = null,
+                startReadingDate = null,
+                finishedReadingDate = null,
+                series = null,
+                volume = null,
+                isLent = false,
+                lentTo = null,
+                lentDate = null,
+                lentReturned = null
+            ),
         val contributorsMap: MutableMap<Int, Contributor> =
             linkedMapOf(
                 1 to
@@ -133,72 +103,10 @@ class AddEditScreenModel(
         val hasUnsavedChanges: Boolean = false
     )
 
-    fun updateFavorite(favorite: Boolean) {
-        mutableState.update { it.copy(favorite = favorite, hasUnsavedChanges = true) }
-    }
-
-    fun updateTitlePrefix(titlePrefix: String) {
-        mutableState.update { it.copy(titlePrefix = titlePrefix, hasUnsavedChanges = true) }
-    }
-
-    fun updateTitle(title: String) {
-        mutableState.update { it.copy(title = title, hasUnsavedChanges = true) }
-    }
-
-    fun updateTitleSuffix(titleSuffix: String) {
-        mutableState.update { it.copy(titleSuffix = titleSuffix, hasUnsavedChanges = true) }
-    }
-
-    fun updateCoverUri(coverUri: Uri?) {
-        mutableState.update { it.copy(coverUri = coverUri, hasUnsavedChanges = true) }
-    }
-
-    fun updateDescription(description: String) {
-        mutableState.update { it.copy(description = description, hasUnsavedChanges = true) }
-    }
-
-    fun updatePublisher(publisher: String) {
-        mutableState.update { it.copy(publisher = publisher, hasUnsavedChanges = true) }
-    }
-
-    fun updateLanguage(language: String) {
-        mutableState.update { it.copy(language = language, hasUnsavedChanges = true) }
-    }
-
-    fun updatePages(pages: String) {
-        mutableState.update { it.copy(pages = pages, hasUnsavedChanges = true) }
-    }
-
-    fun updateFormat(format: String) {
-        mutableState.update { it.copy(format = format, hasUnsavedChanges = true) }
-    }
-
-    fun updatePurchaseFrom(purchaseFrom: String) {
-        mutableState.update { it.copy(purchaseFrom = purchaseFrom, hasUnsavedChanges = true) }
-    }
-
-    fun updatePurchasePrice(purchasePrice: String) {
-        mutableState.update { it.copy(purchasePrice = purchasePrice, hasUnsavedChanges = true) }
-    }
-
-    fun updatePurchaseDate(purchaseDate: String) {
-        mutableState.update { it.copy(purchaseDate = purchaseDate, hasUnsavedChanges = true) }
-    }
-
-    fun updateStatus(status: String) {
-        mutableState.update { it.copy(readStatus = status, hasUnsavedChanges = true) }
-    }
-
-    fun updateReadPages(readPages: Long) {
-        mutableState.update { it.copy(readPages = readPages, hasUnsavedChanges = true) }
-    }
-
-    fun updateSeries(series: String) {
-        mutableState.update { it.copy(series = series, hasUnsavedChanges = true) }
-    }
-
-    fun updateVolume(volume: Long) {
-        mutableState.update { it.copy(volume = volume, hasUnsavedChanges = true) }
+    fun updateBook(update: Books.() -> Books) {
+        mutableState.update {
+            it.copy(book = it.book.update(), hasUnsavedChanges = true)
+        }
     }
 
     fun addContributor(
