@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.frost23z.bookshelf.ui.core.util.IconSize
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 
 @Composable
 fun FormFields(
@@ -52,7 +52,7 @@ fun FormFields(
 @Composable
 fun FieldDivider() {
     HorizontalDivider(
-        modifier = Modifier.padding(start = IconSize),
+        modifier = Modifier.padding(start = LargeIcon),
         color = MaterialTheme.colorScheme.outline
     )
 }
@@ -76,7 +76,7 @@ fun AddFieldButton(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            leadingIcon?.invoke() ?: Spacer(modifier = Modifier.size(IconSize))
+            leadingIcon?.invoke() ?: Spacer(modifier = Modifier.size(LargeIcon))
             Text(
                 text = label,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),

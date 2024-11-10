@@ -10,27 +10,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 
 data class TextStyles(
-    val labelStyle: TextStyle,
-    val fieldStyle: TextStyle
+    val textFieldLabelStyle: TextStyle,
+    val textFieldStyle: TextStyle
 )
 
 @Composable
 fun getTextStyles(): TextStyles {
     return TextStyles(
-        labelStyle = MaterialTheme.typography.labelMedium,
-        fieldStyle = MaterialTheme.typography.bodyLarge
+        textFieldLabelStyle = MaterialTheme.typography.labelLarge,
+        textFieldStyle = MaterialTheme.typography.bodyLarge
     )
 }
 
 val GetTextStyle: TextStyles
     @Composable
     get() = getTextStyles()
-
-val IconSize = 48.dp
 
 @Composable
 fun maxCutoutPadding(): Dp {

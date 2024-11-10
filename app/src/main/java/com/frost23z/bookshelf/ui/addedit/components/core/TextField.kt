@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 import com.frost23z.bookshelf.ui.core.util.GetTextStyle
-import com.frost23z.bookshelf.ui.core.util.IconSize
 
 @Composable
 fun TextField(
@@ -46,7 +46,7 @@ fun TextField(
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         readOnly = readOnly,
-        textStyle = GetTextStyle.fieldStyle.copy(color = MaterialTheme.colorScheme.onBackground),
+        textStyle = GetTextStyle.textFieldStyle.copy(color = MaterialTheme.colorScheme.onBackground),
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
@@ -59,7 +59,7 @@ fun TextField(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                leadingIcon?.invoke() ?: Spacer(modifier = Modifier.size(IconSize))
+                leadingIcon?.invoke() ?: Spacer(modifier = Modifier.size(LargeIcon))
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.Center
@@ -67,7 +67,7 @@ fun TextField(
                     label?.let {
                         TextFieldText(
                             text = it,
-                            textStyle = GetTextStyle.labelStyle,
+                            textStyle = GetTextStyle.textFieldLabelStyle,
                         )
                     }
                     labelCustom?.invoke()
@@ -75,13 +75,13 @@ fun TextField(
                         if (value.isEmpty() && placeholder != null) {
                             TextFieldText(
                                 text = placeholder,
-                                textStyle = GetTextStyle.fieldStyle
+                                textStyle = GetTextStyle.textFieldStyle
                             )
                         }
                         innerTextField()
                     }
                 }
-                trailingIcon?.invoke() ?: Spacer(modifier = Modifier.size(IconSize))
+                trailingIcon?.invoke() ?: Spacer(modifier = Modifier.size(LargeIcon))
             }
         }
     )

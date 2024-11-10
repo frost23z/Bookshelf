@@ -39,7 +39,7 @@ fun <T : Enum<T>> TextFieldDropdownLabel(
                 Modifier
                     .clickable { expanded = true },
             color = MaterialTheme.colorScheme.primary,
-            style = GetTextStyle.labelStyle
+            style = GetTextStyle.textFieldLabelStyle
         )
 
         DropdownMenu(
