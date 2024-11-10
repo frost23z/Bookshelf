@@ -109,6 +109,7 @@ data class DetailsScreen(private val book: Books) : Screen {
                         }
                     }
                 }
+                Text(text = state.book.toString())
             }
         }
         if (coverDialog) {

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.frost23z.bookshelf.ui.addedit.components.core.BorderedContainer
 import com.frost23z.bookshelf.ui.addedit.components.core.FormField
 import com.frost23z.bookshelf.ui.core.components.IconButton
-import com.frost23z.bookshelf.ui.core.util.IconSize
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 
 @Composable
 fun StatusSection(
@@ -99,7 +99,7 @@ fun StatusSection(
             Text(
                 text = sliderValue.toInt().toString(),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.width(IconSize),
+                modifier = Modifier.width(LargeIcon),
             )
 
             Slider(
@@ -128,7 +128,7 @@ fun StatusSection(
 
             Text(
                 text = totalPages.toString(),
-                modifier = Modifier.width(IconSize),
+                modifier = Modifier.width(LargeIcon),
                 textAlign = TextAlign.Center
             )
         }

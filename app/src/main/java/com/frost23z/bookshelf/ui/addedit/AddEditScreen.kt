@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.ui.addedit
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -41,6 +42,7 @@ import com.frost23z.bookshelf.ui.addedit.components.StatusSection
 import com.frost23z.bookshelf.ui.addedit.components.TitleSection
 import com.frost23z.bookshelf.ui.addedit.components.camera.clearTempImageCache
 import com.frost23z.bookshelf.ui.addedit.components.camera.moveImageToCoverFolder
+import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import kotlinx.coroutines.delay
@@ -85,10 +87,11 @@ class AddEditScreen : Screen {
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
                         .padding(
-                            horizontal = maxCutoutPadding(),
+                            horizontal = maxOf(maxCutoutPadding(), MediumPadding),
                             vertical = SmallPadding
                         ),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(MediumPadding)
             ) {
                 CoverSection(
                     coverUri = state.book.coverUri?.toUri(),

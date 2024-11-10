@@ -21,9 +21,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.data.Books
+import com.frost23z.bookshelf.ui.core.constants.LargeIcon
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
-import com.frost23z.bookshelf.ui.core.util.IconSize
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -57,7 +57,7 @@ fun LibraryBookItem(
             contentDescription = null,
             modifier =
                 Modifier
-                    .size(IconSize)
+                    .size(LargeIcon)
                     .border(
                         border =
                             BorderStroke(
