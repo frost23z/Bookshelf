@@ -17,7 +17,7 @@ class DetailsScreenModel(
     ) {
     data class State(
         val book: Books,
-        var contributors: Map<String, List<String>> = emptyMap(),
+        val contributors: Map<String, List<String>> = emptyMap(),
     )
 
     init {
