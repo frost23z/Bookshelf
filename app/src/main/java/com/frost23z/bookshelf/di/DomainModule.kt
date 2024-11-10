@@ -26,5 +26,5 @@ val domainModule =
         factory { HomeScreenModel() }
         factory { LibraryScreenModel(getLibraryBooks = get()) }
         factory { DetailsScreenModel(bookId = get(), getDetails = get()) }
-        factory { AddEditScreenModel(addBook = get(), isEditing = get(), bookId = get()) }
+        factory { (isEditing: Boolean, bookId: Long?) -> AddEditScreenModel(addBook = get(), isEditing = isEditing, bookId = bookId) }
     }

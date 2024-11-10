@@ -51,7 +51,7 @@ import org.koin.core.parameter.parametersOf
 
 data class AddEditScreen(
     private val isEditing: Boolean = false,
-    val bookId: Long? = null
+    private val bookId: Long? = null
 ) : Screen {
     @OptIn(InternalVoyagerApi::class)
     @Composable
@@ -66,17 +66,6 @@ data class AddEditScreen(
         val snackbarHostState = remember { SnackbarHostState() }
 
         var isSaving = rememberSaveable { mutableStateOf(false) }
-        var showDiscardDialog by rememberSaveable { mutableStateOf(false) }
-
-        BackHandler(
-            enabled = true
-        ) {
-            if (state.hasUnsavedChanges) {
-                showDiscardDialog = true
-            } else {
-                navigator.pop()
-            }
-        }
 
         Scaffold(
             topBar = {
@@ -206,21 +195,32 @@ data class AddEditScreen(
                 }
             }
         }
-        if (showDiscardDialog) {
+
+        BackHandler(
+            enabled = true
+        ) {
+            if (state.hasUnsavedChanges) {
+                screenModel.toggleDiscardDialog()
+            } else {
+                navigator.pop()
+            }
+        }
+
+        if (state.showDiscardDialog) {
             AlertDialog(
-                onDismissRequest = { showDiscardDialog = false },
+                onDismissRequest = { screenModel.toggleDiscardDialog() },
                 title = { Text("Discard Changes?") },
                 text = { Text("You have unsaved changes. Are you sure you want to discard them?") },
                 confirmButton = {
                     TextButton(onClick = {
-                        showDiscardDialog = false
+                        screenModel.toggleDiscardDialog()
                         navigator.pop()
                     }) {
                         Text("Discard")
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDiscardDialog = false }) {
+                    TextButton(onClick = { screenModel.toggleDiscardDialog() }) {
                         Text("Cancel")
                     }
                 }

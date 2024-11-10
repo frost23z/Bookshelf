@@ -16,9 +16,23 @@ import kotlinx.coroutines.launch
 
 class AddEditScreenModel(
     private val addBook: AddBook,
-    private val isEditing: Boolean = false,
-    private val bookId: Long? = null
+    private val isEditing: Boolean,
+    private val bookId: Long?
 ) : StateScreenModel<AddEditScreenModel.State>(State()) {
+    data class State(
+        val book: Books = books,
+        val contributorsMap: MutableMap<Int, Contributor> =
+            linkedMapOf(
+                1 to
+                    Contributor(
+                        "",
+                        Roles.AUTHOR
+                    )
+            ),
+        val hasUnsavedChanges: Boolean = false,
+        val showDiscardDialog: Boolean = false
+    )
+
     init {
         if (isEditing && bookId != null) {
             screenModelScope.launch {
@@ -153,19 +167,6 @@ class AddEditScreenModel(
         }
     }
 
-    data class State(
-        val book: Books = books,
-        val contributorsMap: MutableMap<Int, Contributor> =
-            linkedMapOf(
-                1 to
-                    Contributor(
-                        "",
-                        Roles.AUTHOR
-                    )
-            ),
-        val hasUnsavedChanges: Boolean = false
-    )
-
     fun updateBook(update: Books.() -> Books) {
         mutableState.update {
             it.copy(book = it.book.update(), hasUnsavedChanges = true)
@@ -221,6 +222,12 @@ class AddEditScreenModel(
                     remove(id)
                 }
             currentState.copy(contributorsMap = updatedMap, hasUnsavedChanges = true)
+        }
+    }
+
+    fun toggleDiscardDialog() {
+        mutableState.update {
+            it.copy(showDiscardDialog = !it.showDiscardDialog)
         }
     }
 }
