@@ -116,7 +116,7 @@ object LibraryTab : Tab {
                                     if (state.selectionCounter > 0) {
                                         screenModel.toggleSelection(book.id)
                                     } else {
-                                        navigator.push(DetailsScreen(book))
+                                        navigator.push(DetailsScreen(book.id))
                                     }
                                 },
                                 onLongClick = {

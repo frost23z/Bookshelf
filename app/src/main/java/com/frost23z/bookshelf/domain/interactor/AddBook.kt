@@ -10,6 +10,10 @@ class AddBook(
     private val booksRepository: BooksRepository,
     private val contributorsRepository: ContributorsRepository
 ) {
+    suspend fun getBookById(id: Long): Books {
+        return booksRepository.getBookById(id)
+    }
+
     suspend fun insertBook(book: Books) {
         booksRepository.insertBook(book)
     }
@@ -32,5 +36,21 @@ class AddBook(
 
     suspend fun insertBookContributor(map: Books_Contributors_Map) {
         contributorsRepository.insertBookContributor(map)
+    }
+
+    suspend fun updateBook(
+        id: Long,
+        book: Books
+    ) {
+        booksRepository.updateBookById(id, book)
+    }
+
+    suspend fun getContributorsByBookId(bookId: Long) = contributorsRepository.getContributorsByBookId(bookId)
+
+    suspend fun deleteBookContributorByBookIdAndContributorId(
+        bookId: Long,
+        contributorId: Long
+    ) {
+        contributorsRepository.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
     }
 }

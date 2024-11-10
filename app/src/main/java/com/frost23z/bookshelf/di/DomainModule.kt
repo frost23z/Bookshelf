@@ -21,10 +21,10 @@ val domainModule =
 
         factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
         factory { GetLibraryBooks(booksRepository = get()) }
-        factory { GetDetails(contributorsRepository = get()) }
+        factory { GetDetails(booksRepository = get(), contributorsRepository = get()) }
 
         factory { HomeScreenModel() }
         factory { LibraryScreenModel(getLibraryBooks = get()) }
-        factory { DetailsScreenModel(book = get(), getDetails = get()) }
-        factory { AddEditScreenModel(addBook = get()) }
+        factory { DetailsScreenModel(bookId = get(), getDetails = get()) }
+        factory { AddEditScreenModel(addBook = get(), isEditing = get(), bookId = get()) }
     }

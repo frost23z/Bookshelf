@@ -47,12 +47,16 @@ import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.core.parameter.parametersOf
 
-class AddEditScreen : Screen {
+data class AddEditScreen(
+    private val isEditing: Boolean = false,
+    val bookId: Long? = null
+) : Screen {
     @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
-        val screenModel = koinScreenModel<AddEditScreenModel>()
+        val screenModel = koinScreenModel<AddEditScreenModel> { parametersOf(isEditing, bookId) }
         val state by screenModel.state.collectAsStateWithLifecycle()
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
@@ -186,7 +190,7 @@ class AddEditScreen : Screen {
                                 }
                                 clearTempImageCache(context)
 
-                                screenModel.addBook()
+                                screenModel.saveBook()
                                 snackbarHostState.showSnackbar(
                                     message = "Book saved",
                                     withDismissAction = true

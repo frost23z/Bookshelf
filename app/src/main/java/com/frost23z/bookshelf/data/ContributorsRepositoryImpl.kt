@@ -78,6 +78,9 @@ class ContributorsRepositoryImpl(
         bookId: Long,
         contributorId: Long
     ) {
-        TODO("Not yet implemented")
+        db.books_Contributors_MapQueries.deleteBookContributorByBookIdAndContributorId(
+            bookId = bookId,
+            contributorId = contributorId
+        )
     }
 }

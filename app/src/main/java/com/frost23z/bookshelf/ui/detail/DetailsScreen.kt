@@ -14,10 +14,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,9 +36,11 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.R
-import com.frost23z.bookshelf.data.Books
+import com.frost23z.bookshelf.ui.addedit.AddEditScreen
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
@@ -44,13 +48,19 @@ import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
 
-data class DetailsScreen(private val book: Books) : Screen {
+data class DetailsScreen(private val bookId: Long) : Screen {
     @Composable
     override fun Content() {
-        val screenModel = koinScreenModel<DetailsScreenModel> { parametersOf(book) }
+        val screenModel = koinScreenModel<DetailsScreenModel> { parametersOf(bookId) }
         val state by screenModel.state.collectAsStateWithLifecycle()
 
+        LaunchedEffect(Unit) {
+            screenModel.loadDetails()
+        }
+
         var coverDialog by remember { mutableStateOf(false) }
+
+        val navigator = LocalNavigator.currentOrThrow
 
         Scaffold { innerPadding ->
             Column(
@@ -71,9 +81,9 @@ data class DetailsScreen(private val book: Books) : Screen {
                 ) {
                     Image(
                         painter =
-                            if (book.coverUri != null) {
+                            if (state.book.coverUri != null) {
                                 rememberAsyncImagePainter(
-                                    model = book.coverUri
+                                    model = state.book.coverUri
                                 )
                             } else {
                                 painterResource(id = R.drawable.ic_launcher_foreground)
@@ -103,13 +113,20 @@ data class DetailsScreen(private val book: Books) : Screen {
                                 horizontalArrangement = Arrangement.spacedBy(SmallPadding),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(icon = Icons.Default.Person, iconDescription = "Authors", iconSize = SmallIcon)
+                                Icon(
+                                    icon = Icons.Default.Person,
+                                    iconDescription = "Authors",
+                                    iconSize = SmallIcon
+                                )
                                 Text(text = authors, style = MaterialTheme.typography.bodyLarge)
                             }
                         }
                     }
                 }
                 Text(text = state.book.toString())
+                Button(onClick = { navigator.push(AddEditScreen(true, state.book.id)) }) {
+                    Text(text = "Edit Book")
+                }
             }
         }
         if (coverDialog) {
@@ -124,9 +141,9 @@ data class DetailsScreen(private val book: Books) : Screen {
             ) {
                 Image(
                     painter =
-                        if (book.coverUri != null) {
+                        if (state.book.coverUri != null) {
                             rememberAsyncImagePainter(
-                                model = book.coverUri
+                                model = state.book.coverUri
                             )
                         } else {
                             painterResource(id = R.drawable.ic_launcher_foreground)
