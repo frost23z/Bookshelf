@@ -12,6 +12,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.frost23z.bookshelf.ui.addedit.components.core.FormField
@@ -30,7 +31,7 @@ fun PurchaseSection(
     purchaseDate: Long,
     onPurchaseDateChange: (Long) -> Unit
 ) {
-    val isDatePickerVisible = remember { mutableStateOf(false) }
+    val isDatePickerVisible = rememberSaveable { mutableStateOf(false) }
 
     val formattedDate =
         if (purchaseDate != 0L) {

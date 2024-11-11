@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +35,9 @@ fun StatusSection(
     onStatusChange: (String) -> Unit,
     onReadPagesChange: (Long) -> Unit,
 ) {
-    var status by remember { mutableStateOf("Unread") }
-    var showDropdown by remember { mutableStateOf(false) }
-    var sliderValue by remember { mutableFloatStateOf(readPages.toFloat()) }
+    var status by rememberSaveable { mutableStateOf("Unread") }
+    var showDropdown by rememberSaveable { mutableStateOf(false) }
+    var sliderValue by rememberSaveable { mutableFloatStateOf(readPages.toFloat()) }
 
     val statusOptions = listOf("Unread", "Reading", "Read")
 
