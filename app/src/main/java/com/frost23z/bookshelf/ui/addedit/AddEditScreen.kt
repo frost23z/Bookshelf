@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -71,6 +73,12 @@ data class AddEditScreen(
                     title = if (isEditing) "Edit Book" else "Add Book",
                     searchEnabled = false,
                     actions = {
+                        IconButton(
+                            icon = if (state.book.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            onClick = { screenModel.updateBook { copy(favorite = !favorite) } },
+                            iconDescription = "Favorite",
+                            tooltip = "Favorite"
+                        )
                         IconButton(
                             icon = Icons.Default.Save,
                             onClick = {
