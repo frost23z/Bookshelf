@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -77,6 +78,7 @@ data class AddEditScreen(
                             icon = if (state.book.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                             onClick = { screenModel.updateBook { copy(favorite = !favorite) } },
                             iconDescription = "Favorite",
+                            iconTint = Color(0xFFE57373),
                             tooltip = "Favorite"
                         )
                         IconButton(
