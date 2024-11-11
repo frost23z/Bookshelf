@@ -25,7 +25,8 @@ class AddEditScreenModel(
             linkedMapOf(1 to Contributor("", Roles.AUTHOR)),
         val removedContributors: MutableSet<String> = mutableSetOf(),
         val hasUnsavedChanges: Boolean = false,
-        val showDiscardDialog: Boolean = false
+        val showDiscardDialog: Boolean = false,
+        val isSaving: Boolean = true
     )
 
     init {
@@ -43,7 +44,8 @@ class AddEditScreenModel(
                                 .toMutableMap(),
                         removedContributors = mutableSetOf(),
                         hasUnsavedChanges = false,
-                        showDiscardDialog = false
+                        showDiscardDialog = false,
+                        isSaving = true
                     )
                 }
             }
@@ -176,6 +178,12 @@ class AddEditScreenModel(
     fun toggleDiscardDialog() {
         mutableState.update {
             it.copy(showDiscardDialog = !it.showDiscardDialog)
+        }
+    }
+
+    fun toggleSaving() {
+        mutableState.update {
+            it.copy(isSaving = !it.isSaving)
         }
     }
 }

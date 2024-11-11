@@ -54,7 +54,7 @@ class BooksRepositoryImpl(
         db.booksQueries.insert(
             favorite = book.favorite,
             dateAdded = Clock.System.now().toEpochMilliseconds(),
-            dateLastUpdated = book.dateLastUpdated,
+            dateLastUpdated = Clock.System.now().toEpochMilliseconds(),
             title = book.title,
             titlePrefix = book.titlePrefix,
             titleSuffix = book.titleSuffix,
