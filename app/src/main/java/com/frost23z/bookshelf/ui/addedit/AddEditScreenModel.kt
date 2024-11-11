@@ -22,13 +22,8 @@ class AddEditScreenModel(
     data class State(
         val book: Books = books,
         val contributorsMap: MutableMap<Int, Contributor> =
-            linkedMapOf(
-                1 to
-                    Contributor(
-                        "",
-                        Roles.AUTHOR
-                    )
-            ),
+            linkedMapOf(1 to Contributor("", Roles.AUTHOR)),
+        val removedContributors: MutableSet<String> = mutableSetOf(),
         val hasUnsavedChanges: Boolean = false,
         val showDiscardDialog: Boolean = false
     )
@@ -46,7 +41,9 @@ class AddEditScreenModel(
                                     index + 1 to Contributor(contributor.name, Roles.fromValue(contributor.role) ?: Roles.OTHER_CONTRIBUTOR)
                                 }.toMap()
                                 .toMutableMap(),
-                        hasUnsavedChanges = false
+                        removedContributors = mutableSetOf(),
+                        hasUnsavedChanges = false,
+                        showDiscardDialog = false
                     )
                 }
             }
@@ -69,12 +66,31 @@ class AddEditScreenModel(
 
     private suspend fun updateExistingBook() {
         addBook.updateBook(bookId!!, state.value.book)
+
+        state.value.removedContributors.forEach { contributorName ->
+            val contributorId = addBook.getContributorIdByName(contributorName)
+            if (contributorId != null) {
+                addBook.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
+            }
+        }
+
+        val existingContributors = addBook.getContributorsByBookId(bookId)
+        existingContributors.forEach { contributor ->
+            val contributorId = addBook.getContributorIdByName(contributor.name)
+            if (contributorId != null) {
+                addBook.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
+            }
+        }
+
         saveContributors(bookId)
-        deleteRemovedContributors(bookId)
     }
 
     private suspend fun saveContributors(bookId: Long) {
         state.value.contributorsMap.forEach { (_, contributor) ->
+            if (contributor.name.isBlank()) {
+                Log.d("DatabaseError", "Contributor with empty name cannot be saved.")
+                return@forEach
+            }
             try {
                 val contributorId =
                     addBook.getContributorIdByName(contributor.name)
@@ -95,74 +111,6 @@ class AddEditScreenModel(
                 )
             } catch (e: SQLiteConstraintException) {
                 Log.d("DatabaseError", "Constraint failed for contributor ${contributor.name}: ${e.message}")
-            }
-        }
-    }
-
-    private suspend fun deleteRemovedContributors(bookId: Long) {
-        // Get the contributors currently associated with the book in the database
-        val currentContributors = addBook.getContributorsByBookId(bookId)
-
-        // Find the contributors that have been removed from the state
-        val contributorsToRemove =
-            currentContributors.filterNot { contributor ->
-                state.value.contributorsMap.values
-                    .any { it.name == contributor.name }
-            }
-
-        // Delete the removed contributors from the Books_Contributors_Map
-        contributorsToRemove.forEach { contributor ->
-            val contributorId = addBook.getContributorIdByName(contributor.name)
-            if (contributorId != null) {
-                addBook.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
-            }
-        }
-    }
-
-    suspend fun addBook() {
-        addBook.insertBook(state.value.book)
-
-        val bookId = addBook.getLastInsertedBookRowId()
-
-        state.value.contributorsMap.forEach { (_, contributor) ->
-            try {
-                val contributorId =
-                    addBook.getContributorIdByName(contributor.name)
-                        ?: kotlin
-                            .runCatching {
-                                addBook.insertContributor(
-                                    Contributors(
-                                        id = 0,
-                                        name = contributor.name
-                                    )
-                                )
-                                addBook.getLastInsertedContributorRowId()
-                            }.getOrElse { e ->
-                                if (e is SQLiteConstraintException) {
-                                    Log.d(
-                                        "DatabaseError",
-                                        "Duplicate contributor detected: ${contributor.name}"
-                                    )
-                                    addBook.getContributorIdByName(contributor.name)
-                                } else {
-                                    throw e
-                                }
-                            }
-                        ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
-
-                addBook.insertBookContributor(
-                    Books_Contributors_Map(
-                        id = 0,
-                        book_id = bookId,
-                        contributor_id = contributorId,
-                        role = contributor.role.value
-                    )
-                )
-            } catch (e: SQLiteConstraintException) {
-                Log.d(
-                    "DatabaseError",
-                    "Constraint failed for contributor ${contributor.name}: ${e.message}"
-                )
             }
         }
     }
@@ -207,21 +155,21 @@ class AddEditScreenModel(
     fun removeContributor(id: Int) {
         val contributorToRemove = state.value.contributorsMap[id]
         contributorToRemove?.let { contributor ->
-            screenModelScope.launch {
-                // Delete contributor from the database
-                val contributorId = addBook.getContributorIdByName(contributor.name)
-                if (contributorId != null) {
-                    addBook.deleteBookContributorByBookIdAndContributorId(state.value.book.id, contributorId)
-                }
+            mutableState.update { currentState ->
+                val updatedMap =
+                    currentState.contributorsMap.toMutableMap().apply {
+                        remove(id)
+                    }
+                val updatedRemovedContributors =
+                    currentState.removedContributors.toMutableSet().apply {
+                        add(contributor.name)
+                    }
+                currentState.copy(
+                    contributorsMap = updatedMap,
+                    removedContributors = updatedRemovedContributors,
+                    hasUnsavedChanges = true
+                )
             }
-        }
-
-        mutableState.update { currentState ->
-            val updatedMap =
-                currentState.contributorsMap.toMutableMap().apply {
-                    remove(id)
-                }
-            currentState.copy(contributorsMap = updatedMap, hasUnsavedChanges = true)
         }
     }
 

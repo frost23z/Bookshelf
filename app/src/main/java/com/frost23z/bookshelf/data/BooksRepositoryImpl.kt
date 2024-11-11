@@ -7,6 +7,7 @@ import com.frost23z.bookshelf.domain.repository.BooksRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Clock
 
 class BooksRepositoryImpl(
     private val db: AppDatabase,
@@ -52,7 +53,7 @@ class BooksRepositoryImpl(
     override suspend fun insertBook(book: Books) {
         db.booksQueries.insert(
             favorite = book.favorite,
-            dateAdded = book.dateAdded,
+            dateAdded = Clock.System.now().toEpochMilliseconds(),
             dateLastUpdated = book.dateLastUpdated,
             title = book.title,
             titlePrefix = book.titlePrefix,
@@ -87,7 +88,7 @@ class BooksRepositoryImpl(
             id = id,
             favorite = book.favorite,
             dateAdded = book.dateAdded,
-            dateLastUpdated = System.currentTimeMillis(),
+            dateLastUpdated = Clock.System.now().toEpochMilliseconds(),
             titlePrefix = book.titlePrefix,
             title = book.title,
             titleSuffix = book.titleSuffix,
