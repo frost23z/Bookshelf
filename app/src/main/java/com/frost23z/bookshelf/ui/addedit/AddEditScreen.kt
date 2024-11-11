@@ -105,7 +105,9 @@ data class AddEditScreen(
                                     }
                                 }
                             },
-                            enabled = state.isSaving
+                            enabled = state.isSaving,
+                            iconDescription = "Save",
+                            tooltip = "Save"
                         )
                     }
                 )

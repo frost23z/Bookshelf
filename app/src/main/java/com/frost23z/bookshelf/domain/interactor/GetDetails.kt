@@ -9,5 +9,7 @@ class GetDetails(
 ) {
     suspend fun getBookById(id: Long) = booksRepository.getBookById(id)
 
+    suspend fun deleteBookById(id: Long) = booksRepository.deleteBookById(id)
+
     suspend fun getContributorsByBookId(bookId: Long) = contributorsRepository.getContributorsByBookId(bookId)
 }

@@ -15,6 +15,8 @@ class DetailsScreenModel(
     data class State(
         val book: Books = books,
         val contributors: Map<String, List<String>> = emptyMap(),
+        val showDeleteConfirmationDialog: Boolean = false,
+        val showCoverDialog: Boolean = false
     )
 
     init {
@@ -35,5 +37,17 @@ class DetailsScreenModel(
                 )
             }
         }
+    }
+
+    fun deleteBook() {
+        screenModelScope.launch { getDetails.deleteBookById(bookId) }
+    }
+
+    fun toggleDeleteConfirmationDialog() {
+        mutableState.update { it.copy(showDeleteConfirmationDialog = !it.showDeleteConfirmationDialog) }
+    }
+
+    fun toggleCoverDialog() {
+        mutableState.update { it.copy(showCoverDialog = !it.showCoverDialog) }
     }
 }

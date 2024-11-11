@@ -13,17 +13,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +43,9 @@ import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.addedit.AddEditScreen
 import com.frost23z.bookshelf.ui.core.components.Icon
+import com.frost23z.bookshelf.ui.core.components.IconButton
+import com.frost23z.bookshelf.ui.core.components.TopBar
+import com.frost23z.bookshelf.ui.core.constants.MediumIcon
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
@@ -49,6 +53,7 @@ import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
 
 data class DetailsScreen(private val bookId: Long) : Screen {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val screenModel = koinScreenModel<DetailsScreenModel> { parametersOf(bookId) }
@@ -58,11 +63,31 @@ data class DetailsScreen(private val bookId: Long) : Screen {
             screenModel.loadDetails()
         }
 
-        var coverDialog by remember { mutableStateOf(false) }
-
         val navigator = LocalNavigator.currentOrThrow
 
-        Scaffold { innerPadding ->
+        Scaffold(
+            topBar = {
+                TopBar(
+                    title = "Details",
+                    navigateUp = { navigator.pop() },
+                    actions = {
+                        IconButton(
+                            icon = Icons.Default.Delete,
+                            onClick = { screenModel.toggleDeleteConfirmationDialog() },
+                            iconDescription = "Edit",
+                            tooltip = "Edit",
+                        )
+                        IconButton(
+                            icon = Icons.Default.Edit,
+                            onClick = { navigator.push(AddEditScreen(true, state.book.id)) },
+                            iconDescription = "Edit",
+                            tooltip = "Edit",
+                        )
+                    },
+                    searchEnabled = false
+                )
+            }
+        ) { innerPadding ->
             Column(
                 modifier =
                     Modifier
@@ -71,7 +96,7 @@ data class DetailsScreen(private val bookId: Long) : Screen {
                         .padding(innerPadding)
                         .padding(
                             maxOf(maxCutoutPadding(), MediumPadding),
-                            vertical = MediumPadding
+                            vertical = SmallPadding
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -94,7 +119,7 @@ data class DetailsScreen(private val bookId: Long) : Screen {
                             Modifier
                                 .size(100.dp, 150.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .clickable { coverDialog = true },
+                                .clickable { screenModel.toggleCoverDialog() },
                         colorFilter =
                             if (state.book.coverUri == null) {
                                 ColorFilter.tint(
@@ -124,14 +149,43 @@ data class DetailsScreen(private val bookId: Long) : Screen {
                     }
                 }
                 Text(text = state.book.toString())
-                Button(onClick = { navigator.push(AddEditScreen(true, state.book.id)) }) {
-                    Text(text = "Edit Book")
-                }
             }
         }
-        if (coverDialog) {
+
+        if (state.showDeleteConfirmationDialog) {
+            AlertDialog(
+                onDismissRequest = { screenModel.toggleDeleteConfirmationDialog() },
+                icon = {
+                    Icon(
+                        icon = Icons.Default.Delete,
+                        iconDescription = "Select Image",
+                        iconSize = MediumIcon
+                    )
+                },
+                title = { Text(text = "Delete Book") },
+                text = { Text(text = "Are you sure you want to delete this book?") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            screenModel.deleteBook()
+                            navigator.pop()
+                        }
+                    ) {
+                        Text(text = "Yes")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { screenModel.toggleDeleteConfirmationDialog() }) {
+                        Text(text = "No")
+                    }
+                },
+                properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+            )
+        }
+
+        if (state.showCoverDialog) {
             Dialog(
-                onDismissRequest = { coverDialog = false },
+                onDismissRequest = { screenModel.toggleCoverDialog() },
                 properties =
                     DialogProperties(
                         dismissOnBackPress = true,
