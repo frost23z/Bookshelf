@@ -3,24 +3,16 @@ package com.frost23z.bookshelf.ui.addedit.components
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.frost23z.bookshelf.ui.addedit.components.core.FormField
 import com.frost23z.bookshelf.ui.addedit.components.core.FormFields
+import com.frost23z.bookshelf.ui.core.components.DatePickerModal
 import com.frost23z.bookshelf.ui.core.components.IconButton
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import com.frost23z.bookshelf.ui.core.heplers.formatDateFromTimestamp
 
 @Composable
 fun PurchaseSection(
@@ -32,21 +24,6 @@ fun PurchaseSection(
     onPurchaseDateChange: (Long) -> Unit
 ) {
     val isDatePickerVisible = rememberSaveable { mutableStateOf(false) }
-
-    val formattedDate =
-        if (purchaseDate != 0L) {
-            try {
-                Instant
-                    .fromEpochMilliseconds(purchaseDate)
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .date
-                    .toString()
-            } catch (e: Exception) {
-                "" // In case of any error in conversion, leave it blank
-            }
-        } else {
-            ""
-        }
 
     FormFields(
         fields =
@@ -75,7 +52,7 @@ fun PurchaseSection(
                         )
                 ),
                 FormField(
-                    value = formattedDate,
+                    value = formatDateFromTimestamp(purchaseDate),
                     onValueChange = { },
                     placeholder = "YYYY-MM-DD",
                     label = "Purchase Date (YYYY-MM-DD)",
@@ -96,33 +73,5 @@ fun PurchaseSection(
             onDateSelected = { onPurchaseDateChange(it ?: 0L) },
             onDismiss = { isDatePickerVisible.value = false }
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DatePicker(state = datePickerState)
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.ModeEdit
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -14,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -25,8 +25,10 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.frost23z.bookshelf.ui.addedit.components.core.BorderedContainer
 import com.frost23z.bookshelf.ui.addedit.components.core.FormField
+import com.frost23z.bookshelf.ui.core.components.DateRangePickerModal
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.constants.LargeIcon
+import com.frost23z.bookshelf.ui.core.heplers.formatDateFromTimestamp
 
 @Composable
 fun StatusSection(
@@ -34,6 +36,10 @@ fun StatusSection(
     readPages: Long,
     onStatusChange: (String) -> Unit,
     onReadPagesChange: (Long) -> Unit,
+    startReadingDate: Long,
+    onStartReadingDateChange: (Long) -> Unit,
+    finishedReadingDate: Long,
+    onFinishedReadingDateChange: (Long) -> Unit
 ) {
     var status by rememberSaveable { mutableStateOf("Unread") }
     var showDropdown by rememberSaveable { mutableStateOf(false) }
@@ -54,7 +60,24 @@ fun StatusSection(
         onReadPagesChange(sliderValue.toLong())
     }
 
+    val isDatePickerVisible = rememberSaveable { mutableStateOf(false) }
+
     BorderedContainer(content = {
+        DropdownMenu(
+            expanded = showDropdown,
+            onDismissRequest = { showDropdown = false },
+            offset = DpOffset(x = LargeIcon, y = 0.dp),
+        ) {
+            statusOptions.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onStatusSelected(option)
+                        showDropdown = false
+                    }
+                )
+            }
+        }
         FormField(
             FormField(
                 value = status,
@@ -73,22 +96,6 @@ fun StatusSection(
                 }
             )
         )
-
-        DropdownMenu(
-            expanded = showDropdown,
-            onDismissRequest = { showDropdown = false },
-            offset = DpOffset(x = 40.dp, y = (-70).dp)
-        ) {
-            statusOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        onStatusSelected(option)
-                        showDropdown = false
-                    }
-                )
-            }
-        }
 
         Row(
             modifier =
@@ -120,8 +127,8 @@ fun StatusSection(
                 steps =
                     when (totalPages) {
                         in 0..1 -> 0
-                        in 2..100 -> totalPages.toInt() - 1
-                        else -> 100
+                        in 2..50 -> totalPages.toInt() - 1
+                        else -> 50
                     },
                 valueRange = 0f..totalPages.toFloat(),
                 modifier = Modifier.weight(1f)
@@ -133,11 +140,59 @@ fun StatusSection(
                 textAlign = TextAlign.Center
             )
         }
+
+        FormField(
+            FormField(
+                value = formatDateFromTimestamp(startReadingDate),
+                onValueChange = { },
+                placeholder = "YYYY-MM-DD",
+                label = "Start Date (YYYY-MM-DD)",
+                trailingIcon = {
+                    IconButton(
+                        onClick = { isDatePickerVisible.value = true },
+                        icon = Icons.Default.DateRange,
+                        iconDescription = "Select Date",
+                        tooltip = "Select Date"
+                    )
+                },
+                readOnly = true
+            )
+        )
+        FormField(
+            FormField(
+                value = formatDateFromTimestamp(finishedReadingDate),
+                onValueChange = { },
+                placeholder = "YYYY-MM-DD",
+                label = "Finish Date (YYYY-MM-DD)",
+                trailingIcon = {
+                    IconButton(
+                        onClick = { isDatePickerVisible.value = true },
+                        icon = Icons.Default.DateRange,
+                        iconDescription = "Select Date",
+                        tooltip = "Select Date"
+                    )
+                },
+                readOnly = true
+            )
+        )
     })
+    if (isDatePickerVisible.value) {
+        DateRangePickerModal(
+            onDateRangeSelected = {
+                onStartReadingDateChange(it.first ?: 0L)
+                onFinishedReadingDateChange(it.second ?: 0L)
+            },
+            onDismiss = { isDatePickerVisible.value = false },
+            initialSelectedStartDateMillis = if (startReadingDate == 0L) null else startReadingDate,
+            initialSelectedEndDateMillis = if (finishedReadingDate == 0L) null else finishedReadingDate
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun StatusSectionPreview() {
-    StatusSection(totalPages = 100, readPages = 50, onStatusChange = {}, onReadPagesChange = {})
+    StatusSection(totalPages = 100, readPages = 50, onStatusChange = {
+    }, onReadPagesChange = {
+    }, startReadingDate = 0, onStartReadingDateChange = {}, finishedReadingDate = 0, onFinishedReadingDateChange = {})
 }

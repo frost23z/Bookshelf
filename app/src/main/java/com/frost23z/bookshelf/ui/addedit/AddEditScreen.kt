@@ -204,6 +204,10 @@ data class AddEditScreen(
                     readPages = state.book.readPages ?: 0,
                     onStatusChange = { screenModel.updateBook { copy(readStatus = it) } },
                     onReadPagesChange = { screenModel.updateBook { copy(readPages = it) } },
+                    startReadingDate = state.book.startReadingDate ?: 0,
+                    onStartReadingDateChange = { screenModel.updateBook { copy(startReadingDate = it) } },
+                    finishedReadingDate = state.book.finishedReadingDate ?: 0,
+                    onFinishedReadingDateChange = { screenModel.updateBook { copy(finishedReadingDate = it) } }
                 )
             }
         }
