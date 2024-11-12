@@ -44,7 +44,7 @@ import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
-import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
+import com.frost23z.bookshelf.ui.core.heplers.maxCutoutPadding
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
@@ -62,7 +62,7 @@ data class AddEditScreen(
 
         val navigator = LocalNavigator.currentOrThrow
         val focusManager = LocalFocusManager.current
-        
+
         Scaffold(
             topBar = {
                 TopBar(
