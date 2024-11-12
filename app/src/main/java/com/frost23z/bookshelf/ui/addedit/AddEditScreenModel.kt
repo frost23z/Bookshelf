@@ -11,6 +11,8 @@ import com.frost23z.bookshelf.data.Roles
 import com.frost23z.bookshelf.data.books
 import com.frost23z.bookshelf.domain.interactor.AddBook
 import com.frost23z.bookshelf.ui.addedit.components.Contributor
+import com.frost23z.bookshelf.ui.core.util.SnackbarController
+import com.frost23z.bookshelf.ui.core.util.SnackbarEvent
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -59,6 +61,26 @@ class AddEditScreenModel(
             addNewBook()
         }
     }
+
+    fun showFailedToSaveSnackbar() =
+        screenModelScope.launch {
+            SnackbarController.sendSnackbarEvent(
+                event =
+                    SnackbarEvent(
+                        message = "Title cannot be empty"
+                    )
+            )
+        }
+
+    fun showSaveSuccessSnackbar() =
+        screenModelScope.launch {
+            SnackbarController.sendSnackbarEvent(
+                event =
+                    SnackbarEvent(
+                        message = if (isEditing) "Book updated successfully" else "Book added successfully"
+                    )
+            )
+        }
 
     private suspend fun addNewBook() {
         addBook.insertBook(state.value.book)

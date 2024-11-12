@@ -13,19 +13,16 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
@@ -48,7 +45,6 @@ import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.util.maxCutoutPadding
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
@@ -65,9 +61,8 @@ data class AddEditScreen(
         val scope = rememberCoroutineScope()
 
         val navigator = LocalNavigator.currentOrThrow
-
-        val snackbarHostState = remember { SnackbarHostState() }
-
+        val focusManager = LocalFocusManager.current
+        
         Scaffold(
             topBar = {
                 TopBar(
@@ -85,16 +80,8 @@ data class AddEditScreen(
                             icon = Icons.Default.Save,
                             onClick = {
                                 if (state.book.title.isBlank()) {
-                                    scope.launch {
-                                        launch {
-                                            snackbarHostState.showSnackbar(
-                                                message = "Title cannot be empty",
-                                                duration = SnackbarDuration.Indefinite
-                                            )
-                                        }
-                                        delay(1000L)
-                                        snackbarHostState.currentSnackbarData?.dismiss()
-                                    }
+                                    focusManager.clearFocus()
+                                    screenModel.showFailedToSaveSnackbar()
                                     return@IconButton
                                 } else {
                                     scope.launch {
@@ -107,10 +94,7 @@ data class AddEditScreen(
                                         clearTempImageCache(context)
 
                                         screenModel.saveBook()
-                                        snackbarHostState.showSnackbar(
-                                            message = "Book saved",
-                                            withDismissAction = true
-                                        )
+                                        screenModel.showSaveSuccessSnackbar()
                                         navigator.pop()
                                     }
                                 }
@@ -121,8 +105,7 @@ data class AddEditScreen(
                         )
                     }
                 )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+            }
         ) { innerPadding ->
             Column(
                 modifier =
