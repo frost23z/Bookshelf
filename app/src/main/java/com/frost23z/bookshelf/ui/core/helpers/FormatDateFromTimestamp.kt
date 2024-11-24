@@ -1,14 +1,14 @@
-package com.frost23z.bookshelf.ui.core.heplers
+package com.frost23z.bookshelf.ui.core.helpers
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-fun formatDateFromTimestamp(timestamp: Long): String {
+fun formatDateFromTimestamp(timestamp: Long?): String {
     return if (timestamp != 0L) {
         try {
             Instant
-                .fromEpochMilliseconds(timestamp)
+                .fromEpochMilliseconds(timestamp?:0L)
                 .toLocalDateTime(TimeZone.currentSystemDefault())
                 .date
                 .toString()

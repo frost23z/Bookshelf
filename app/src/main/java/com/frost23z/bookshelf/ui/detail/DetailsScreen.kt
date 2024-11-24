@@ -49,7 +49,7 @@ import com.frost23z.bookshelf.ui.core.constants.MediumIcon
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
-import com.frost23z.bookshelf.ui.core.heplers.maxCutoutPadding
+import com.frost23z.bookshelf.ui.core.helpers.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
 
 data class DetailsScreen(private val bookId: Long) : Screen {

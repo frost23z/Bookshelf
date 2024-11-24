@@ -1,4 +1,4 @@
-package com.frost23z.bookshelf.ui.core.heplers
+package com.frost23z.bookshelf.ui.core.helpers
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues

@@ -12,7 +12,7 @@ import com.frost23z.bookshelf.ui.addedit.components.core.FormField
 import com.frost23z.bookshelf.ui.addedit.components.core.FormFields
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
 import com.frost23z.bookshelf.ui.core.components.IconButton
-import com.frost23z.bookshelf.ui.core.heplers.formatDateFromTimestamp
+import com.frost23z.bookshelf.ui.core.helpers.formatDateFromTimestamp
 
 @Composable
 fun PurchaseSection(

@@ -44,7 +44,7 @@ import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.constants.MediumPadding
 import com.frost23z.bookshelf.ui.core.constants.SmallPadding
-import com.frost23z.bookshelf.ui.core.heplers.maxCutoutPadding
+import com.frost23z.bookshelf.ui.core.helpers.maxCutoutPadding
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 
