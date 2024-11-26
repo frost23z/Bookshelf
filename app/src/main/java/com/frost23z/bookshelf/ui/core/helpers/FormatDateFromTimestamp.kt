@@ -8,7 +8,7 @@ fun formatDateFromTimestamp(timestamp: Long?): String {
     return if (timestamp != 0L) {
         try {
             Instant
-                .fromEpochMilliseconds(timestamp?:0L)
+                .fromEpochMilliseconds(timestamp ?: 0L)
                 .toLocalDateTime(TimeZone.currentSystemDefault())
                 .date
                 .toString()

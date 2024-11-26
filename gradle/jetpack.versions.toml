@@ -2,7 +2,7 @@
 coreKtx = "1.13.1"
 lifecycle = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.10.01"
+composeBom = "2024.11.00"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 camera = "1.4.0"
