@@ -67,6 +67,15 @@ data class AddEditScreen(
             topBar = {
                 TopBar(
                     title = if (isEditing) "Edit Book" else "Add Book",
+                    navigateUp = {
+                        if (isEditing) {
+                            if (state.hasUnsavedChanges) {
+                                screenModel.toggleDiscardDialog()
+                            } else {
+                                navigator.pop()
+                            }
+                        }
+                    },
                     searchEnabled = false,
                     actions = {
                         IconButton(
@@ -88,7 +97,10 @@ data class AddEditScreen(
                                         screenModel.toggleSaving()
                                         if (state.book.coverUri != null) {
                                             val newUri =
-                                                moveImageToCoverFolder(context, state.book.coverUri!!.toUri())
+                                                moveImageToCoverFolder(
+                                                    context,
+                                                    state.book.coverUri!!.toUri()
+                                                )
                                             screenModel.updateBook { copy(coverUri = newUri.toString()) }
                                         }
                                         clearTempImageCache(context)
@@ -190,7 +202,13 @@ data class AddEditScreen(
                     startReadingDate = state.book.startReadingDate ?: 0,
                     onStartReadingDateChange = { screenModel.updateBook { copy(startReadingDate = it) } },
                     finishedReadingDate = state.book.finishedReadingDate ?: 0,
-                    onFinishedReadingDateChange = { screenModel.updateBook { copy(finishedReadingDate = it) } }
+                    onFinishedReadingDateChange = {
+                        screenModel.updateBook {
+                            copy(
+                                finishedReadingDate = it
+                            )
+                        }
+                    }
                 )
             }
         }
