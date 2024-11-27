@@ -133,8 +133,13 @@ data class AddEditScreen(
                 verticalArrangement = Arrangement.spacedBy(MediumPadding)
             ) {
                 CoverSection(
-                    coverUri = state.book.coverUri?.toUri(),
-                    onCoverUriChange = { screenModel.updateBook { copy(coverUri = it.toString()) } },
+                    coverUri = state.book.coverUri,
+                    onCoverUriChange = {
+                        if (it == null && state.book.coverUri != null) {
+                            screenModel.deleteImageFile(state.book.coverUri!!.toUri())
+                        }
+                        screenModel.updateBook { copy(coverUri = it?.toString()) }
+                    },
                     navigator = navigator
                 )
 

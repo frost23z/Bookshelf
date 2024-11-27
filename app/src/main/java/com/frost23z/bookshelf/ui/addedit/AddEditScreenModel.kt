@@ -1,6 +1,7 @@
 package com.frost23z.bookshelf.ui.addedit
 
 import android.database.sqlite.SQLiteConstraintException
+import android.net.Uri
 import android.util.Log
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -15,6 +16,7 @@ import com.frost23z.bookshelf.ui.core.util.SnackbarController
 import com.frost23z.bookshelf.ui.core.util.SnackbarEvent
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 
 class AddEditScreenModel(
     private val addBook: AddBook,
@@ -54,7 +56,37 @@ class AddEditScreenModel(
         }
     }
 
+    private fun cleanBookData(book: Books): Books {
+        return book.copy(
+            titlePrefix = book.titlePrefix?.trim().takeIf { it?.isNotBlank() == true },
+            title = book.title.trim(),
+            titleSuffix = book.titleSuffix?.trim().takeIf { it?.isNotBlank() == true },
+            coverUri = book.coverUri?.trim().takeIf { it?.isNotBlank() == true },
+            description = book.description?.trim().takeIf { it?.isNotBlank() == true },
+            publisher = book.publisher?.trim().takeIf { it?.isNotBlank() == true },
+            language = book.language?.trim().takeIf { it?.isNotBlank() == true },
+            pages = book.pages?.takeIf { it > 0 },
+            format = book.format?.trim().takeIf { it?.isNotBlank() == true },
+            purchaseFrom = book.purchaseFrom?.trim().takeIf { it?.isNotBlank() == true },
+            purchasePrice = book.purchasePrice?.takeIf { it > 0 },
+            purchaseDate = book.purchaseDate?.takeIf { it > 0 },
+            readStatus = book.readStatus?.trim().takeIf { it?.isNotBlank() == true },
+            readPages = book.readPages?.takeIf { it > 0 },
+            startReadingDate = book.startReadingDate?.takeIf { it > 0 },
+            finishedReadingDate = book.finishedReadingDate?.takeIf { it > 0 },
+            series = book.series?.trim().takeIf { it?.isNotBlank() == true },
+            volume = book.volume?.takeIf { it > 0 },
+            lentTo = book.lentTo?.trim().takeIf { it?.isNotBlank() == true },
+            lentDate = book.lentDate?.takeIf { it > 0 },
+            lentReturned = book.lentReturned?.takeIf { it > 0 }
+        )
+    }
+
     suspend fun saveBook() {
+        val cleanedBook = cleanBookData(state.value.book)
+        mutableState.update {
+            it.copy(book = cleanedBook)
+        }
         if (isEditing && bookId != null) {
             updateExistingBook()
         } else {
@@ -206,6 +238,17 @@ class AddEditScreenModel(
     fun toggleSaving() {
         mutableState.update {
             it.copy(isSaving = !it.isSaving)
+        }
+    }
+
+    fun deleteImageFile(uri: Uri) {
+        try {
+            val file = uri.path?.let { File(it) }
+            if (file != null && file.exists()) {
+                file.delete()
+            }
+        } catch (e: Exception) {
+            Log.e("AddEditScreen", "Error deleting image file", e)
         }
     }
 }
