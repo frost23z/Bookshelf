@@ -26,11 +26,17 @@ interface TagsRepository {
 
     suspend fun getBooksByTag(tagId: Long): List<Books>
 
-    suspend fun insertBookTag(bookId: Long, tagId: Long)
+    suspend fun insertBookTag(
+        bookId: Long,
+        tagId: Long
+    )
 
     suspend fun deleteBookTagByBook(bookId: Long)
 
     suspend fun deleteBookTagByTag(tagId: Long)
 
-    suspend fun deleteBookTag(bookId: Long, tagId: Long)
+    suspend fun deleteBookTag(
+        bookId: Long,
+        tagId: Long
+    )
 }

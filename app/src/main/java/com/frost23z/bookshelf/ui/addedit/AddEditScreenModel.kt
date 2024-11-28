@@ -116,7 +116,7 @@ class AddEditScreenModel(
 
     private suspend fun addNewBook() {
         addBook.insertBook(state.value.book)
-        val newBookId = addBook.getLastInsertedBookRowId()
+        val newBookId = addBook.getLastInsertedBookId()
         saveContributors(newBookId)
     }
 
@@ -124,17 +124,17 @@ class AddEditScreenModel(
         addBook.updateBook(bookId!!, state.value.book)
 
         state.value.removedContributors.forEach { contributorName ->
-            val contributorId = addBook.getContributorIdByName(contributorName)
+            val contributorId = addBook.getContributorByName(contributorName)
             if (contributorId != null) {
-                addBook.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
+                addBook.deleteBookContributorMapping(bookId, contributorId)
             }
         }
 
         val existingContributors = addBook.getContributorsByBookId(bookId)
         existingContributors.forEach { contributor ->
-            val contributorId = addBook.getContributorIdByName(contributor.name)
+            val contributorId = addBook.getContributorByName(contributor.name)
             if (contributorId != null) {
-                addBook.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
+                addBook.deleteBookContributorMapping(bookId, contributorId)
             }
         }
 
@@ -149,14 +149,14 @@ class AddEditScreenModel(
             }
             try {
                 val contributorId =
-                    addBook.getContributorIdByName(contributor.name)
+                    addBook.getContributorByName(contributor.name)
                         ?: runCatching {
                             addBook.insertContributor(Contributors(id = 0, name = contributor.name))
-                            addBook.getLastInsertedContributorRowId()
+                            addBook.getLastInsertedContributorId()
                         }.getOrElse { e ->
                             if (e is SQLiteConstraintException) {
                                 Log.d("DatabaseError", "Duplicate contributor detected: ${contributor.name}")
-                                addBook.getContributorIdByName(contributor.name)
+                                addBook.getContributorByName(contributor.name)
                             } else {
                                 throw e
                             }

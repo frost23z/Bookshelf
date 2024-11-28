@@ -40,7 +40,7 @@ class DetailsScreenModel(
     }
 
     fun deleteBook() {
-        screenModelScope.launch { getDetails.deleteBookById(bookId) }
+        screenModelScope.launch { getDetails.deleteBook(bookId) }
     }
 
     fun toggleDeleteConfirmationDialog() {

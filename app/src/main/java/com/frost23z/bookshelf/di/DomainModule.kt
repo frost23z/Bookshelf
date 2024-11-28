@@ -2,11 +2,15 @@ package com.frost23z.bookshelf.di
 
 import com.frost23z.bookshelf.data.BooksRepositoryImpl
 import com.frost23z.bookshelf.data.ContributorsRepositoryImpl
+import com.frost23z.bookshelf.data.ShelvesRepositoryImpl
+import com.frost23z.bookshelf.data.TagsRepositoryImpl
 import com.frost23z.bookshelf.domain.interactor.AddBook
 import com.frost23z.bookshelf.domain.interactor.GetDetails
 import com.frost23z.bookshelf.domain.interactor.GetLibraryBooks
 import com.frost23z.bookshelf.domain.repository.BooksRepository
 import com.frost23z.bookshelf.domain.repository.ContributorsRepository
+import com.frost23z.bookshelf.domain.repository.ShelvesRepository
+import com.frost23z.bookshelf.domain.repository.TagsRepository
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.detail.DetailsScreenModel
 import com.frost23z.bookshelf.ui.home.HomeScreenModel

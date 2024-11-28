@@ -18,20 +18,20 @@ class AddBook(
         booksRepository.insertBook(book)
     }
 
-    suspend fun getLastInsertedBookRowId(): Long {
+    suspend fun getLastInsertedBookId(): Long {
         return booksRepository.getLastInsertedRowId()
     }
 
-    suspend fun getContributorIdByName(contributorName: String): Long? {
-        return contributorsRepository.getContributorIdByName(contributorName)
+    suspend fun getContributorByName(contributorName: String): Long? {
+        return contributorsRepository.getContributorByName(contributorName)
     }
 
     suspend fun insertContributor(contributor: Contributors) {
         contributorsRepository.insertContributor(contributor)
     }
 
-    suspend fun getLastInsertedContributorRowId(): Long {
-        return contributorsRepository.getLastInsertedContributorRowId()
+    suspend fun getLastInsertedContributorId(): Long {
+        return contributorsRepository.getLastInsertedRowId()
     }
 
     suspend fun insertBookContributor(map: Books_Contributors_Map) {
@@ -42,15 +42,15 @@ class AddBook(
         id: Long,
         book: Books
     ) {
-        booksRepository.updateBookById(id, book)
+        booksRepository.updateBook(id, book)
     }
 
     suspend fun getContributorsByBookId(bookId: Long) = contributorsRepository.getContributorsByBookId(bookId)
 
-    suspend fun deleteBookContributorByBookIdAndContributorId(
+    suspend fun deleteBookContributorMapping(
         bookId: Long,
         contributorId: Long
     ) {
-        contributorsRepository.deleteBookContributorByBookIdAndContributorId(bookId, contributorId)
+        contributorsRepository.deleteBookContributorMapping(bookId, contributorId)
     }
 }

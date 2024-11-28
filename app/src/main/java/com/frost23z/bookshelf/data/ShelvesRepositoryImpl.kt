@@ -38,22 +38,6 @@ class ShelvesRepositoryImpl(
         db.shelvesQueries.insertShelf(name = shelf.name)
     }
 
-    override suspend fun updateShelfById(shelf: Shelves) {
-        db.shelvesQueries.updateShelfById(name = shelf.name, id = shelf.id)
-    }
-
-    override suspend fun deleteShelfById(id: Long) {
-        db.shelvesQueries.deleteShelfById(id)
-    }
-
-    override suspend fun getShelvesByBookId(bookId: Long): List<Shelves> {
-        return db.books_Shelves_MapQueries.getShelvesByBookId(bookId).executeAsList()
-    }
-
-    override suspend fun getBooksByShelfId(shelfId: Long): List<Books> {
-        return db.books_Shelves_MapQueries.getBooksByShelfId(shelfId).executeAsList()
-    }
-
     override suspend fun insertBookShelf(
         bookId: Long,
         shelfId: Long
@@ -61,11 +45,11 @@ class ShelvesRepositoryImpl(
         db.books_Shelves_MapQueries.insertBookShelf(bookId, shelfId)
     }
 
-    override suspend fun deleteBookShelfByBookId(bookId: Long) {
+    override suspend fun deleteBookShelfByBook(bookId: Long) {
         db.books_Shelves_MapQueries.deleteBookShelfByBookId(bookId)
     }
 
-    override suspend fun deleteBookShelfByShelfId(shelfId: Long) {
+    override suspend fun deleteBookShelfByShelf(shelfId: Long) {
         db.books_Shelves_MapQueries.deleteBookShelfByShelfId(shelfId)
     }
 
