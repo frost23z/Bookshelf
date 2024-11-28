@@ -8,14 +8,23 @@ CREATE TABLE books_Contributors_Map (
 );
 
 getContributorsByBookId:
-SELECT c.name, m.role
+SELECT c.*, m.role
 FROM books_Contributors_Map m
 JOIN contributors c ON m.contributor_id = c.id
 WHERE m.book_id = :bookId;
 
-getAll:
+getBooksByContributorId:
+SELECT b.*, m.role
+FROM books_Contributors_Map m
+JOIN books b ON m.book_id = b.id
+WHERE m.contributor_id = :contributorId;
+
+getAllBookContributors:
 SELECT *
 FROM books_Contributors_Map;
+
+getLastInsertedRowId:
+SELECT last_insert_rowid();
 
 insertBookContributor:
 INSERT INTO books_Contributors_Map (
@@ -25,14 +34,14 @@ VALUES (
     :bookId, :contributorId, :role
 );
 
-deleteBookContributorByBookId:
+deleteBookContributorsByBook:
 DELETE FROM books_Contributors_Map
 WHERE book_id = :bookId;
 
-deleteBookContributorByContributorId:
+deleteBookContributorsByContributor:
 DELETE FROM books_Contributors_Map
 WHERE contributor_id = :contributorId;
 
-deleteBookContributorByBookIdAndContributorId:
+deleteBookContributorMapping:
 DELETE FROM books_Contributors_Map
 WHERE book_id = :bookId AND contributor_id = :contributorId;

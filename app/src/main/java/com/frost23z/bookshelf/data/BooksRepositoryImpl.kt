@@ -51,7 +51,7 @@ class BooksRepositoryImpl(
     }
 
     override suspend fun insertBook(book: Books) {
-        db.booksQueries.insert(
+        db.booksQueries.insertBook(
             favorite = book.favorite,
             dateAdded = Clock.System.now().toEpochMilliseconds(),
             dateLastUpdated = Clock.System.now().toEpochMilliseconds(),
@@ -80,11 +80,11 @@ class BooksRepositoryImpl(
         )
     }
 
-    override suspend fun updateBookById(
+    override suspend fun updateBook(
         id: Long,
         book: Books
     ) {
-        db.booksQueries.update(
+        db.booksQueries.updateBook(
             id = id,
             favorite = book.favorite,
             dateAdded = book.dateAdded,
@@ -114,7 +114,7 @@ class BooksRepositoryImpl(
         )
     }
 
-    override suspend fun deleteBookById(id: Long) {
-        db.booksQueries.deleteBookById(id)
+    override suspend fun deleteBook(id: Long) {
+        db.booksQueries.deleteBook(id)
     }
 }

@@ -12,12 +12,12 @@ class ContributorsRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ContributorsRepository {
     override suspend fun getContributorById(id: Long): Contributors {
-        TODO("Not yet implemented")
+        return db.contributorsQueries.getContributorById(id).executeAsOne()
     }
 
-    override suspend fun getContributorIdByName(contributorName: String): Long? {
+    override suspend fun getContributorByName(contributorName: String): Long? {
         return db.contributorsQueries
-            .getContributorsIdByName(contributorName.trim())
+            .getContributorByName(contributorName.trim())
             .executeAsOneOrNull()
     }
 
@@ -32,7 +32,7 @@ class ContributorsRepositoryImpl(
             .mapToList(dispatcher)
     }
 
-    override suspend fun getLastInsertedContributorRowId(): Long {
+    override suspend fun getLastInsertedRowId(): Long {
         return db.contributorsQueries.getLastInsertedRowId().executeAsOne()
     }
 
@@ -40,12 +40,15 @@ class ContributorsRepositoryImpl(
         db.contributorsQueries.insertContributor(name = contributor.name)
     }
 
-    override suspend fun updateContributorById(contributor: Contributors) {
-        TODO("Not yet implemented")
+    override suspend fun updateContributor(contributor: Contributors) {
+        db.contributorsQueries.updateContributor(
+            id = contributor.id,
+            name = contributor.name
+        )
     }
 
-    override suspend fun deleteContributorById(id: Long) {
-        TODO("Not yet implemented")
+    override suspend fun deleteContributor(id: Long) {
+        db.contributorsQueries.deleteContributor(id)
     }
 
     //  mapper section
@@ -54,8 +57,12 @@ class ContributorsRepositoryImpl(
         return db.books_Contributors_MapQueries.getContributorsByBookId(bookId).executeAsList()
     }
 
-    override suspend fun getAllMapping(): List<Books_Contributors_Map> {
-        return db.books_Contributors_MapQueries.getAll().executeAsList()
+    override suspend fun getAllBookContributors(): List<Books_Contributors_Map> {
+        return db.books_Contributors_MapQueries.getAllBookContributors().executeAsList()
+    }
+
+    override suspend fun getBooksByContributorId(contributorId: Long): List<GetBooksByContributorId> {
+        return db.books_Contributors_MapQueries.getBooksByContributorId(contributorId).executeAsList()
     }
 
     override suspend fun insertBookContributor(map: Books_Contributors_Map) {
@@ -66,19 +73,19 @@ class ContributorsRepositoryImpl(
         )
     }
 
-    override suspend fun deleteBookContributorByBookId(bookId: Long) {
-        TODO("Not yet implemented")
+    override suspend fun deleteBookContributorsByBook(bookId: Long) {
+        db.books_Contributors_MapQueries.deleteBookContributorsByBook(bookId)
     }
 
-    override suspend fun deleteBookContributorByContributorId(contributorId: Long) {
-        TODO("Not yet implemented")
+    override suspend fun deleteBookContributorsByContributor(contributorId: Long) {
+        db.books_Contributors_MapQueries.deleteBookContributorsByContributor(contributorId)
     }
 
-    override suspend fun deleteBookContributorByBookIdAndContributorId(
+    override suspend fun deleteBookContributorMapping(
         bookId: Long,
         contributorId: Long
     ) {
-        db.books_Contributors_MapQueries.deleteBookContributorByBookIdAndContributorId(
+        db.books_Contributors_MapQueries.deleteBookContributorMapping(
             bookId = bookId,
             contributorId = contributorId
         )

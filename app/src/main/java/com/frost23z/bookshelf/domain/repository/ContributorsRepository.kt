@@ -7,34 +7,22 @@ import kotlinx.coroutines.flow.Flow
 
 interface ContributorsRepository {
     suspend fun getContributorById(id: Long): Contributors
-
-    suspend fun getContributorIdByName(contributorName: String): Long?
-
+    suspend fun getContributorByName(contributorName: String): Long?
     suspend fun getAllContributors(): List<Contributors>
-
     fun getAllContributorsAsFlow(): Flow<List<Contributors>>
-
-    suspend fun getLastInsertedContributorRowId(): Long
-
+    suspend fun getLastInsertedRowId(): Long
     suspend fun insertContributor(contributor: Contributors)
+    suspend fun updateContributor(contributor: Contributors)
+    suspend fun deleteContributor(id: Long)
 
-    suspend fun updateContributorById(contributor: Contributors)
-
-    suspend fun deleteContributorById(id: Long)
-
-    //  mapper section
-
+    // mapper section
     suspend fun getContributorsByBookId(bookId: Long): List<GetContributorsByBookId>
-
-    suspend fun getAllMapping(): List<Books_Contributors_Map>
-
+    suspend fun getBooksByContributorId(contributorId: Long): List<GetBooksByContributorId>
+    suspend fun getAllBookContributors(): List<Books_Contributors_Map>
     suspend fun insertBookContributor(map: Books_Contributors_Map)
-
-    suspend fun deleteBookContributorByBookId(bookId: Long)
-
-    suspend fun deleteBookContributorByContributorId(contributorId: Long)
-
-    suspend fun deleteBookContributorByBookIdAndContributorId(
+    suspend fun deleteBookContributorsByBook(bookId: Long)
+    suspend fun deleteBookContributorsByContributor(contributorId: Long)
+    suspend fun deleteBookContributorMapping(
         bookId: Long,
         contributorId: Long
     )

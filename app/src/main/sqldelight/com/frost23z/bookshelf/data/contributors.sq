@@ -8,10 +8,10 @@ SELECT *
 FROM contributors
 WHERE id = :id;
 
-getContributorsIdByName:
+getContributorByName:
 SELECT id
 FROM contributors
-WHERE name = :contributorName;
+WHERE name = :name;
 
 getAllContributors:
 SELECT *
@@ -23,11 +23,11 @@ SELECT last_insert_rowid();
 insertContributor:
 INSERT INTO contributors(name) VALUES (:name);
 
-updateContributorById:
+updateContributor:
 UPDATE contributors SET
 name = coalesce(:name, name)
 WHERE id = :id;
 
-deleteContributorById:
+deleteContributor:
 DELETE FROM contributors
 WHERE id = :id;

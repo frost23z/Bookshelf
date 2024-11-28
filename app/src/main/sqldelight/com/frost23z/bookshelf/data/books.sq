@@ -53,7 +53,7 @@ WHERE favorite = 1;
 getLastInsertedRowId:
 SELECT last_insert_rowid();
 
-insert:
+insertBook:
 INSERT INTO books(
     favorite, dateAdded, dateLastUpdated,
     titlePrefix, title, titleSuffix,
@@ -75,8 +75,7 @@ VALUES (
     :isLent, :lentTo, :lentDate, :lentReturned
 );
 
-
-update:
+updateBook:
 UPDATE books SET
     favorite = coalesce(:favorite, favorite),
     dateAdded = coalesce(:dateAdded, dateAdded),
@@ -105,6 +104,6 @@ UPDATE books SET
     lentReturned = :lentReturned
 WHERE id = :id;
 
-deleteBookById:
+deleteBook:
 DELETE FROM books
 WHERE id = :id;

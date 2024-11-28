@@ -18,6 +18,8 @@ val domainModule =
 
         single<BooksRepository> { BooksRepositoryImpl(db = get()) }
         single<ContributorsRepository> { ContributorsRepositoryImpl(db = get()) }
+        single<TagsRepository> { TagsRepositoryImpl(db = get()) }
+        single<ShelvesRepository> { ShelvesRepositoryImpl(db = get()) }
 
         factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
         factory { GetLibraryBooks(booksRepository = get()) }

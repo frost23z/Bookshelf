@@ -20,10 +20,10 @@ interface BooksRepository {
 
     suspend fun insertBook(book: Books)
 
-    suspend fun updateBookById(
+    suspend fun updateBook(
         id: Long,
         book: Books
     )
 
-    suspend fun deleteBookById(id: Long)
+    suspend fun deleteBook(id: Long)
 }
