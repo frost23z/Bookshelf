@@ -1,5 +1,5 @@
 [versions]
-coreKtx = "1.13.1"
+coreKtx = "1.15.0"
 lifecycle = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.11.00"
@@ -31,7 +31,7 @@ camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
 camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "camera" }
 
-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 # testing
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
