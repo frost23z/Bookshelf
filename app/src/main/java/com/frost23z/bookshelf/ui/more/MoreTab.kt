@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.More
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,10 +32,6 @@ object MoreTab : Tab {
             contentAlignment = Alignment.Center
         ) {
             val navigator = LocalNavigator.currentOrThrow
-            Button(
-                onClick = { navigator.push(ThemeSettingsScreen()) },
-                modifier = Modifier.align(Alignment.Center)
-            ) { }
         }
     }
 }
