@@ -11,14 +11,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
 import com.frost23z.bookshelf.ui.core.util.SnackbarEventObserver
 import com.frost23z.bookshelf.ui.home.HomeScreen
-import com.frost23z.bookshelf.ui.theme.BookshelfTheme
+import com.frost23z.bookshelf.ui.theme.AppTheme
+import com.frost23z.bookshelf.ui.theme.ThemePreference
+import com.frost23z.bookshelf.ui.theme.ThemeProperties
+import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
     private val cameraPermissionRequest =
@@ -41,11 +48,27 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            BookshelfTheme {
+            val themePreference: ThemePreference = get()
+            var themeProperties by remember { mutableStateOf<ThemeProperties?>(null) }
+
+            LaunchedEffect(Unit) {
+                themePreference.getThemeProperties().collect { properties ->
+                    themeProperties = properties
+                }
+            }
+
+            if (themeProperties == null) return@setContent
+
+            AppTheme(themeProperties!!) {
                 val snackbarHostState = remember { SnackbarHostState() }
                 SnackbarEventObserver(snackbarHostState = snackbarHostState)
                 Scaffold(
-                    snackbarHost = { SnackbarHost(hostState = snackbarHostState, modifier = Modifier.padding(bottom = 72.dp)) }
+                    snackbarHost = {
+                        SnackbarHost(
+                            hostState = snackbarHostState,
+                            modifier = Modifier.padding(bottom = 72.dp)
+                        )
+                    }
                 ) { innerPadding ->
                     Navigator(HomeScreen)
                 }
