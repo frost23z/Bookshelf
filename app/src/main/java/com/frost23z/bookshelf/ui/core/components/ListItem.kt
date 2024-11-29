@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,9 +29,11 @@ fun ListItem(
     leadingImageDescription: String? = null,
     leadingIcon: ImageVector? = null,
     leadingIconDescription: String? = null,
+    trailingContent: @Composable (() -> Unit)? = null,
     iconModifier: Modifier = Modifier,
     leadingContentSize: Dp = LargeIcon,
-    leadingIconSize: Dp = leadingContentSize
+    leadingIconSize: Dp = leadingContentSize,
+    tonalElevation: Dp = ListItemDefaults.Elevation
 ) {
     ListItem(
         headlineContent = { Text(headlineContent) },
@@ -60,7 +63,9 @@ fun ListItem(
                     }
                 }
                 else -> null
-            }
+            },
+        trailingContent = trailingContent,
+        tonalElevation = tonalElevation
     )
 }
 
