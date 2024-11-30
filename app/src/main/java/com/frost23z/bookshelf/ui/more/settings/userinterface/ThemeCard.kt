@@ -170,11 +170,6 @@ fun ThemeCard(
                         .background(colorScheme.surfaceContainer)
             )
         }
-        Text(
-            text =
-                theme.name
-                    .lowercase()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
-        )
+        Text(text = theme.displayName)
     }
 }
