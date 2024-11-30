@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +19,7 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,9 +98,11 @@ class AppearanceScreen : Screen {
                 }
 
                 val themeList = themeColorMapping().keys.toList()
+                val lazyListState = rememberLazyListState()
 
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
+                    state = lazyListState,
                     horizontalArrangement = Arrangement.spacedBy(PaddingSmall)
                 ) {
                     items(
@@ -110,9 +114,24 @@ class AppearanceScreen : Screen {
                             isDark = state.themeProperties.isDark,
                             isAmoledDark = state.themeProperties.isAmoledDark,
                             isSelected = state.themeProperties.theme == themeList[index],
-                            onClick = { screenModel.updateTheme(themeList[index]) },
+                            onClick = {
+                                screenModel.updateTheme(themeList[index])
+                            },
                             modifier = Modifier.width(cardWidth)
                         )
+                    }
+                }
+
+                // Scroll to selected theme when screen is displayed
+                LaunchedEffect(state.themeProperties.theme) {
+                    val selectedIndex = themeList.indexOf(state.themeProperties.theme)
+
+                    if (selectedIndex != -1) {
+                        val visibleItemCount = lazyListState.layoutInfo.visibleItemsInfo.size
+                        val centerOffset = (visibleItemCount / 2).coerceAtLeast(0)
+                        val targetIndex = (selectedIndex - centerOffset).coerceAtLeast(0)
+
+                        lazyListState.animateScrollToItem(targetIndex)
                     }
                 }
 
