@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -53,7 +54,7 @@ object MoreTab : Tab {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val drawable = ContextCompat.getDrawable(context, R.drawable.bookshelf)
+                    val drawable = remember { ContextCompat.getDrawable(context, R.drawable.bookshelf) }
                     Image(
                         painter = rememberAsyncImagePainter(drawable),
                         contentDescription = "Logo",
