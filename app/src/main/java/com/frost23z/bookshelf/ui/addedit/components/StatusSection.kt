@@ -247,6 +247,7 @@ private fun handleDateUpdates(
             onStartDateChange(0)
             onFinishDateChange(0)
         }
+
         "Reading" -> onStartDateChange(Clock.System.now().toEpochMilliseconds())
         "Read" -> onFinishDateChange(Clock.System.now().toEpochMilliseconds())
     }

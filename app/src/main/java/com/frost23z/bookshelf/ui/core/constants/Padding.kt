@@ -2,8 +2,11 @@ package com.frost23z.bookshelf.ui.core.constants
 
 import androidx.compose.ui.unit.dp
 
-val ExtraSmallPadding = 4.dp
-val SmallPadding = 8.dp
-val MediumPadding = 16.dp
-val LargePadding = 24.dp
-val ExtraLargePadding = 32.dp
+val PaddingExtraSmall = 4.dp
+val PaddingSmall = 8.dp
+val PaddingMedium = 12.dp
+val PaddingMediumLarge = 16.dp
+val PaddingLarge = 24.dp
+val PaddingExtraLarge = 32.dp
+
+val PaddingLogo = 64.dp

@@ -42,8 +42,8 @@ import com.frost23z.bookshelf.ui.addedit.components.camera.clearTempImageCache
 import com.frost23z.bookshelf.ui.addedit.components.camera.moveImageToCoverFolder
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.TopBar
-import com.frost23z.bookshelf.ui.core.constants.MediumPadding
-import com.frost23z.bookshelf.ui.core.constants.SmallPadding
+import com.frost23z.bookshelf.ui.core.constants.PaddingMediumLarge
+import com.frost23z.bookshelf.ui.core.constants.PaddingSmall
 import com.frost23z.bookshelf.ui.core.helpers.maxCutoutPadding
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -126,11 +126,11 @@ data class AddEditScreen(
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
                         .padding(
-                            horizontal = maxOf(maxCutoutPadding(), MediumPadding),
-                            vertical = SmallPadding
+                            horizontal = maxOf(maxCutoutPadding(), PaddingMediumLarge),
+                            vertical = PaddingSmall
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(MediumPadding)
+                verticalArrangement = Arrangement.spacedBy(PaddingMediumLarge)
             ) {
                 CoverSection(
                     coverUri = state.book.coverUri,

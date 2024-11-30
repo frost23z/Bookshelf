@@ -73,7 +73,7 @@ internal object NordColorScheme : ColorSchemeController() {
             onErrorContainer = Color(0xFF2E3440), // nord0
             background = Color(0xFFECEFF4), // nord6
             onBackground = Color(0xFF2E3440), // nord0
-            surface = Color(0xFFE5E9F0), // nord5
+            surface = Color(0xFFECEFF4), // nord6
             onSurface = Color(0xFF2E3440), // nord0
             surfaceVariant = Color(0xFFE5E9F0), // nord5
             onSurfaceVariant = Color(0xFF3B4252), // nord1

@@ -3,7 +3,7 @@ package com.frost23z.bookshelf.ui.theme.colorscheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
-internal abstract class ColorSchemeController {
+abstract class ColorSchemeController {
     abstract val darkScheme: ColorScheme
     abstract val lightScheme: ColorScheme
 

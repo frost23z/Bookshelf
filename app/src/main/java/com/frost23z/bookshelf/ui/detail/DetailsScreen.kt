@@ -46,9 +46,9 @@ import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.constants.MediumIcon
-import com.frost23z.bookshelf.ui.core.constants.MediumPadding
+import com.frost23z.bookshelf.ui.core.constants.PaddingMediumLarge
+import com.frost23z.bookshelf.ui.core.constants.PaddingSmall
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
-import com.frost23z.bookshelf.ui.core.constants.SmallPadding
 import com.frost23z.bookshelf.ui.core.helpers.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
 
@@ -95,14 +95,14 @@ data class DetailsScreen(private val bookId: Long) : Screen {
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
                         .padding(
-                            maxOf(maxCutoutPadding(), MediumPadding),
-                            vertical = SmallPadding
+                            maxOf(maxCutoutPadding(), PaddingMediumLarge),
+                            vertical = PaddingSmall
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(SmallPadding)
+                    horizontalArrangement = Arrangement.spacedBy(PaddingSmall)
                 ) {
                     Image(
                         painter =
@@ -135,7 +135,7 @@ data class DetailsScreen(private val bookId: Long) : Screen {
                         if (authors.isNotEmpty()) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(SmallPadding),
+                                horizontalArrangement = Arrangement.spacedBy(PaddingSmall),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
@@ -179,7 +179,11 @@ data class DetailsScreen(private val bookId: Long) : Screen {
                         Text(text = "No")
                     }
                 },
-                properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+                properties =
+                    DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true
+                    )
             )
         }
 

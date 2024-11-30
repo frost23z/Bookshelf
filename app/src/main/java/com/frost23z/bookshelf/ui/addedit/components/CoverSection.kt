@@ -119,6 +119,7 @@ fun CoverSection(
                 }
             )
         }
+
         CoverState.CAMERA -> {
             navigator.push(
                 CameraScreen(onImageCaptured = { uri ->
@@ -131,9 +132,11 @@ fun CoverSection(
                 })
             )
         }
+
         CoverState.GALLERY -> {
             // TODO: Implement gallery image picker
         }
+
         CoverState.URL_INPUT -> {
             ImageUrlInputDialog(
                 onDismiss = { coverState = CoverState.NONE },
@@ -143,6 +146,7 @@ fun CoverSection(
                 }
             )
         }
+
         CoverState.CROP -> {
             selectedImageUri?.let { uri ->
                 CropImage(

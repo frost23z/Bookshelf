@@ -50,7 +50,7 @@ fun Modifier.showSoftKeyboard(show: Boolean): Modifier =
     }
 
 @OptIn(ExperimentalLayoutApi::class)
-fun Modifier.clearFocusOnSoftKeyboardHide(onFocusCleared: (() -> Unit)? = null,): Modifier =
+fun Modifier.clearFocusOnSoftKeyboardHide(onFocusCleared: (() -> Unit)? = null): Modifier =
     composed {
         var isFocused by remember { mutableStateOf(false) }
         var keyboardShowedSinceFocused by remember { mutableStateOf(false) }

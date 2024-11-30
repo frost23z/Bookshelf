@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.frost23z.bookshelf.ui.core.components.IconTextButtonVertical
-import com.frost23z.bookshelf.ui.core.constants.ExtraSmallPadding
 import com.frost23z.bookshelf.ui.core.constants.MediumIcon
+import com.frost23z.bookshelf.ui.core.constants.PaddingExtraSmall
 
 @Composable
 fun ImagePickDialog(
@@ -109,7 +109,7 @@ fun ImagePickDialogOptions(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     tint = tint,
-                    spacing = ExtraSmallPadding
+                    spacing = PaddingExtraSmall
                 )
             }
         }

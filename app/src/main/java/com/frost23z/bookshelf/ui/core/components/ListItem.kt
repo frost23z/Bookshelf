@@ -47,10 +47,14 @@ fun ListItem(
                             painter = rememberAsyncImagePainter(model = leadingImageUri),
                             contentDescription = leadingImageDescription,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.size(leadingContentSize).clip(RoundedCornerShape(4.dp))
+                            modifier =
+                                Modifier
+                                    .size(leadingContentSize)
+                                    .clip(RoundedCornerShape(4.dp))
                         )
                     }
                 }
+
                 leadingIcon != null -> {
                     {
                         Icon(
@@ -62,6 +66,7 @@ fun ListItem(
                         )
                     }
                 }
+
                 else -> null
             },
         trailingContent = trailingContent,

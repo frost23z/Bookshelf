@@ -43,7 +43,11 @@ class AddEditScreenModel(
                             addBook
                                 .getContributorsByBookId(bookId)
                                 .mapIndexed { index, contributor ->
-                                    index + 1 to Contributor(contributor.name, Roles.fromValue(contributor.role) ?: Roles.OTHER_CONTRIBUTOR)
+                                    index + 1 to
+                                        Contributor(
+                                            contributor.name,
+                                            Roles.fromValue(contributor.role) ?: Roles.OTHER_CONTRIBUTOR
+                                        )
                                 }.toMap()
                                 .toMutableMap(),
                         removedContributors = mutableSetOf(),
@@ -155,18 +159,30 @@ class AddEditScreenModel(
                             addBook.getLastInsertedContributorId()
                         }.getOrElse { e ->
                             if (e is SQLiteConstraintException) {
-                                Log.d("DatabaseError", "Duplicate contributor detected: ${contributor.name}")
+                                Log.d(
+                                    "DatabaseError",
+                                    "Duplicate contributor detected: ${contributor.name}"
+                                )
                                 addBook.getContributorByName(contributor.name)
                             } else {
                                 throw e
                             }
-                        } ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
+                        }
+                        ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
 
                 addBook.insertBookContributor(
-                    Books_Contributors_Map(id = 0, book_id = bookId, contributor_id = contributorId, role = contributor.role.value)
+                    Books_Contributors_Map(
+                        id = 0,
+                        book_id = bookId,
+                        contributor_id = contributorId,
+                        role = contributor.role.value
+                    )
                 )
             } catch (e: SQLiteConstraintException) {
-                Log.d("DatabaseError", "Constraint failed for contributor ${contributor.name}: ${e.message}")
+                Log.d(
+                    "DatabaseError",
+                    "Constraint failed for contributor ${contributor.name}: ${e.message}"
+                )
             }
         }
     }

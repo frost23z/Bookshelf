@@ -62,7 +62,9 @@ class ContributorsRepositoryImpl(
     }
 
     override suspend fun getBooksByContributorId(contributorId: Long): List<GetBooksByContributorId> {
-        return db.books_Contributors_MapQueries.getBooksByContributorId(contributorId).executeAsList()
+        return db.books_Contributors_MapQueries
+            .getBooksByContributorId(contributorId)
+            .executeAsList()
     }
 
     override suspend fun insertBookContributor(map: Books_Contributors_Map) {

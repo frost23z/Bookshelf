@@ -7,3 +7,5 @@ val SmallIcon = 24.dp
 val MediumIcon = 32.dp
 val LargeIcon = 48.dp
 val ExtraLargeIcon = 64.dp
+
+val LargeLogo = 128.dp
