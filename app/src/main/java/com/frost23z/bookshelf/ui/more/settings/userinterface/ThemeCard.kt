@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.DividerDefaults
@@ -48,11 +45,11 @@ fun ThemeCard(
                 modifier
                     .fillMaxWidth()
                     .aspectRatio(9f / 16f)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(MaterialTheme.shapes.medium)
                     .border(
                         width = 4.dp,
                         color = if (isSelected) colorScheme.primary else DividerDefaults.color,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = MaterialTheme.shapes.medium
                     ).background(colorScheme.background)
                     .clickable(onClick = onClick)
         ) {
@@ -178,27 +175,6 @@ fun ThemeCard(
                 theme.name
                     .lowercase()
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
-        )
-    }
-}
-
-@Composable
-fun ColorPreview(
-    name: String,
-    color: androidx.compose.ui.graphics.Color
-) {
-    Box(
-        modifier =
-            Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .background(color)
-    ) {
-        Text(
-            text = name,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
