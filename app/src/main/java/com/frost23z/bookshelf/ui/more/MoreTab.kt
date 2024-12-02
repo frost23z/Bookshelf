@@ -39,7 +39,7 @@ object MoreTab : Tab {
     override val options: TabOptions
         @Composable get() {
             return TabOptions(
-                index = 2u,
+                index = 3u,
                 title = "More",
                 icon = rememberVectorPainter(Icons.AutoMirrored.Filled.More),
             )

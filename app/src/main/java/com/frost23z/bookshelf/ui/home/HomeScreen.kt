@@ -6,6 +6,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
@@ -14,8 +18,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -38,9 +40,12 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.addedit.AddEditScreen
+import com.frost23z.bookshelf.ui.lent.LentTab
 import com.frost23z.bookshelf.ui.library.LibraryTab
 import com.frost23z.bookshelf.ui.more.MoreTab
+import com.frost23z.bookshelf.ui.reading.ReadingTab
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -53,9 +58,12 @@ object HomeScreen : Screen {
     private val tabs =
         listOf(
             LibraryTab,
+            ReadingTab,
+            LentTab,
             MoreTab
         )
 
+    @OptIn(ExperimentalAnimationGraphicsApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -88,7 +96,12 @@ object HomeScreen : Screen {
                                             },
                                             icon = {
                                                 Icon(
-                                                    imageVector = Icons.Default.AddCircleOutline,
+                                                    rememberAnimatedVectorPainter(
+                                                        animatedImageVector =
+                                                            AnimatedImageVector
+                                                                .animatedVectorResource(R.drawable.anim_add),
+                                                        atEnd = state.showAddOptionsBottomsheet
+                                                    ),
                                                     contentDescription = "Add"
                                                 )
                                             },

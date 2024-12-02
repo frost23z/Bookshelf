@@ -45,7 +45,7 @@ object LibraryTab : Tab {
                 title = "Library",
                 icon =
                     rememberAnimatedVectorPainter(
-                        animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_select),
+                        animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library),
                         atEnd = LocalTabNavigator.current.current.key == key
                     )
             )
@@ -89,7 +89,10 @@ object LibraryTab : Tab {
                 }
 
                 state.filteredLibrary.isEmpty() -> {
-                    EmptyScreen(modifier = Modifier.padding(innerPadding))
+                    EmptyScreen(
+                        message = "No books found",
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
 
                 else -> {

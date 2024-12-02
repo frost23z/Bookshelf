@@ -1,0 +1,38 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="960"
+            android:viewportHeight="960">
+            <path
+                android:name="path_1"
+                android:fillColor="#000000"
+                android:pathData="M 480 800 C 448 774 414 754 376 740 C 338 726 300 718 260 718 C 220 718 204 722 178 730 C 152 738 126 748 100 762 C 86 770 72 770 60 762 C 48 754 40 742 40 726 L 40 244 C 40 236 40 230 46 222 C 52 214 56 210 62 206 C 92 190 124 178 158 170 C 192 162 226 158 260 158 C 294 158 336 164 374 174 C 412 184 446 200 480 220 L 480 726 C 514 704 550 688 588 676 C 626 664 664 660 702 660 C 740 660 752 662 780 668 C 808 674 836 682 862 698 L 862 190 C 868 192 876 196 882 198 C 888 200 894 204 900 208 C 906 212 912 218 916 224 C 920 230 922 238 922 244 L 922 726 C 922 742 916 754 902 762 C 888 770 876 770 862 762 C 838 748 812 738 784 730 C 756 722 730 718 702 718 C 662 718 624 726 586 740 C 548 754 514 774 482 800 Z"
+                android:strokeWidth="1" />
+            <path
+                android:name="path_3"
+                android:fillColor="#000000"
+                android:pathData="M 478 220 L 480 220 L 480 726 L 478 726 Z"
+                android:strokeWidth="1" />
+            <path
+                android:name="path_2"
+                android:fillColor="#000000"
+                android:pathData="M 540 632 L 540 280 L 800 20 L 800 406 L 540 632 Z"
+                android:strokeWidth="1" />
+        </vector>
+    </aapt:attr>
+    <target android:name="path_3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="2000"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="pathData"
+                android:valueFrom="M 480 220 L 480 726 L 478 726 L 478 220 L 479 220 L 480 220"
+                android:valueTo="M 540 280 L 540 632 L 540 632 L 800 406 L 800 20 L 540 280"
+                android:valueType="pathType" />
+        </aapt:attr>
+    </target>
+</animated-vector>
