@@ -91,10 +91,11 @@ spotless {
                 // https://pinterest.github.io/ktlint/latest/rules/code-styles/
                 "ktlint_code_style" to "ktlint_official",
                 // https://pinterest.github.io/ktlint/latest/rules/standard
-                "ktlint_standard_final-newline" to "disabled",
-                "ktlint_standard_function-expression-body" to "disabled",
-                "ktlint_standard_class-signature" to "disabled",
                 "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+                "ktlint_standard_binary-expression-wrapping" to "disabled",
+                "ktlint_standard_class-signature" to "disabled",
+                "ktlint_standard_final-newline" to "disabled",
+                "ktlint_function_signature_body_expression_wrapping" to "default",
                 "ktlint_standard_no-trailing-spaces" to "disabled",
                 "ktlint_standard_no-unit-return" to "disabled",
                 "ktlint_standard_trailing-comma-on-call-site" to "disabled",
