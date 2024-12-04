@@ -54,21 +54,21 @@ class ContributorsRepositoryImpl(
     //  mapper section
 
     override suspend fun getContributorsByBookId(bookId: Long): List<GetContributorsByBookId> {
-        return db.books_Contributors_MapQueries.getContributorsByBookId(bookId).executeAsList()
+        return db.booksContributorsMapperQueries.getContributorsByBookId(bookId).executeAsList()
     }
 
     override suspend fun getAllBookContributors(): List<Books_Contributors_Map> {
-        return db.books_Contributors_MapQueries.getAllBookContributors().executeAsList()
+        return db.booksContributorsMapperQueries.getAllBookContributors().executeAsList()
     }
 
     override suspend fun getBooksByContributorId(contributorId: Long): List<GetBooksByContributorId> {
-        return db.books_Contributors_MapQueries
+        return db.booksContributorsMapperQueries
             .getBooksByContributorId(contributorId)
             .executeAsList()
     }
 
     override suspend fun insertBookContributor(map: Books_Contributors_Map) {
-        db.books_Contributors_MapQueries.insertBookContributor(
+        db.booksContributorsMapperQueries.insertBookContributor(
             bookId = map.book_id,
             contributorId = map.contributor_id,
             role = map.role
@@ -76,18 +76,18 @@ class ContributorsRepositoryImpl(
     }
 
     override suspend fun deleteBookContributorsByBook(bookId: Long) {
-        db.books_Contributors_MapQueries.deleteBookContributorsByBook(bookId)
+        db.booksContributorsMapperQueries.deleteBookContributorsByBook(bookId)
     }
 
     override suspend fun deleteBookContributorsByContributor(contributorId: Long) {
-        db.books_Contributors_MapQueries.deleteBookContributorsByContributor(contributorId)
+        db.booksContributorsMapperQueries.deleteBookContributorsByContributor(contributorId)
     }
 
     override suspend fun deleteBookContributorMapping(
         bookId: Long,
         contributorId: Long
     ) {
-        db.books_Contributors_MapQueries.deleteBookContributorMapping(
+        db.booksContributorsMapperQueries.deleteBookContributorMapping(
             bookId = bookId,
             contributorId = contributorId
         )

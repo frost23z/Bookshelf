@@ -42,22 +42,22 @@ class ShelvesRepositoryImpl(
         bookId: Long,
         shelfId: Long
     ) {
-        db.books_Shelves_MapQueries.insertBookShelf(bookId, shelfId)
+        db.booksShelvesMapperQueries.insertBookShelf(bookId, shelfId)
     }
 
     override suspend fun deleteBookShelfByBook(bookId: Long) {
-        db.books_Shelves_MapQueries.deleteBookShelfByBookId(bookId)
+        db.booksShelvesMapperQueries.deleteBookShelfByBookId(bookId)
     }
 
     override suspend fun deleteBookShelfByShelf(shelfId: Long) {
-        db.books_Shelves_MapQueries.deleteBookShelfByShelfId(shelfId)
+        db.booksShelvesMapperQueries.deleteBookShelfByShelfId(shelfId)
     }
 
     override suspend fun deleteBookShelf(
         bookId: Long,
         shelfId: Long
     ) {
-        db.books_Shelves_MapQueries.deleteBookShelf(bookId, shelfId)
+        db.booksShelvesMapperQueries.deleteBookShelf(bookId, shelfId)
     }
 
     override suspend fun updateShelf(shelf: Shelves) {
@@ -69,10 +69,10 @@ class ShelvesRepositoryImpl(
     }
 
     override suspend fun getShelvesByBook(bookId: Long): List<Shelves> {
-        return db.books_Shelves_MapQueries.getShelvesByBookId(bookId).executeAsList()
+        return db.booksShelvesMapperQueries.getShelvesByBookId(bookId).executeAsList()
     }
 
     override suspend fun getBooksByShelf(shelfId: Long): List<Books> {
-        return db.books_Shelves_MapQueries.getBooksByShelfId(shelfId).executeAsList()
+        return db.booksShelvesMapperQueries.getBooksByShelfId(shelfId).executeAsList()
     }
 }

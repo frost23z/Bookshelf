@@ -47,32 +47,32 @@ class TagsRepositoryImpl(
     }
 
     override suspend fun getTagsByBook(bookId: Long): List<Tags> {
-        return db.books_Tags_MapQueries.getTagsByBookId(bookId).executeAsList()
+        return db.booksTagsMapMapperQueries.getTagsByBookId(bookId).executeAsList()
     }
 
     override suspend fun getBooksByTag(tagId: Long): List<Books> {
-        return db.books_Tags_MapQueries.getBooksByTagId(tagId).executeAsList()
+        return db.booksTagsMapMapperQueries.getBooksByTagId(tagId).executeAsList()
     }
 
     override suspend fun insertBookTag(
         bookId: Long,
         tagId: Long
     ) {
-        db.books_Tags_MapQueries.insertBookTag(bookId, tagId)
+        db.booksTagsMapMapperQueries.insertBookTag(bookId, tagId)
     }
 
     override suspend fun deleteBookTagByBook(bookId: Long) {
-        db.books_Tags_MapQueries.deleteBookTagByBookId(bookId)
+        db.booksTagsMapMapperQueries.deleteBookTagByBookId(bookId)
     }
 
     override suspend fun deleteBookTagByTag(tagId: Long) {
-        db.books_Tags_MapQueries.deleteBookTagByTagId(tagId)
+        db.booksTagsMapMapperQueries.deleteBookTagByTagId(tagId)
     }
 
     override suspend fun deleteBookTag(
         bookId: Long,
         tagId: Long
     ) {
-        db.books_Tags_MapQueries.deleteBookTag(bookId, tagId)
+        db.booksTagsMapMapperQueries.deleteBookTag(bookId, tagId)
     }
 }
