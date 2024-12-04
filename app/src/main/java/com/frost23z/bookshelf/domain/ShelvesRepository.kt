@@ -1,4 +1,4 @@
-package com.frost23z.bookshelf.domain.repository
+package com.frost23z.bookshelf.domain
 
 import com.frost23z.bookshelf.data.Books
 import com.frost23z.bookshelf.data.Shelves

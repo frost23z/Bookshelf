@@ -4,13 +4,10 @@ import com.frost23z.bookshelf.data.BooksRepositoryImpl
 import com.frost23z.bookshelf.data.ContributorsRepositoryImpl
 import com.frost23z.bookshelf.data.ShelvesRepositoryImpl
 import com.frost23z.bookshelf.data.TagsRepositoryImpl
-import com.frost23z.bookshelf.domain.interactor.AddBook
-import com.frost23z.bookshelf.domain.interactor.GetDetails
-import com.frost23z.bookshelf.domain.interactor.GetLibraryBooks
-import com.frost23z.bookshelf.domain.repository.BooksRepository
-import com.frost23z.bookshelf.domain.repository.ContributorsRepository
-import com.frost23z.bookshelf.domain.repository.ShelvesRepository
-import com.frost23z.bookshelf.domain.repository.TagsRepository
+import com.frost23z.bookshelf.domain.BooksRepository
+import com.frost23z.bookshelf.domain.ContributorsRepository
+import com.frost23z.bookshelf.domain.ShelvesRepository
+import com.frost23z.bookshelf.domain.TagsRepository
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.detail.DetailsScreenModel
 import com.frost23z.bookshelf.ui.home.HomeScreenModel
@@ -28,20 +25,12 @@ val domainModule =
         single<TagsRepository> { TagsRepositoryImpl(db = get()) }
         single<ShelvesRepository> { ShelvesRepositoryImpl(db = get()) }
 
-        factory { AddBook(booksRepository = get(), contributorsRepository = get()) }
-        factory { GetLibraryBooks(booksRepository = get()) }
-        factory { GetDetails(booksRepository = get(), contributorsRepository = get()) }
-
         factory { HomeScreenModel() }
-        factory { LibraryScreenModel(getLibraryBooks = get()) }
-        factory { DetailsScreenModel(bookId = get(), getDetails = get()) }
+        factory { LibraryScreenModel(booksRepository = get()) }
+        factory { DetailsScreenModel(bookId = get(), booksRepository = get(), contributorsRepository = get()) }
         factory { ReadingScreenModel(repository = get()) }
         factory { (isEditing: Boolean, bookId: Long?) ->
-            AddEditScreenModel(
-                addBook = get(),
-                isEditing = isEditing,
-                bookId = bookId
-            )
+            AddEditScreenModel(booksRepository = get(), contributorsRepository = get(), isEditing = isEditing, bookId = bookId)
         }
         factory { LentScreenModel(booksRepository = get()) }
 

@@ -2,7 +2,7 @@ package com.frost23z.bookshelf.data
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.frost23z.bookshelf.domain.repository.TagsRepository
+import com.frost23z.bookshelf.domain.TagsRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

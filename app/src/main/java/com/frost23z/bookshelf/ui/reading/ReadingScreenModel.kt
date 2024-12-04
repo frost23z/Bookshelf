@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
 import com.frost23z.bookshelf.data.ReadStatus
-import com.frost23z.bookshelf.domain.repository.BooksRepository
+import com.frost23z.bookshelf.domain.BooksRepository
 import com.frost23z.bookshelf.ui.core.util.SnackbarController
 import com.frost23z.bookshelf.ui.core.util.SnackbarEvent
 import kotlinx.coroutines.flow.update

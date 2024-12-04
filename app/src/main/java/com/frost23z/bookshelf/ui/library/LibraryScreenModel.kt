@@ -3,16 +3,16 @@ package com.frost23z.bookshelf.ui.library
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
-import com.frost23z.bookshelf.domain.interactor.GetLibraryBooks
+import com.frost23z.bookshelf.domain.BooksRepository
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LibraryScreenModel(
-    private val getLibraryBooks: GetLibraryBooks
+    private val booksRepository: BooksRepository
 ) : StateScreenModel<LibraryScreenModel.State>(State()) {
     init {
         screenModelScope.launch {
-            getLibraryBooks.getAllBooksAsFlow().collect { books ->
+            booksRepository.getAllBooksAsFlow().collect { books ->
                 mutableState.update { state ->
                     state.copy(
                         isLoading = false,

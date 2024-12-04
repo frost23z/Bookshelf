@@ -4,13 +4,15 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
 import com.frost23z.bookshelf.data.books
-import com.frost23z.bookshelf.domain.interactor.GetDetails
+import com.frost23z.bookshelf.domain.BooksRepository
+import com.frost23z.bookshelf.domain.ContributorsRepository
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailsScreenModel(
     private val bookId: Long,
-    private val getDetails: GetDetails
+    private val booksRepository: BooksRepository,
+    private val contributorsRepository: ContributorsRepository
 ) : StateScreenModel<DetailsScreenModel.State>(State()) {
     data class State(
         val book: Books = books,
@@ -25,10 +27,10 @@ class DetailsScreenModel(
 
     fun loadDetails() {
         screenModelScope.launch {
-            val getContributors = getDetails.getContributorsByBookId(state.value.book.id)
+            val getContributors = contributorsRepository.getContributorsByBookId(state.value.book.id)
             mutableState.update { state ->
                 state.copy(
-                    book = getDetails.getBookById(bookId),
+                    book = booksRepository.getBookById(bookId),
                     contributors =
                         getContributors.groupBy(
                             keySelector = { it.role },
@@ -40,7 +42,7 @@ class DetailsScreenModel(
     }
 
     fun deleteBook() {
-        screenModelScope.launch { getDetails.deleteBook(bookId) }
+        screenModelScope.launch { booksRepository.deleteBook(bookId) }
     }
 
     fun toggleDeleteConfirmationDialog() {

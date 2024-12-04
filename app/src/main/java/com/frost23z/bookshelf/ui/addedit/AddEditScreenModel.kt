@@ -10,7 +10,8 @@ import com.frost23z.bookshelf.data.Books_Contributors_Map
 import com.frost23z.bookshelf.data.Contributors
 import com.frost23z.bookshelf.data.Roles
 import com.frost23z.bookshelf.data.books
-import com.frost23z.bookshelf.domain.interactor.AddBook
+import com.frost23z.bookshelf.domain.BooksRepository
+import com.frost23z.bookshelf.domain.ContributorsRepository
 import com.frost23z.bookshelf.ui.addedit.components.Contributor
 import com.frost23z.bookshelf.ui.core.util.SnackbarController
 import com.frost23z.bookshelf.ui.core.util.SnackbarEvent
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class AddEditScreenModel(
-    private val addBook: AddBook,
+    private val booksRepository: BooksRepository,
+    private val contributorsRepository: ContributorsRepository,
     private val isEditing: Boolean,
     private val bookId: Long?
 ) : StateScreenModel<AddEditScreenModel.State>(State()) {
@@ -38,9 +40,9 @@ class AddEditScreenModel(
             screenModelScope.launch {
                 mutableState.update {
                     it.copy(
-                        book = addBook.getBookById(bookId),
+                        book = booksRepository.getBookById(bookId),
                         contributorsMap =
-                            addBook
+                            contributorsRepository
                                 .getContributorsByBookId(bookId)
                                 .mapIndexed { index, contributor ->
                                     index + 1 to
@@ -119,26 +121,26 @@ class AddEditScreenModel(
         }
 
     private suspend fun addNewBook() {
-        addBook.insertBook(state.value.book)
-        val newBookId = addBook.getLastInsertedBookId()
+        booksRepository.insertBook(state.value.book)
+        val newBookId = booksRepository.getLastInsertedRowId()
         saveContributors(newBookId)
     }
 
     private suspend fun updateExistingBook() {
-        addBook.updateBook(bookId!!, state.value.book)
+        booksRepository.updateBook(bookId!!, state.value.book)
 
         state.value.removedContributors.forEach { contributorName ->
-            val contributorId = addBook.getContributorByName(contributorName)
+            val contributorId = contributorsRepository.getContributorByName(contributorName)
             if (contributorId != null) {
-                addBook.deleteBookContributorMapping(bookId, contributorId)
+                contributorsRepository.deleteBookContributorMapping(bookId, contributorId)
             }
         }
 
-        val existingContributors = addBook.getContributorsByBookId(bookId)
+        val existingContributors = contributorsRepository.getContributorsByBookId(bookId)
         existingContributors.forEach { contributor ->
-            val contributorId = addBook.getContributorByName(contributor.name)
+            val contributorId = contributorsRepository.getContributorByName(contributor.name)
             if (contributorId != null) {
-                addBook.deleteBookContributorMapping(bookId, contributorId)
+                contributorsRepository.deleteBookContributorMapping(bookId, contributorId)
             }
         }
 
@@ -153,24 +155,24 @@ class AddEditScreenModel(
             }
             try {
                 val contributorId =
-                    addBook.getContributorByName(contributor.name)
+                    contributorsRepository.getContributorByName(contributor.name)
                         ?: runCatching {
-                            addBook.insertContributor(Contributors(id = 0, name = contributor.name))
-                            addBook.getLastInsertedContributorId()
+                            contributorsRepository.insertContributor(Contributors(id = 0, name = contributor.name))
+                            contributorsRepository.getLastInsertedRowId()
                         }.getOrElse { e ->
                             if (e is SQLiteConstraintException) {
                                 Log.d(
                                     "DatabaseError",
                                     "Duplicate contributor detected: ${contributor.name}"
                                 )
-                                addBook.getContributorByName(contributor.name)
+                                contributorsRepository.getContributorByName(contributor.name)
                             } else {
                                 throw e
                             }
                         }
                         ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
 
-                addBook.insertBookContributor(
+                contributorsRepository.insertBookContributor(
                     Books_Contributors_Map(
                         id = 0,
                         book_id = bookId,

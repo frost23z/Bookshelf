@@ -3,7 +3,7 @@ package com.frost23z.bookshelf.ui.lent
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
-import com.frost23z.bookshelf.domain.repository.BooksRepository
+import com.frost23z.bookshelf.domain.BooksRepository
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
