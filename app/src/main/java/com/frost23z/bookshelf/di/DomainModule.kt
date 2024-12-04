@@ -14,8 +14,10 @@ import com.frost23z.bookshelf.domain.repository.TagsRepository
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.detail.DetailsScreenModel
 import com.frost23z.bookshelf.ui.home.HomeScreenModel
+import com.frost23z.bookshelf.ui.lent.LentScreenModel
 import com.frost23z.bookshelf.ui.library.LibraryScreenModel
 import com.frost23z.bookshelf.ui.more.settings.userinterface.AppearanceScreenModel
+import com.frost23z.bookshelf.ui.reading.ReadingScreenModel
 import org.koin.dsl.module
 
 val domainModule =
@@ -33,6 +35,7 @@ val domainModule =
         factory { HomeScreenModel() }
         factory { LibraryScreenModel(getLibraryBooks = get()) }
         factory { DetailsScreenModel(bookId = get(), getDetails = get()) }
+        factory { ReadingScreenModel(repository = get()) }
         factory { (isEditing: Boolean, bookId: Long?) ->
             AddEditScreenModel(
                 addBook = get(),
@@ -40,6 +43,7 @@ val domainModule =
                 bookId = bookId
             )
         }
+        factory { LentScreenModel(booksRepository = get()) }
 
         // Settings
         factory { AppearanceScreenModel(themePreference = get()) }
