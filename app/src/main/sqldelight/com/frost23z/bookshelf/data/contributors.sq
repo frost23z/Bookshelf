@@ -21,7 +21,8 @@ getLastInsertedRowId:
 SELECT last_insert_rowid();
 
 insertContributor:
-INSERT INTO contributors(name) VALUES (:name);
+INSERT INTO contributors(name)
+VALUES (:name);
 
 updateContributor:
 UPDATE contributors SET

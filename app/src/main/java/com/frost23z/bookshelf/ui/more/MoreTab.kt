@@ -54,7 +54,8 @@ object MoreTab : Tab {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val drawable = remember { ContextCompat.getDrawable(context, R.drawable.bookshelf) }
+                    val drawable =
+                        remember { ContextCompat.getDrawable(context, R.drawable.bookshelf) }
                     Image(
                         painter = rememberAsyncImagePainter(drawable),
                         contentDescription = "Logo",

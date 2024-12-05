@@ -15,7 +15,7 @@ CREATE TABLE books (
     -- -------------------
     publisher TEXT,
     language TEXT,
-    pages INTEGER,
+    totalPages INTEGER,
     format TEXT,
     -- -------------------
     purchaseFrom TEXT,
@@ -45,11 +45,6 @@ getAllBooks:
 SELECT *
 FROM books;
 
-getFavoriteBooks:
-SELECT *
-FROM books
-WHERE favorite = 1;
-
 getLastInsertedRowId:
 SELECT last_insert_rowid();
 
@@ -58,7 +53,7 @@ INSERT INTO books(
     favorite, dateAdded, dateLastUpdated,
     titlePrefix, title, titleSuffix,
     coverUri, description,
-    publisher, language, pages, format,
+    publisher, language, totalPages, format,
     purchaseFrom, purchasePrice, purchaseDate,
     readStatus, readPages, startReadingDate, finishedReadingDate,
     series, volume,
@@ -68,7 +63,7 @@ VALUES (
     :favorite, :dateAdded, :dateLastUpdated,
     :titlePrefix, :title, :titleSuffix,
     :coverUri, :description,
-    :publisher, :language, :pages, :format,
+    :publisher, :language, :totalPages, :format,
     :purchaseFrom, :purchasePrice, :purchaseDate,
     :readStatus, :readPages, :startReadingDate, :finishedReadingDate,
     :series, :volume,
@@ -87,7 +82,7 @@ UPDATE books SET
     description = :description,
     publisher = :publisher,
     language = :language,
-    pages = :pages,
+    totalPages = :totalPages,
     format = :format,
     purchaseFrom = :purchaseFrom,
     purchasePrice = :purchasePrice,
@@ -98,7 +93,7 @@ UPDATE books SET
     finishedReadingDate = :finishedReadingDate,
     series = :series,
     volume = :volume,
-    isLent = :isLent,
+    isLent = coalesce(:isLent, isLent),
     lentTo = :lentTo,
     lentDate = :lentDate,
     lentReturned = :lentReturned

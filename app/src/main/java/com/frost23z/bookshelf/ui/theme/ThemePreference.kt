@@ -18,11 +18,9 @@ class ThemePreference(
         private val THEME_DARK_AMOLED = booleanPreferencesKey("theme_dark_amoled")
     }
 
-    private fun getTheme(): Flow<Theme> {
-        return dataStore.data.map { preferences ->
-            val themeOrdinal = preferences[THEME_KEY] ?: Theme.DYNAMIC.ordinal
-            Theme.entries.getOrNull(themeOrdinal) ?: Theme.DYNAMIC
-        }
+    private fun getTheme(): Flow<Theme> = dataStore.data.map { preferences ->
+        val themeOrdinal = preferences[THEME_KEY] ?: Theme.DYNAMIC.ordinal
+        Theme.entries.getOrNull(themeOrdinal) ?: Theme.DYNAMIC
     }
 
     suspend fun setTheme(theme: Theme) {
@@ -31,11 +29,9 @@ class ThemePreference(
         }
     }
 
-    private fun getThemeMode(): Flow<ThemeMode> {
-        return dataStore.data.map { preferences ->
-            val modeOrdinal = preferences[THEME_MODE] ?: ThemeMode.SYSTEM.ordinal
-            ThemeMode.entries.getOrNull(modeOrdinal) ?: ThemeMode.SYSTEM
-        }
+    private fun getThemeMode(): Flow<ThemeMode> = dataStore.data.map { preferences ->
+        val modeOrdinal = preferences[THEME_MODE] ?: ThemeMode.SYSTEM.ordinal
+        ThemeMode.entries.getOrNull(modeOrdinal) ?: ThemeMode.SYSTEM
     }
 
     suspend fun setThemeMode(themeMode: ThemeMode) {
@@ -44,10 +40,8 @@ class ThemePreference(
         }
     }
 
-    private fun getThemeDarkAmoled(): Flow<Boolean> {
-        return dataStore.data.map { preferences ->
-            preferences[THEME_DARK_AMOLED] ?: false
-        }
+    private fun getThemeDarkAmoled(): Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[THEME_DARK_AMOLED] ?: false
     }
 
     suspend fun setThemeDarkAmoled(isAmoled: Boolean) {
@@ -56,12 +50,11 @@ class ThemePreference(
         }
     }
 
-    fun getThemeProperties(): Flow<ThemeProperties> =
-        combine(getTheme(), getThemeMode(), getThemeDarkAmoled()) { theme, mode, isAmoled ->
-            ThemeProperties(
-                theme = theme,
-                themeMode = mode,
-                isAmoledDark = isAmoled
-            )
-        }
+    fun getThemeProperties(): Flow<ThemeProperties> = combine(getTheme(), getThemeMode(), getThemeDarkAmoled()) { theme, mode, isAmoled ->
+        ThemeProperties(
+            theme = theme,
+            themeMode = mode,
+            isAmoledDark = isAmoled
+        )
+    }
 }

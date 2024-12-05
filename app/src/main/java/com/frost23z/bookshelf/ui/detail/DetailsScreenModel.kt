@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
 import com.frost23z.bookshelf.data.books
+import com.frost23z.bookshelf.domain.BooksContributorsMapperRepository
 import com.frost23z.bookshelf.domain.BooksRepository
 import com.frost23z.bookshelf.domain.ContributorsRepository
 import kotlinx.coroutines.flow.update
@@ -12,7 +13,8 @@ import kotlinx.coroutines.launch
 class DetailsScreenModel(
     private val bookId: Long,
     private val booksRepository: BooksRepository,
-    private val contributorsRepository: ContributorsRepository
+    private val contributorsRepository: ContributorsRepository,
+    private val booksContributorsMapperRepository: BooksContributorsMapperRepository
 ) : StateScreenModel<DetailsScreenModel.State>(State()) {
     data class State(
         val book: Books = books,
@@ -27,14 +29,22 @@ class DetailsScreenModel(
 
     fun loadDetails() {
         screenModelScope.launch {
-            val getContributors = contributorsRepository.getContributorsByBookId(state.value.book.id)
+            val getContributors =
+                booksContributorsMapperRepository.getContributorsByBookId(state.value.book.id)
             mutableState.update { state ->
                 state.copy(
                     book = booksRepository.getBookById(bookId),
                     contributors =
                         getContributors.groupBy(
                             keySelector = { it.role },
-                            valueTransform = { it.name }
+                            valueTransform = {
+                                it.contributorId.let {
+                                    contributorsRepository
+                                        .getContributorById(
+                                            it
+                                        ).name
+                                }
+                            }
                         )
                 )
             }

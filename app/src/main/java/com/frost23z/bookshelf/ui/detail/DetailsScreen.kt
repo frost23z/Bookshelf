@@ -52,7 +52,9 @@ import com.frost23z.bookshelf.ui.core.constants.SmallIcon
 import com.frost23z.bookshelf.ui.core.helpers.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
 
-data class DetailsScreen(private val bookId: Long) : Screen {
+data class DetailsScreen(
+    private val bookId: Long
+) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {

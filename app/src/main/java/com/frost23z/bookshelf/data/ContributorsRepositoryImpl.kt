@@ -11,85 +11,27 @@ class ContributorsRepositoryImpl(
     private val db: AppDatabase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ContributorsRepository {
-    override suspend fun getContributorById(id: Long): Contributors {
-        return db.contributorsQueries.getContributorById(id).executeAsOne()
-    }
+    override suspend fun getContributorById(id: Long): Contributors = db.contributorsQueries.getContributorById(id).executeAsOne()
 
-    override suspend fun getContributorByName(contributorName: String): Long? {
-        return db.contributorsQueries
-            .getContributorByName(contributorName.trim())
-            .executeAsOneOrNull()
-    }
+    override suspend fun getContributorByName(contributorName: String): Long? = db.contributorsQueries
+        .getContributorByName(contributorName.trim())
+        .executeAsOneOrNull()
 
-    override suspend fun getAllContributors(): List<Contributors> {
-        return db.contributorsQueries.getAllContributors().executeAsList()
-    }
+    override suspend fun getAllContributors(): List<Contributors> = db.contributorsQueries.getAllContributors().executeAsList()
 
-    override fun getAllContributorsAsFlow(): Flow<List<Contributors>> {
-        return db.contributorsQueries
-            .getAllContributors()
-            .asFlow()
-            .mapToList(dispatcher)
-    }
+    override fun getAllContributorsAsFlow(): Flow<List<Contributors>> = db.contributorsQueries
+        .getAllContributors()
+        .asFlow()
+        .mapToList(dispatcher)
 
-    override suspend fun getLastInsertedRowId(): Long {
-        return db.contributorsQueries.getLastInsertedRowId().executeAsOne()
-    }
+    override suspend fun getLastInsertedRowId(): Long = db.contributorsQueries.getLastInsertedRowId().executeAsOne()
 
-    override suspend fun insertContributor(contributor: Contributors) {
-        db.contributorsQueries.insertContributor(name = contributor.name)
-    }
+    override suspend fun insertContributor(contributor: Contributors) = db.contributorsQueries.insertContributor(name = contributor.name)
 
-    override suspend fun updateContributor(contributor: Contributors) {
-        db.contributorsQueries.updateContributor(
-            id = contributor.id,
-            name = contributor.name
-        )
-    }
+    override suspend fun updateContributor(contributor: Contributors) = db.contributorsQueries.updateContributor(
+        id = contributor.id,
+        name = contributor.name
+    )
 
-    override suspend fun deleteContributor(id: Long) {
-        db.contributorsQueries.deleteContributor(id)
-    }
-
-    //  mapper section
-
-    override suspend fun getContributorsByBookId(bookId: Long): List<GetContributorsByBookId> {
-        return db.booksContributorsMapperQueries.getContributorsByBookId(bookId).executeAsList()
-    }
-
-    override suspend fun getAllBookContributors(): List<Books_Contributors_Map> {
-        return db.booksContributorsMapperQueries.getAllBookContributors().executeAsList()
-    }
-
-    override suspend fun getBooksByContributorId(contributorId: Long): List<GetBooksByContributorId> {
-        return db.booksContributorsMapperQueries
-            .getBooksByContributorId(contributorId)
-            .executeAsList()
-    }
-
-    override suspend fun insertBookContributor(map: Books_Contributors_Map) {
-        db.booksContributorsMapperQueries.insertBookContributor(
-            bookId = map.book_id,
-            contributorId = map.contributor_id,
-            role = map.role
-        )
-    }
-
-    override suspend fun deleteBookContributorsByBook(bookId: Long) {
-        db.booksContributorsMapperQueries.deleteBookContributorsByBook(bookId)
-    }
-
-    override suspend fun deleteBookContributorsByContributor(contributorId: Long) {
-        db.booksContributorsMapperQueries.deleteBookContributorsByContributor(contributorId)
-    }
-
-    override suspend fun deleteBookContributorMapping(
-        bookId: Long,
-        contributorId: Long
-    ) {
-        db.booksContributorsMapperQueries.deleteBookContributorMapping(
-            bookId = bookId,
-            contributorId = contributorId
-        )
-    }
+    override suspend fun deleteContributor(id: Long) = db.contributorsQueries.deleteContributor(id)
 }

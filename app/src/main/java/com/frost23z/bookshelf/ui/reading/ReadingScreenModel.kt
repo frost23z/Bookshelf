@@ -36,7 +36,7 @@ class ReadingScreenModel(
     ) {
         screenModelScope.launch {
             val book = repository.getBookById(bookId)
-            val totalPages = book.pages ?: 0L
+            val totalPages = book.totalPages ?: 0L
             val oldBook: Books = book
 
             val newStatus =

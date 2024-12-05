@@ -1,0 +1,43 @@
+CREATE TABLE booksTagsMapper (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    bookId INTEGER NOT NULL,
+    tagId INTEGER NOT NULL,
+    UNIQUE(bookId, tagId),
+    FOREIGN KEY (bookId) REFERENCES books(id) ON DELETE CASCADE,
+    FOREIGN KEY (tagId) REFERENCES tags(id) ON DELETE CASCADE
+);
+
+getTagsByBookId:
+SELECT tags.*
+FROM booksTagsMapper
+JOIN tags ON booksTagsMapper.tagId = tags.id
+WHERE booksTagsMapper.bookId = :bookId;
+
+getBooksByTagId:
+SELECT books.*
+FROM booksTagsMapper
+JOIN books ON booksTagsMapper.bookId = books.id
+WHERE booksTagsMapper.tagId = :tagId;
+
+getAllBookTags:
+SELECT *
+FROM booksTagsMapper;
+
+getLastInsertedRowId:
+SELECT last_insert_rowid();
+
+insertBookTag:
+INSERT INTO booksTagsMapper(bookId, tagId)
+VALUES (:bookId, :tagId);
+
+deleteBookTagsByBook:
+DELETE FROM booksTagsMapper
+WHERE bookId = :bookId;
+
+deleteBookTagsByTag:
+DELETE FROM booksTagsMapper
+WHERE tagId = :tagId;
+
+deleteBookTagMapping:
+DELETE FROM booksTagsMapper
+WHERE bookId = :bookId AND tagId = :tagId;

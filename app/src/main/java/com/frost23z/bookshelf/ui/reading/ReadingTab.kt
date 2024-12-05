@@ -68,7 +68,10 @@ object ReadingTab : Tab {
             }
         ) { innerPadding ->
             if (state.readingBooks.isEmpty()) {
-                EmptyScreen(message = "No books are currently being read", modifier = Modifier.padding(innerPadding))
+                EmptyScreen(
+                    message = "No books are currently being read",
+                    modifier = Modifier.padding(innerPadding)
+                )
             } else {
                 LazyColumn(
                     modifier =
@@ -87,7 +90,10 @@ object ReadingTab : Tab {
                             Column(
                                 modifier = Modifier.padding(16.dp)
                             ) {
-                                Text(text = book.title, style = MaterialTheme.typography.titleMedium)
+                                Text(
+                                    text = book.title,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -104,11 +110,11 @@ object ReadingTab : Tab {
                                             screenModel
                                                 .updateBookProgress(book.id, newValue.toLong())
                                         },
-                                        valueRange = 0f..book.pages!!.toFloat(),
+                                        valueRange = 0f..book.totalPages!!.toFloat(),
                                         modifier = Modifier.weight(1f)
                                     )
                                     Text(
-                                        text = book.pages.toString(),
+                                        text = book.totalPages.toString(),
                                         modifier = Modifier.width(40.dp),
                                         textAlign = TextAlign.Center
                                     )

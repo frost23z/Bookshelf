@@ -14,7 +14,9 @@ enum class ThemeMode {
     DARK
 }
 
-enum class Theme(val displayName: String) {
+enum class Theme(
+    val displayName: String
+) {
     DYNAMIC("Dynamic"),
     NORD("Nord"),
     ROSYTWILIGHT("Rosy Twilight"),
@@ -29,20 +31,17 @@ data class ThemeProperties(
     val isAmoledDark: Boolean
 )
 
-fun isDarkMode(themeMode: ThemeMode): Boolean {
-    return when (themeMode) {
-        ThemeMode.DARK -> true
-        ThemeMode.LIGHT -> false
-        ThemeMode.SYSTEM -> false
-    }
+fun isDarkMode(themeMode: ThemeMode): Boolean = when (themeMode) {
+    ThemeMode.DARK -> true
+    ThemeMode.LIGHT -> false
+    ThemeMode.SYSTEM -> false
 }
 
 @Composable
-fun themeColorMapping() =
-    mapOf(
-        Theme.DYNAMIC to DynamicColorScheme(context = LocalContext.current),
-        Theme.NORD to NordColorScheme,
-        Theme.ROSYTWILIGHT to RosyTwilightColorScheme,
-        Theme.EMERALD to EmeraldColorScheme,
-        Theme.VIOLETHAZE to VioletHazeColorScheme,
-    )
+fun themeColorMapping() = mapOf(
+    Theme.DYNAMIC to DynamicColorScheme(context = LocalContext.current),
+    Theme.NORD to NordColorScheme,
+    Theme.ROSYTWILIGHT to RosyTwilightColorScheme,
+    Theme.EMERALD to EmeraldColorScheme,
+    Theme.VIOLETHAZE to VioletHazeColorScheme,
+)

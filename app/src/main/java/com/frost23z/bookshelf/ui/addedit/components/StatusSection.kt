@@ -256,16 +256,14 @@ private fun handleDateUpdates(
 private fun getInitialStatus(
     readPages: Long,
     totalPages: Long
-): String =
-    when {
-        readPages >= totalPages -> "Read"
-        readPages > 0 -> "Reading"
-        else -> "Unread"
-    }
+): String = when {
+    readPages >= totalPages -> "Read"
+    readPages > 0 -> "Reading"
+    else -> "Unread"
+}
 
-private fun calculateSliderSteps(totalPages: Long): Int =
-    when (totalPages) {
-        in 0..1 -> 0
-        in 2..50 -> totalPages.toInt() - 1
-        else -> 50
-    }
+private fun calculateSliderSteps(totalPages: Long): Int = when (totalPages) {
+    in 0..1 -> 0
+    in 2..50 -> totalPages.toInt() - 1
+    else -> 50
+}

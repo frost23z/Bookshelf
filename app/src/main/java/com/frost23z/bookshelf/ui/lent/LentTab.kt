@@ -67,7 +67,10 @@ object LentTab : Tab {
             }
         ) { innerPadding ->
             if (state.lentBooks.isEmpty()) {
-                EmptyScreen(message = "No books are currently lent")
+                EmptyScreen(
+                    message = "No books are currently lent",
+                    modifier = Modifier.padding(innerPadding)
+                )
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),

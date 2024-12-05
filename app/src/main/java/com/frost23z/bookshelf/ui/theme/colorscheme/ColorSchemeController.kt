@@ -10,26 +10,22 @@ abstract class ColorSchemeController {
     fun getColorScheme(
         isDark: Boolean,
         isAmoled: Boolean = false
-    ): ColorScheme {
-        return when {
-            !isDark -> lightScheme
-            !isAmoled -> darkScheme
-            else -> createAmoledScheme()
-        }
+    ): ColorScheme = when {
+        !isDark -> lightScheme
+        !isAmoled -> darkScheme
+        else -> createAmoledScheme()
     }
 
-    private fun createAmoledScheme(): ColorScheme {
-        return darkScheme.copy(
-            background = Color.Black,
-            onBackground = Color.White,
-            surface = Color.Black,
-            onSurface = Color.White,
-            surfaceVariant = Color(0xFF131313),
-            surfaceContainerLowest = Color(0xFF151515),
-            surfaceContainerLow = Color(0xFF171717),
-            surfaceContainer = Color(0xFF191919),
-            surfaceContainerHigh = Color(0xFF1B1B1B),
-            surfaceContainerHighest = Color(0xFF1D1D1D),
-        )
-    }
+    private fun createAmoledScheme(): ColorScheme = darkScheme.copy(
+        background = Color.Black,
+        onBackground = Color.White,
+        surface = Color.Black,
+        onSurface = Color.White,
+        surfaceVariant = Color(0xFF131313),
+        surfaceContainerLowest = Color(0xFF151515),
+        surfaceContainerLow = Color(0xFF171717),
+        surfaceContainer = Color(0xFF191919),
+        surfaceContainerHigh = Color(0xFF1B1B1B),
+        surfaceContainerHighest = Color(0xFF1D1D1D),
+    )
 }

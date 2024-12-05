@@ -79,4 +79,7 @@ fun ContributorsSection(
     )
 }
 
-data class Contributor(val name: String, val role: Roles)
+data class Contributor(
+    val name: String,
+    val role: Roles
+)

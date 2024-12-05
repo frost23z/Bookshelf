@@ -14,8 +14,6 @@ val preferenceModule =
         single<ThemePreference> { ThemePreference(dataStore = get()) }
     }
 
-fun createDataStore(context: Context): DataStore<Preferences> {
-    return PreferenceDataStoreFactory.create {
-        context.preferencesDataStoreFile("data_store")
-    }
+fun createDataStore(context: Context): DataStore<Preferences> = PreferenceDataStoreFactory.create {
+    context.preferencesDataStoreFile("data_store")
 }

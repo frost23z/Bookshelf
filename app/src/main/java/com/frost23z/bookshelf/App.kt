@@ -11,9 +11,8 @@ import org.koin.dsl.KoinAppDeclaration
 
 @OptIn(KoinExperimentalAPI::class)
 class App : Application(), KoinStartup {
-    override fun onKoinStartup(): KoinAppDeclaration =
-        {
-            androidContext(this@App)
-            modules(appModule, domainModule, preferenceModule)
-        }
+    override fun onKoinStartup(): KoinAppDeclaration = {
+        androidContext(this@App)
+        modules(appModule, domainModule, preferenceModule)
+    }
 }

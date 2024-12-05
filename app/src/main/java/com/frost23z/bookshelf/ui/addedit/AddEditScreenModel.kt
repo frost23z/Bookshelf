@@ -6,10 +6,11 @@ import android.util.Log
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
-import com.frost23z.bookshelf.data.Books_Contributors_Map
+import com.frost23z.bookshelf.data.BooksContributorsMapper
 import com.frost23z.bookshelf.data.Contributors
 import com.frost23z.bookshelf.data.Roles
 import com.frost23z.bookshelf.data.books
+import com.frost23z.bookshelf.domain.BooksContributorsMapperRepository
 import com.frost23z.bookshelf.domain.BooksRepository
 import com.frost23z.bookshelf.domain.ContributorsRepository
 import com.frost23z.bookshelf.ui.addedit.components.Contributor
@@ -22,6 +23,7 @@ import java.io.File
 class AddEditScreenModel(
     private val booksRepository: BooksRepository,
     private val contributorsRepository: ContributorsRepository,
+    private val booksContributorsMapperRepository: BooksContributorsMapperRepository,
     private val isEditing: Boolean,
     private val bookId: Long?
 ) : StateScreenModel<AddEditScreenModel.State>(State()) {
@@ -42,13 +44,16 @@ class AddEditScreenModel(
                     it.copy(
                         book = booksRepository.getBookById(bookId),
                         contributorsMap =
-                            contributorsRepository
+                            booksContributorsMapperRepository
                                 .getContributorsByBookId(bookId)
                                 .mapIndexed { index, contributor ->
                                     index + 1 to
                                         Contributor(
-                                            contributor.name,
-                                            Roles.fromValue(contributor.role) ?: Roles.OTHER_CONTRIBUTOR
+                                            contributor.contributorId.let {
+                                                contributorsRepository.getContributorById(it).name
+                                            },
+                                            Roles.fromValue(contributor.role)
+                                                ?: Roles.OTHER_CONTRIBUTOR
                                         )
                                 }.toMap()
                                 .toMutableMap(),
@@ -62,31 +67,29 @@ class AddEditScreenModel(
         }
     }
 
-    private fun cleanBookData(book: Books): Books {
-        return book.copy(
-            titlePrefix = book.titlePrefix?.trim().takeIf { it?.isNotBlank() == true },
-            title = book.title.trim(),
-            titleSuffix = book.titleSuffix?.trim().takeIf { it?.isNotBlank() == true },
-            coverUri = book.coverUri?.trim().takeIf { it?.isNotBlank() == true },
-            description = book.description?.trim().takeIf { it?.isNotBlank() == true },
-            publisher = book.publisher?.trim().takeIf { it?.isNotBlank() == true },
-            language = book.language?.trim().takeIf { it?.isNotBlank() == true },
-            pages = book.pages?.takeIf { it > 0 },
-            format = book.format?.trim().takeIf { it?.isNotBlank() == true },
-            purchaseFrom = book.purchaseFrom?.trim().takeIf { it?.isNotBlank() == true },
-            purchasePrice = book.purchasePrice?.takeIf { it > 0 },
-            purchaseDate = book.purchaseDate?.takeIf { it > 0 },
-            readStatus = book.readStatus?.trim().takeIf { it?.isNotBlank() == true },
-            readPages = book.readPages?.takeIf { it > 0 },
-            startReadingDate = book.startReadingDate?.takeIf { it > 0 },
-            finishedReadingDate = book.finishedReadingDate?.takeIf { it > 0 },
-            series = book.series?.trim().takeIf { it?.isNotBlank() == true },
-            volume = book.volume?.takeIf { it > 0 },
-            lentTo = book.lentTo?.trim().takeIf { it?.isNotBlank() == true },
-            lentDate = book.lentDate?.takeIf { it > 0 },
-            lentReturned = book.lentReturned?.takeIf { it > 0 }
-        )
-    }
+    private fun cleanBookData(book: Books): Books = book.copy(
+        titlePrefix = book.titlePrefix?.trim().takeIf { it?.isNotBlank() == true },
+        title = book.title.trim(),
+        titleSuffix = book.titleSuffix?.trim().takeIf { it?.isNotBlank() == true },
+        coverUri = book.coverUri?.trim().takeIf { it?.isNotBlank() == true },
+        description = book.description?.trim().takeIf { it?.isNotBlank() == true },
+        publisher = book.publisher?.trim().takeIf { it?.isNotBlank() == true },
+        language = book.language?.trim().takeIf { it?.isNotBlank() == true },
+        totalPages = book.totalPages?.takeIf { it > 0 },
+        format = book.format?.trim().takeIf { it?.isNotBlank() == true },
+        purchaseFrom = book.purchaseFrom?.trim().takeIf { it?.isNotBlank() == true },
+        purchasePrice = book.purchasePrice?.takeIf { it > 0 },
+        purchaseDate = book.purchaseDate?.takeIf { it > 0 },
+        readStatus = book.readStatus?.trim().takeIf { it?.isNotBlank() == true },
+        readPages = book.readPages?.takeIf { it > 0 },
+        startReadingDate = book.startReadingDate?.takeIf { it > 0 },
+        finishedReadingDate = book.finishedReadingDate?.takeIf { it > 0 },
+        series = book.series?.trim().takeIf { it?.isNotBlank() == true },
+        volume = book.volume?.takeIf { it > 0 },
+        lentTo = book.lentTo?.trim().takeIf { it?.isNotBlank() == true },
+        lentDate = book.lentDate?.takeIf { it > 0 },
+        lentReturned = book.lentReturned?.takeIf { it > 0 }
+    )
 
     suspend fun saveBook() {
         val cleanedBook = cleanBookData(state.value.book)
@@ -100,25 +103,23 @@ class AddEditScreenModel(
         }
     }
 
-    fun showFailedToSaveSnackbar() =
-        screenModelScope.launch {
-            SnackbarController.sendSnackbarEvent(
-                event =
-                    SnackbarEvent(
-                        message = "Title cannot be empty"
-                    )
-            )
-        }
+    fun showFailedToSaveSnackbar() = screenModelScope.launch {
+        SnackbarController.sendSnackbarEvent(
+            event =
+                SnackbarEvent(
+                    message = "Title cannot be empty"
+                )
+        )
+    }
 
-    fun showSaveSuccessSnackbar() =
-        screenModelScope.launch {
-            SnackbarController.sendSnackbarEvent(
-                event =
-                    SnackbarEvent(
-                        message = if (isEditing) "Book updated successfully" else "Book added successfully"
-                    )
-            )
-        }
+    fun showSaveSuccessSnackbar() = screenModelScope.launch {
+        SnackbarController.sendSnackbarEvent(
+            event =
+                SnackbarEvent(
+                    message = if (isEditing) "Book updated successfully" else "Book added successfully"
+                )
+        )
+    }
 
     private suspend fun addNewBook() {
         booksRepository.insertBook(state.value.book)
@@ -132,15 +133,26 @@ class AddEditScreenModel(
         state.value.removedContributors.forEach { contributorName ->
             val contributorId = contributorsRepository.getContributorByName(contributorName)
             if (contributorId != null) {
-                contributorsRepository.deleteBookContributorMapping(bookId, contributorId)
+                booksContributorsMapperRepository.deleteBookContributorMapping(
+                    bookId,
+                    contributorId
+                )
             }
         }
 
-        val existingContributors = contributorsRepository.getContributorsByBookId(bookId)
+        val existingContributors = booksContributorsMapperRepository.getContributorsByBookId(bookId)
         existingContributors.forEach { contributor ->
-            val contributorId = contributorsRepository.getContributorByName(contributor.name)
+            val contributorId =
+                contributorsRepository.getContributorByName(
+                    contributor.contributorId.let {
+                        contributorsRepository.getContributorById(it).name
+                    }
+                )
             if (contributorId != null) {
-                contributorsRepository.deleteBookContributorMapping(bookId, contributorId)
+                booksContributorsMapperRepository.deleteBookContributorMapping(
+                    bookId,
+                    contributorId
+                )
             }
         }
 
@@ -157,7 +169,12 @@ class AddEditScreenModel(
                 val contributorId =
                     contributorsRepository.getContributorByName(contributor.name)
                         ?: runCatching {
-                            contributorsRepository.insertContributor(Contributors(id = 0, name = contributor.name))
+                            contributorsRepository.insertContributor(
+                                Contributors(
+                                    id = 0,
+                                    name = contributor.name
+                                )
+                            )
                             contributorsRepository.getLastInsertedRowId()
                         }.getOrElse { e ->
                             if (e is SQLiteConstraintException) {
@@ -172,11 +189,11 @@ class AddEditScreenModel(
                         }
                         ?: throw SQLiteConstraintException("Failed to retrieve contributor ID for ${contributor.name}")
 
-                contributorsRepository.insertBookContributor(
-                    Books_Contributors_Map(
+                booksContributorsMapperRepository.insertBookContributor(
+                    BooksContributorsMapper(
                         id = 0,
-                        book_id = bookId,
-                        contributor_id = contributorId,
+                        bookId = bookId,
+                        contributorId = contributorId,
                         role = contributor.role.value
                     )
                 )

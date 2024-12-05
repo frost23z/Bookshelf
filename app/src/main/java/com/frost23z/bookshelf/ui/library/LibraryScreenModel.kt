@@ -47,12 +47,10 @@ class LibraryScreenModel(
     private fun filterBooks(
         books: List<Books>,
         query: String?
-    ): List<Books> {
-        return if (query.isNullOrEmpty()) {
-            books
-        } else {
-            books.filter { it.title.contains(query, ignoreCase = true) }
-        }
+    ): List<Books> = if (query.isNullOrEmpty()) {
+        books
+    } else {
+        books.filter { it.title.contains(query, ignoreCase = true) }
     }
 
     fun onCancelSelection() {

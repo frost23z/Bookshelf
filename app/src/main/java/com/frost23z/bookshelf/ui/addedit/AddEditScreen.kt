@@ -184,8 +184,8 @@ data class AddEditScreen(
                     onPublisherChange = { screenModel.updateBook { copy(publisher = it) } },
                     language = state.book.language ?: "",
                     onLanguageChange = { screenModel.updateBook { copy(language = it) } },
-                    pages = state.book.pages?.toString() ?: "",
-                    onPagesChange = { screenModel.updateBook { copy(pages = it.toLongOrNull()) } },
+                    pages = state.book.totalPages?.toString() ?: "",
+                    onPagesChange = { screenModel.updateBook { copy(totalPages = it.toLongOrNull()) } },
                     format = state.book.format ?: "",
                     onFormatChange = { screenModel.updateBook { copy(format = it) } }
                 )
@@ -200,7 +200,7 @@ data class AddEditScreen(
                 )
 
                 StatusSection(
-                    totalPages = state.book.pages ?: 0,
+                    totalPages = state.book.totalPages ?: 0,
                     readPages = state.book.readPages ?: 0,
                     onStatusChange = { screenModel.updateBook { copy(readStatus = it) } },
                     onReadPagesChange = { screenModel.updateBook { copy(readPages = it) } },

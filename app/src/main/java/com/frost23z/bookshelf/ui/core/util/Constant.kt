@@ -10,12 +10,10 @@ data class TextStyles(
 )
 
 @Composable
-fun getTextStyles(): TextStyles {
-    return TextStyles(
-        textFieldLabelStyle = MaterialTheme.typography.labelLarge,
-        textFieldStyle = MaterialTheme.typography.bodyLarge
-    )
-}
+fun getTextStyles(): TextStyles = TextStyles(
+    textFieldLabelStyle = MaterialTheme.typography.labelLarge,
+    textFieldStyle = MaterialTheme.typography.bodyLarge
+)
 
 val GetTextStyle: TextStyles
     @Composable

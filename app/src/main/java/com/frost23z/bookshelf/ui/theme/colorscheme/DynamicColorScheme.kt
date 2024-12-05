@@ -6,7 +6,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 
-internal class DynamicColorScheme(context: Context) : ColorSchemeController() {
+internal class DynamicColorScheme(
+    context: Context
+) : ColorSchemeController() {
     @RequiresApi(Build.VERSION_CODES.S)
     override val darkScheme = dynamicDarkColorScheme(context)
 

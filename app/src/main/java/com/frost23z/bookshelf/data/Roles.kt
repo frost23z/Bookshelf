@@ -1,6 +1,8 @@
 package com.frost23z.bookshelf.data
 
-enum class Roles(val value: String) {
+enum class Roles(
+    val value: String
+) {
     AUTHOR("Author"),
     EDITOR("Editor"),
     TRANSLATOR("Translator"),
@@ -9,8 +11,6 @@ enum class Roles(val value: String) {
     OTHER_CONTRIBUTOR("Other Contributor");
 
     companion object {
-        fun fromValue(value: String): Roles? {
-            return entries.find { it.value == value }
-        }
+        fun fromValue(value: String): Roles? = entries.find { it.value == value }
     }
 }

@@ -34,13 +34,11 @@ fun AppTheme(
 }
 
 @Composable
-fun getThemeColorScheme(themeProperties: ThemeProperties): ColorScheme {
-    return resolveColorScheme(
-        theme = themeProperties.theme,
-        isDark = themeProperties.isDark,
-        isAmoled = themeProperties.isAmoledDark
-    )
-}
+fun getThemeColorScheme(themeProperties: ThemeProperties): ColorScheme = resolveColorScheme(
+    theme = themeProperties.theme,
+    isDark = themeProperties.isDark,
+    isAmoled = themeProperties.isAmoledDark
+)
 
 @Composable
 fun resolveColorScheme(

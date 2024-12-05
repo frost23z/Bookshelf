@@ -1,43 +1,43 @@
-CREATE TABLE books_Shelves_Map (
+CREATE TABLE booksShelvesMapper (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    book_id INTEGER NOT NULL,
-    shelf_id INTEGER NOT NULL,
-    UNIQUE(book_id, shelf_id),
-    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
-    FOREIGN KEY (shelf_id) REFERENCES shelves(id) ON DELETE CASCADE
+    bookId INTEGER NOT NULL,
+    shelfId INTEGER NOT NULL,
+    UNIQUE(bookId, shelfId),
+    FOREIGN KEY (bookId) REFERENCES books(id) ON DELETE CASCADE,
+    FOREIGN KEY (shelfId) REFERENCES shelves(id) ON DELETE CASCADE
 );
 
 getShelvesByBookId:
-SELECT s.*
-FROM books_Shelves_Map m
-JOIN shelves s ON m.shelf_id = s.id
-WHERE m.book_id = :bookId;
+SELECT shelves.*
+FROM booksShelvesMapper
+JOIN shelves ON booksShelvesMapper.shelfId = shelves.id
+WHERE booksShelvesMapper.bookId = :bookId;
 
 getBooksByShelfId:
-SELECT b.*
-FROM books_Shelves_Map m
-JOIN books b ON m.book_id = b.id
-WHERE m.shelf_id = :shelfId;
+SELECT books.*
+FROM booksShelvesMapper
+JOIN books ON booksShelvesMapper.bookId = books.id
+WHERE booksShelvesMapper.shelfId = :shelfId;
 
 getAllBookShelves:
 SELECT *
-FROM books_Shelves_Map;
+FROM booksShelvesMapper;
 
 getLastInsertedRowId:
 SELECT last_insert_rowid();
 
 insertBookShelf:
-INSERT INTO books_Shelves_Map(book_id, shelf_id)
+INSERT INTO booksShelvesMapper (bookId, shelfId)
 VALUES (:bookId, :shelfId);
 
-deleteBookShelfByBookId:
-DELETE FROM books_Shelves_Map
-WHERE book_id = :bookId;
+deleteBookShelvesByBook:
+DELETE FROM booksShelvesMapper
+WHERE bookId = :bookId;
 
-deleteBookShelfByShelfId:
-DELETE FROM books_Shelves_Map
-WHERE shelf_id = :shelfId;
+deleteBookShelvesByShelf:
+DELETE FROM booksShelvesMapper
+WHERE shelfId = :shelfId;
 
-deleteBookShelf:
-DELETE FROM books_Shelves_Map
-WHERE book_id = :bookId AND shelf_id = :shelfId;
+deleteBookShelfMapping:
+DELETE FROM booksShelvesMapper
+WHERE bookId = :bookId AND shelfId = :shelfId;
