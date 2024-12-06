@@ -3,6 +3,7 @@ package com.frost23z.bookshelf.ui.home
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -12,12 +13,21 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -29,9 +39,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ClipOp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -66,60 +83,85 @@ object HomeScreen : Screen {
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-
         val screenModel = koinScreenModel<HomeScreenModel>()
         val state by screenModel.state.collectAsStateWithLifecycle()
 
+        val navigator = LocalNavigator.currentOrThrow
+
+        val bottomNavigationVisible by produceState(initialValue = true) {
+            showBottomNavigationEvent.receiveAsFlow().collectLatest { value = it }
+        }
+
         TabNavigator(
-            tab = LibraryTab
+            tab = state.currentTab,
+            key = "home_navigator"
         ) { tabNavigator ->
             CompositionLocalProvider(LocalNavigator provides navigator) {
                 Scaffold(
                     bottomBar = {
-                        val bottomNavigationVisible by produceState(initialValue = true) {
-                            showBottomNavigationEvent.receiveAsFlow().collectLatest { value = it }
-                        }
                         AnimatedVisibility(
                             visible = bottomNavigationVisible,
                             enter = expandVertically(),
                             exit = shrinkVertically(),
                         ) {
-                            NavigationBar {
-                                tabs.forEachIndexed { index, tab ->
-                                    NavigationBarItem(tab = tab)
-                                    if (index == (tabs.size / 2) - 1) {
-                                        NavigationBarItem(
-                                            selected = state.showAddOptionsBottomsheet,
-                                            onClick = {
-                                                screenModel.toggleAddOptionsBottomsheet()
-                                            },
-                                            icon = {
-                                                Icon(
-                                                    rememberAnimatedVectorPainter(
-                                                        animatedImageVector =
-                                                            AnimatedImageVector
-                                                                .animatedVectorResource(R.drawable.anim_add),
-                                                        atEnd = state.showAddOptionsBottomsheet
-                                                    ),
-                                                    contentDescription = "Add"
-                                                )
-                                            },
-                                            label = {
-                                                Text(
-                                                    text = "Add",
-                                                    style = MaterialTheme.typography.labelLarge,
-                                                    maxLines = 1,
-                                                    overflow = TextOverflow.Ellipsis,
-                                                )
-                                            },
-                                            alwaysShowLabel = true,
-                                        )
+                            NavigationBar(
+                                containerColor = Color.Transparent,
+                            ) {
+                                Box(modifier = Modifier.fillMaxWidth().height(80.dp)) {
+                                    val surfaceContainerColor = MaterialTheme.colorScheme.surfaceContainer
+                                    Canvas(modifier = Modifier.fillMaxSize()) {
+                                        val cutoutRadius = 40.dp.toPx()
+                                        val cutoutPath =
+                                            Path().apply {
+                                                addOval(Rect(center = Offset(size.width / 2, 0f), radius = cutoutRadius))
+                                            }
+                                        clipPath(path = cutoutPath, clipOp = ClipOp.Difference) {
+                                            drawRect(color = surfaceContainerColor)
+                                        }
+                                    }
+                                    Row(
+                                        modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .align(Alignment.BottomCenter),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        tabs.forEachIndexed { index, tab ->
+                                            NavigationBarItem(tab = tab)
+                                            if (index == (tabs.size / 2) - 1) {
+                                                // Spacer(modifier = Modifier.weight(1f))
+                                                NavigationBarMiddleItem(modifier = Modifier.weight(1f))
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     },
+                    floatingActionButton = {
+                        AnimatedVisibility(
+                            visible = bottomNavigationVisible,
+                            enter = expandHorizontally(),
+                            exit = shrinkVertically(),
+                        ) {
+                            FloatingActionButton(
+                                onClick = { screenModel.toggleAddOptionsBottomsheet() },
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                shape = CircleShape,
+                                modifier = Modifier.offset(y = 44.dp),
+                            ) {
+                                Icon(
+                                    rememberAnimatedVectorPainter(
+                                        animatedImageVector =
+                                            AnimatedImageVector.animatedVectorResource(R.drawable.anim_add),
+                                        atEnd = state.showAddOptionsBottomsheet
+                                    ),
+                                    contentDescription = "Add"
+                                )
+                            }
+                        }
+                    },
+                    floatingActionButtonPosition = FabPosition.Center,
                     contentWindowInsets = WindowInsets(0),
                 ) { innerPadding ->
                     Box(
@@ -155,10 +197,15 @@ object HomeScreen : Screen {
                 }
             }
             BackHandler(
-                enabled = tabNavigator.current != LibraryTab,
+                enabled = state.showAddOptionsBottomsheet || tabNavigator.current != LibraryTab,
                 onBack = {
-                    tabNavigator.current = LibraryTab
-                    screenModel.setCurrentTab(LibraryTab)
+                    when {
+                        state.showAddOptionsBottomsheet -> screenModel.toggleAddOptionsBottomsheet()
+                        else -> {
+                            tabNavigator.current = LibraryTab
+                            screenModel.setCurrentTab(LibraryTab)
+                        }
+                    }
                 }
             )
         }
@@ -167,8 +214,6 @@ object HomeScreen : Screen {
     @Composable
     private fun RowScope.NavigationBarItem(tab: Tab) {
         val tabNavigator = LocalTabNavigator.current
-        val navigator = LocalNavigator.currentOrThrow
-        val scope = rememberCoroutineScope()
         val selected = tabNavigator.current::class == tab::class
         val screenModel = koinScreenModel<HomeScreenModel>()
         val state by screenModel.state.collectAsStateWithLifecycle()
@@ -176,6 +221,7 @@ object HomeScreen : Screen {
             selected = selected && !state.showAddOptionsBottomsheet,
             onClick = {
                 if (!selected) {
+                    screenModel.setCurrentTab(tab)
                     tabNavigator.current = tab
                 }
             },
@@ -191,11 +237,32 @@ object HomeScreen : Screen {
                     text = tab.options.title,
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                    overflow = TextOverflow.Ellipsis
                 )
             },
             alwaysShowLabel = true,
         )
+    }
+
+    @Composable
+    private fun NavigationBarMiddleItem(modifier: Modifier = Modifier) {
+        Box(
+            modifier = modifier.size(80.dp), // Standard NavigationBar Container height
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier.padding(top = 32.dp), // 12dp + 16dp + 4dp = 32dp from top
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Add",
+                    style = MaterialTheme.typography.labelLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
     }
 
     suspend fun showBottomNavigation(show: Boolean) {

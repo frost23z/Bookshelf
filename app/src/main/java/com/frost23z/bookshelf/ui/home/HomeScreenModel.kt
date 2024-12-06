@@ -13,19 +13,19 @@ class HomeScreenModel : StateScreenModel<HomeScreenModel.State>(State()) {
         val currentTab: Tab = LibraryTab
     )
 
-    fun toggleLibraryBottomsheet() {
-        mutableState.update { state -> state.copy(showLibraryBottomsheet = !state.showLibraryBottomsheet) }
+    private fun safeStateUpdate(update: (State) -> State) {
+        try {
+            mutableState.update(update)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    fun toggleAddOptionsBottomsheet() {
-        mutableState.update { state -> state.copy(showAddOptionsBottomsheet = !state.showAddOptionsBottomsheet) }
-    }
+    fun toggleLibraryBottomsheet() = safeStateUpdate { it.copy(showLibraryBottomsheet = !it.showLibraryBottomsheet) }
 
-    fun setCurrentTab(tab: Tab) {
-        mutableState.update { state -> state.copy(currentTab = tab) }
-    }
+    fun toggleAddOptionsBottomsheet() = safeStateUpdate { it.copy(showAddOptionsBottomsheet = !it.showAddOptionsBottomsheet) }
 
-    fun setPreviousTab(tab: Tab) {
-        mutableState.update { state -> state.copy(previousTab = tab) }
-    }
+    fun setCurrentTab(tab: Tab) = safeStateUpdate { it.copy(currentTab = tab, previousTab = it.currentTab) }
+
+    fun setPreviousTab(tab: Tab) = mutableState.update { state -> state.copy(previousTab = tab) }
 }
