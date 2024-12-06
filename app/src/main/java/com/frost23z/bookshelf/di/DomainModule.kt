@@ -57,5 +57,5 @@ val domainModule =
         factory { LentScreenModel(booksRepository = get()) }
 
         // Settings
-        factory { AppearanceScreenModel(themePreference = get()) }
+        factory { AppearanceScreenModel(appearancePreference = get()) }
     }

@@ -23,8 +23,9 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.frost23z.bookshelf.ui.core.util.SnackbarEventObserver
 import com.frost23z.bookshelf.ui.home.HomeScreen
 import com.frost23z.bookshelf.ui.theme.AppTheme
-import com.frost23z.bookshelf.ui.theme.ThemePreference
+import com.frost23z.bookshelf.preferences.AppearancePreference
 import com.frost23z.bookshelf.ui.theme.ThemeProperties
+import com.frost23z.bookshelf.utils.LocaleUtils
 import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
@@ -48,12 +49,15 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            val themePreference: ThemePreference = get()
+            val appearancePreference: AppearancePreference = get()
             var themeProperties by remember { mutableStateOf<ThemeProperties?>(null) }
 
             LaunchedEffect(Unit) {
-                themePreference.getThemeProperties().collect { properties ->
+                appearancePreference.getThemeProperties().collect { properties ->
                     themeProperties = properties
+                }
+                appearancePreference.getLanguage().collect { language ->
+                    LocaleUtils.setLocale(this@MainActivity, language)
                 }
             }
 

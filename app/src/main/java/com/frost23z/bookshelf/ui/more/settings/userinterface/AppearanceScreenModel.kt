@@ -4,13 +4,13 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.ui.theme.Theme
 import com.frost23z.bookshelf.ui.theme.ThemeMode
-import com.frost23z.bookshelf.ui.theme.ThemePreference
+import com.frost23z.bookshelf.preferences.AppearancePreference
 import com.frost23z.bookshelf.ui.theme.ThemeProperties
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AppearanceScreenModel(
-    val themePreference: ThemePreference
+    val appearancePreference: AppearancePreference
 ) : StateScreenModel<AppearanceScreenModel.State>(State()) {
     data class State(
         val themeProperties: ThemeProperties =
@@ -23,7 +23,7 @@ class AppearanceScreenModel(
 
     init {
         screenModelScope.launch {
-            themePreference.getThemeProperties().collect {
+            appearancePreference.getThemeProperties().collect {
                 mutableState.update { state -> state.copy(themeProperties = it) }
             }
         }
@@ -31,19 +31,19 @@ class AppearanceScreenModel(
 
     fun updateTheme(theme: Theme) {
         screenModelScope.launch {
-            themePreference.setTheme(theme)
+            appearancePreference.setTheme(theme)
         }
     }
 
     fun updateThemeMode(themeMode: ThemeMode) {
         screenModelScope.launch {
-            themePreference.setThemeMode(themeMode)
+            appearancePreference.setThemeMode(themeMode)
         }
     }
 
     fun toggleAmoledDarkMode(isAmoled: Boolean) {
         screenModelScope.launch {
-            themePreference.setThemeDarkAmoled(isAmoled)
+            appearancePreference.setThemeDarkAmoled(isAmoled)
         }
     }
 }
