@@ -35,6 +35,7 @@ import com.frost23z.bookshelf.data.Roles
 import com.frost23z.bookshelf.ui.addedit.components.ContributorsSection
 import com.frost23z.bookshelf.ui.addedit.components.CoverSection
 import com.frost23z.bookshelf.ui.addedit.components.InfoSection
+import com.frost23z.bookshelf.ui.addedit.components.LentSection
 import com.frost23z.bookshelf.ui.addedit.components.PurchaseSection
 import com.frost23z.bookshelf.ui.addedit.components.StatusSection
 import com.frost23z.bookshelf.ui.addedit.components.TitleSection
@@ -214,6 +215,15 @@ data class AddEditScreen(
                             )
                         }
                     }
+                )
+
+                LentSection(
+                    lentTo = state.book.lentTo ?: "",
+                    onLentToChange = { screenModel.updateBook { copy(lentTo = it) } },
+                    lentDate = state.book.lentDate ?: 0,
+                    onLentDateChange = { screenModel.updateBook { copy(lentDate = it) } },
+                    lentReturned = state.book.lentReturned ?: 0,
+                    onLentReturnedChange = { screenModel.updateBook { copy(lentReturned = it) } }
                 )
             }
         }

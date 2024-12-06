@@ -88,7 +88,8 @@ class AddEditScreenModel(
         volume = book.volume?.takeIf { it > 0 },
         lentTo = book.lentTo?.trim().takeIf { it?.isNotBlank() == true },
         lentDate = book.lentDate?.takeIf { it > 0 },
-        lentReturned = book.lentReturned?.takeIf { it > 0 }
+        lentReturned = book.lentReturned?.takeIf { it > 0 },
+        isLent = book.lentTo?.isNotBlank() == true
     )
 
     suspend fun saveBook() {
