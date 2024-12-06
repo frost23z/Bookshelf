@@ -16,8 +16,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,7 +29,6 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.frost23z.bookshelf.R
-import com.frost23z.bookshelf.data.Books
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
 import java.text.SimpleDateFormat
@@ -78,55 +79,57 @@ object LentTab : Tab {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(state.lentBooks) { book ->
-                        LentBookItem(book)
+                        ElevatedCard(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    text = book.title,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+
+                                book.lentTo?.let { lentTo ->
+                                    Text(
+                                        text = "Lent to: $lentTo",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+
+                                book.lentDate?.let { lentDate ->
+                                    val formattedDate =
+                                        SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+                                            .format(Date(lentDate))
+                                    Text(
+                                        text = "Since: $formattedDate",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+
+                                book.lentReturned?.let { returnDate ->
+                                    val formattedDate =
+                                        SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+                                            .format(Date(returnDate))
+                                    Text(
+                                        text = "Return by: $formattedDate",
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+
+                                TextButton(
+                                    onClick = { screenModel.returnBook(book.id) },
+                                    modifier = Modifier.align(Alignment.End)
+                                ) {
+                                    Text("Mark as Returned")
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun LentBookItem(book: Books) {
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = book.title,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            book.lentTo?.let { lentTo ->
-                Text(
-                    text = "Lent to: $lentTo",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            book.lentDate?.let { lentDate ->
-                val formattedDate =
-                    SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                        .format(Date(lentDate))
-                Text(
-                    text = "Since: $formattedDate",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            book.lentReturned?.let { returnDate ->
-                val formattedDate =
-                    SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                        .format(Date(returnDate))
-                Text(
-                    text = "Return by: $formattedDate",
-                    style = MaterialTheme.typography.bodyMedium
-                )
             }
         }
     }
