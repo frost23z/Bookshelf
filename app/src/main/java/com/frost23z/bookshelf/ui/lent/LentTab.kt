@@ -6,13 +6,24 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -70,60 +81,111 @@ object LentTab : Tab {
         ) { innerPadding ->
             if (state.lentBooks.isEmpty()) {
                 EmptyScreen(
-                    message = "No books are currently lent",
+                    icon = Icons.Default.Book,
+                    message = "Your lending list is empty",
+                    subtitle = "Books you lend to others will appear here",
                     modifier = Modifier.padding(innerPadding)
                 )
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = innerPadding,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(state.lentBooks) { book ->
                         ElevatedCard(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                            colors =
+                                CardDefaults.elevatedCardColors(
+                                    containerColor = MaterialTheme.colorScheme.surface
+                                ),
+                            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
                         ) {
                             Column(
-                                modifier = Modifier.padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                modifier =
+                                    Modifier
+                                        .padding(16.dp)
+                                        .fillMaxWidth(),
                             ) {
                                 Text(
                                     text = book.title,
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = MaterialTheme.typography.titleLarge,
                                     maxLines = 2,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
 
+                                Spacer(modifier = Modifier.height(12.dp))
+
                                 book.lentTo?.let { lentTo ->
-                                    Text(
-                                        text = "Lent to: $lentTo",
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.padding(vertical = 4.dp)
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Person,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(20.dp),
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Text(
+                                            text = lentTo,
+                                            style = MaterialTheme.typography.bodyLarge
+                                        )
+                                    }
                                 }
 
                                 book.lentDate?.let { lentDate ->
-                                    val formattedDate =
-                                        SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                                            .format(Date(lentDate))
-                                    Text(
-                                        text = "Since: $formattedDate",
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.padding(vertical = 4.dp)
+                                    ) {
+                                        Icon(
+                                            Icons.Default.DateRange,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(20.dp),
+                                            tint = MaterialTheme.colorScheme.secondary
+                                        )
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Column {
+                                            val formattedDate =
+                                                SimpleDateFormat(
+                                                    "MMM dd, yyyy",
+                                                    Locale.getDefault()
+                                                ).format(Date(lentDate))
+                                            Text(
+                                                text = "Lent since: $formattedDate",
+                                                style = MaterialTheme.typography.bodyMedium
+                                            )
+
+                                            book.lentReturned?.let { returnDate ->
+                                                val formattedReturnDate =
+                                                    SimpleDateFormat(
+                                                        "MMM dd, yyyy",
+                                                        Locale.getDefault()
+                                                    ).format(Date(returnDate))
+                                                Text(
+                                                    text = "Due: $formattedReturnDate",
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    color = MaterialTheme.colorScheme.error
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
 
-                                book.lentReturned?.let { returnDate ->
-                                    val formattedDate =
-                                        SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                                            .format(Date(returnDate))
-                                    Text(
-                                        text = "Return by: $formattedDate",
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                }
+                                Spacer(modifier = Modifier.height(8.dp))
 
                                 TextButton(
                                     onClick = { screenModel.returnBook(book.id) },
-                                    modifier = Modifier.align(Alignment.End)
+                                    modifier = Modifier.align(Alignment.End),
+//                                    colors = ButtonDefaults.textButtonColors(
+//                                        contentColor = MaterialTheme.colorScheme.primary
+//                                    )
                                 ) {
                                     Text("Mark as Returned")
                                 }

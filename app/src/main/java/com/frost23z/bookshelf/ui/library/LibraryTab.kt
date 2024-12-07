@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material.icons.outlined.FlipToBack
 import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -91,7 +92,9 @@ object LibraryTab : Tab {
 
                 state.filteredLibrary.isEmpty() -> {
                     EmptyScreen(
+                        icon = Icons.Default.LibraryBooks,
                         message = "No books found",
+                        subtitle = "Add some books to your library to get started",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
