@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import cafe.adriel.voyager.navigator.Navigator
 import com.frost23z.bookshelf.data.Languages
 import com.frost23z.bookshelf.preferences.UISettingsPreference
@@ -102,6 +104,11 @@ class MainActivity : ComponentActivity() {
 
             LocaleWrapper(language = language) {
                 AppTheme(themeProperties!!) {
+                    val window = this@MainActivity.window
+                    val insetsController =
+                        WindowCompat.getInsetsController(window, window.decorView)
+                    val useDarkIcons = !themeProperties!!.isDark
+
                     val snackbarHostState = remember { SnackbarHostState() }
                     SnackbarEventObserver(snackbarHostState = snackbarHostState)
                     Scaffold(
@@ -113,6 +120,10 @@ class MainActivity : ComponentActivity() {
                         }
                     ) { innerPadding ->
                         Navigator(HomeScreen)
+                    }
+
+                    SideEffect {
+                        insetsController.isAppearanceLightStatusBars = useDarkIcons
                     }
                 }
             }
