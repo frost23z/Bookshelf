@@ -30,7 +30,6 @@ import com.frost23z.bookshelf.ui.core.util.SnackbarEventObserver
 import com.frost23z.bookshelf.ui.home.HomeScreen
 import com.frost23z.bookshelf.ui.theme.AppTheme
 import com.frost23z.bookshelf.ui.theme.ThemeProperties
-import com.frost23z.bookshelf.ui.theme.isDarkMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

@@ -17,8 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -38,7 +38,7 @@ object MoreTab : Tab {
         @Composable get() {
             return TabOptions(
                 index = 3u,
-                title = "More",
+                title = stringResource(R.string.more),
                 icon = rememberVectorPainter(Icons.AutoMirrored.Filled.More),
             )
         }

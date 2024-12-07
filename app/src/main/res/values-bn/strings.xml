@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Bookshelf</string>
-    <string name="library">বাংলা</string>
+    <string name="library">লাইব্রেরি</string>
     <string name="details">বিস্তারিত</string>
+    <string name="lent">ধার দেওয়া বইসমূহ</string>
+    <string name="reading">বর্তমানে পড়ছি</string>
+    <string name="more">আরও</string>
+    <string name="add">যুক্ত করুন</string>
 </resources>

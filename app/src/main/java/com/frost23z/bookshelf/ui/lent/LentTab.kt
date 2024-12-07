@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,7 +44,7 @@ object LentTab : Tab {
         @Composable get() {
             return TabOptions(
                 index = 2u,
-                title = "Lent",
+                title = stringResource(R.string.lent),
                 icon =
                     rememberAnimatedVectorPainter(
                         animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_lent),
@@ -62,7 +63,7 @@ object LentTab : Tab {
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopBar(
-                    title = "Lent",
+                    title = stringResource(R.string.lent),
                     searchEnabled = false
                 )
             }

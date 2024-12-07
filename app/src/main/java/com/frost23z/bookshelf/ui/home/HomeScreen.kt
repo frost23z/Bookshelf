@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -107,7 +108,12 @@ object HomeScreen : Screen {
                             NavigationBar(
                                 containerColor = Color.Transparent,
                             ) {
-                                Box(modifier = Modifier.fillMaxWidth().height(80.dp)) {
+                                Box(
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(80.dp)
+                                ) {
                                     val surfaceContainerColor = MaterialTheme.colorScheme.surfaceContainer
                                     Canvas(modifier = Modifier.fillMaxSize()) {
                                         val cutoutRadius = 40.dp.toPx()
@@ -255,7 +261,7 @@ object HomeScreen : Screen {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Add",
+                    text = stringResource(R.string.add),
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
