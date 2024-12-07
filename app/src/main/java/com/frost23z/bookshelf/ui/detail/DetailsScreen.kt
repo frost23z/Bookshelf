@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -70,7 +71,7 @@ data class DetailsScreen(
         Scaffold(
             topBar = {
                 TopBar(
-                    title = "Details",
+                    title = stringResource(R.string.details),
                     navigateUp = { navigator.pop() },
                     actions = {
                         IconButton(

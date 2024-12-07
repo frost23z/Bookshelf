@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -42,7 +43,7 @@ object LibraryTab : Tab {
         @Composable get() {
             return TabOptions(
                 index = 0u,
-                title = "Library",
+                title = stringResource(R.string.library),
                 icon =
                     rememberAnimatedVectorPainter(
                         animatedImageVector = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library),
@@ -61,7 +62,7 @@ object LibraryTab : Tab {
 
         Scaffold(topBar = {
             TopBar(
-                title = "Library",
+                title = stringResource(R.string.library),
                 searchQuery = state.searchQuery,
                 onSearchQueryChange = { screenModel.onSearchQueryChange(it) },
                 selectionCounter = state.selectionCounter,

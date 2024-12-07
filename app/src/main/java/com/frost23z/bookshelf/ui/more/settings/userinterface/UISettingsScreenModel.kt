@@ -59,7 +59,6 @@ class UISettingsScreenModel(
     fun updateLanguage(language: Languages) {
         screenModelScope.launch {
             uiSettingsPreference.setLanguage(language)
-            mutableState.update { state -> state.copy(language = language) }
         }
     }
 
