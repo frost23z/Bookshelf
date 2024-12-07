@@ -19,7 +19,7 @@ import com.frost23z.bookshelf.ui.detail.DetailsScreenModel
 import com.frost23z.bookshelf.ui.home.HomeScreenModel
 import com.frost23z.bookshelf.ui.lent.LentScreenModel
 import com.frost23z.bookshelf.ui.library.LibraryScreenModel
-import com.frost23z.bookshelf.ui.more.settings.userinterface.AppearanceScreenModel
+import com.frost23z.bookshelf.ui.more.settings.userinterface.UISettingsScreenModel
 import com.frost23z.bookshelf.ui.reading.ReadingScreenModel
 import org.koin.dsl.module
 
@@ -57,5 +57,5 @@ val domainModule =
         factory { LentScreenModel(booksRepository = get()) }
 
         // Settings
-        factory { AppearanceScreenModel(appearancePreference = get()) }
+        factory { UISettingsScreenModel(uiSettingsPreference = get()) }
     }

@@ -20,7 +20,7 @@ import com.frost23z.bookshelf.ui.core.components.ListItem
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.constants.MediumIcon
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
-import com.frost23z.bookshelf.ui.more.settings.userinterface.AppearanceScreen
+import com.frost23z.bookshelf.ui.more.settings.userinterface.UISettingsScreen
 
 class SettingsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +49,7 @@ class SettingsScreen : Screen {
                     modifier =
                         Modifier.clickable(
                             onClick = {
-                                navigator.push(AppearanceScreen())
+                                navigator.push(UISettingsScreen())
                             }
                         ),
                     leadingIcon = Icons.Default.Settings,
