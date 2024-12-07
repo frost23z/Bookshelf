@@ -25,6 +25,10 @@ class DetailsScreenModel(
     )
 
     init {
+        refreshData()
+    }
+
+    private fun refreshData() {
         screenModelScope.launch {
             try {
                 val loadedBook = booksRepository.getBookById(bookId)
@@ -50,6 +54,10 @@ class DetailsScreenModel(
                 Log.e("DetailsScreenModel", "Error loading book details", e)
             }
         }
+    }
+
+    fun refresh() {
+        refreshData()
     }
 
     fun deleteBook() {

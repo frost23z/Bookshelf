@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import com.frost23z.bookshelf.ui.core.constants.MediumIcon
 import com.frost23z.bookshelf.ui.core.constants.PaddingMediumLarge
 import com.frost23z.bookshelf.ui.core.constants.PaddingSmall
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
+import com.frost23z.bookshelf.ui.core.helpers.formatDateFromTimestamp
 import org.koin.core.parameter.parametersOf
 
 data class DetailsScreen(
@@ -135,16 +137,16 @@ data class DetailsScreen(
                             text = fullTitle,
                             style = MaterialTheme.typography.titleLarge
                         )
-                        state.contributors["Author"]?.let { authors ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    icon = Icons.Default.Person,
-                                    iconDescription = "Authors",
-                                    iconSize = SmallIcon
-                                )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                icon = Icons.Default.Person,
+                                iconDescription = "Authors",
+                                iconSize = SmallIcon
+                            )
+                            state.contributors["Author"]?.let { authors ->
                                 Text(
                                     text = authors.joinToString(separator = ", "),
                                     style = MaterialTheme.typography.bodyLarge
@@ -162,28 +164,29 @@ data class DetailsScreen(
                     ) {
                         BookSection(title = "Basic Information") {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                state.book.publisher?.let { InfoRow("Publisher", it) }
-                                state.book.language?.let { InfoRow("Language", it) }
-                                state.book.format?.let { InfoRow("Format", it) }
-                                state.book.totalPages?.let { InfoRow("Total Pages", it.toString()) }
+                                InfoRow("Publisher", state.book.publisher)
+                                InfoRow("Language", state.book.language)
+                                InfoRow("Format", state.book.format)
+                                InfoRow("Total Pages", state.book.totalPages?.toString())
                             }
                         }
                     }
                 }
 
                 // Purchase Information
-                if (state.book.purchaseFrom != null || state.book.purchasePrice != null || state.book.purchaseDate != null) {
-                    Card {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            BookSection(title = "Purchase Information") {
-                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    state.book.purchaseFrom?.let { InfoRow("Purchased From", it) }
-                                    state.book.purchasePrice?.let { InfoRow("Price", it.toString()) }
-                                    state.book.purchaseDate?.let { InfoRow("Purchase Date", it.toString()) }
-                                }
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        BookSection(title = "Purchase Information") {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                InfoRow("Purchased From", state.book.purchaseFrom)
+                                InfoRow("Price", state.book.purchasePrice?.toString())
+                                InfoRow(
+                                    "Purchase Date",
+                                    state.book.purchaseDate?.let { formatDateFromTimestamp(it) }
+                                )
                             }
                         }
                     }
@@ -198,43 +201,60 @@ data class DetailsScreen(
                         BookSection(title = "Reading Progress") {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 InfoRow("Status", state.book.readStatus?.toString() ?: "Not Started")
-                                state.book.readPages?.let { InfoRow("Pages Read", "$it/${state.book.totalPages ?: "?"}") }
-                                state.book.startReadingDate?.let { InfoRow("Started Reading", it.toString()) }
-                                state.book.finishedReadingDate?.let { InfoRow("Finished Reading", it.toString()) }
+                                InfoRow(
+                                    "Pages Read",
+                                    if (state.book.readPages != null) {
+                                        "${state.book.readPages}/${state.book.totalPages ?: "?"}"
+                                    } else {
+                                        "--"
+                                    }
+                                )
+                                InfoRow(
+                                    "Started Reading",
+                                    state.book.startReadingDate?.let { formatDateFromTimestamp(it) }
+                                )
+                                InfoRow(
+                                    "Finished Reading",
+                                    state.book.finishedReadingDate?.let { formatDateFromTimestamp(it) }
+                                )
                             }
                         }
                     }
                 }
 
                 // Lending Information
-                if (state.book.isLent) {
-                    Card {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            BookSection(title = "Lending Information") {
-                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    state.book.lentTo?.let { InfoRow("Lent To", it) }
-                                    state.book.lentDate?.let { InfoRow("Lent Date", it.toString()) }
-                                    state.book.lentReturned?.let { InfoRow("Returned", it.toString()) }
-                                }
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        BookSection(title = "Lending Information") {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                InfoRow("Lent To", state.book.lentTo)
+                                InfoRow(
+                                    "Lent Date",
+                                    state.book.lentDate?.let { formatDateFromTimestamp(it) }
+                                )
+                                InfoRow(
+                                    "Returned",
+                                    state.book.lentReturned?.let { formatDateFromTimestamp(it) }
+                                )
                             }
                         }
                     }
                 }
 
                 // Other Contributors
-                state.contributors.forEach { (role, contributors) ->
-                    if (role != "Author") {
-                        Card {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        state.contributors.forEach { (role, contributors) ->
+                            if (role != "Author") {
                                 BookSection(title = role) {
                                     Text(
-                                        text = contributors.joinToString(),
+                                        text = contributors.joinToString(separator = ", "),
                                         style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
@@ -305,6 +325,10 @@ data class DetailsScreen(
                 )
             }
         }
+
+        LaunchedEffect(key1 = state.book.id) {
+            screenModel.refresh()
+        }
     }
 }
 
@@ -332,20 +356,18 @@ private fun InfoRow(
     label: String,
     value: String?
 ) {
-    if (value != null) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value ?: "--",
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
