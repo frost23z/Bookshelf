@@ -13,24 +13,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -46,11 +46,11 @@ import com.frost23z.bookshelf.ui.addedit.AddEditScreen
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.TopBar
+import com.frost23z.bookshelf.ui.core.constants.ExtraLargeIcon
 import com.frost23z.bookshelf.ui.core.constants.MediumIcon
 import com.frost23z.bookshelf.ui.core.constants.PaddingMediumLarge
 import com.frost23z.bookshelf.ui.core.constants.PaddingSmall
 import com.frost23z.bookshelf.ui.core.constants.SmallIcon
-import com.frost23z.bookshelf.ui.core.helpers.maxCutoutPadding
 import org.koin.core.parameter.parametersOf
 
 data class DetailsScreen(
@@ -61,10 +61,6 @@ data class DetailsScreen(
     override fun Content() {
         val screenModel = koinScreenModel<DetailsScreenModel> { parametersOf(bookId) }
         val state by screenModel.state.collectAsStateWithLifecycle()
-
-        LaunchedEffect(Unit) {
-            screenModel.loadDetails()
-        }
 
         val navigator = LocalNavigator.currentOrThrow
 
@@ -97,61 +93,155 @@ data class DetailsScreen(
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
-                        .padding(
-                            maxOf(maxCutoutPadding(), PaddingMediumLarge),
-                            vertical = PaddingSmall
-                        ),
-                horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(horizontal = PaddingMediumLarge, vertical = PaddingSmall),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Cover, Title section and Authors of the book
                 Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(PaddingSmall)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Image(
-                        painter =
-                            if (state.book.coverUri != null) {
-                                rememberAsyncImagePainter(
-                                    model = state.book.coverUri
-                                )
-                            } else {
-                                painterResource(id = R.drawable.ic_launcher_foreground)
-                            },
-                        contentDescription = "Select Image",
-                        contentScale = ContentScale.Crop,
-                        modifier =
-                            Modifier
-                                .size(100.dp, 150.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .clickable { screenModel.toggleCoverDialog() },
-                        colorFilter =
-                            if (state.book.coverUri == null) {
-                                ColorFilter.tint(
-                                    MaterialTheme.colorScheme.primary
-                                )
-                            } else {
-                                null
-                            }
-                    )
-                    Column {
-                        Text(text = state.book.title, style = MaterialTheme.typography.titleLarge)
-                        val authors = state.contributors["Author"]?.joinToString { it } ?: ""
-                        if (authors.isNotEmpty()) {
+                    when (state.book.coverUri) {
+                        null -> {
+                            Icon(
+                                icon = Icons.Default.AutoStories,
+                                iconDescription = "Book Cover",
+                                iconSize = ExtraLargeIcon,
+                                modifier = Modifier.size(120.dp, 180.dp).clip(RoundedCornerShape(8.dp))
+                            )
+                        }
+                        else -> {
+                            Image(
+                                painter = rememberAsyncImagePainter(model = state.book.coverUri),
+                                contentDescription = "Book Cover",
+                                contentScale = ContentScale.Crop,
+                                modifier =
+                                    Modifier
+                                        .size(
+                                            120.dp,
+                                            180.dp
+                                        ).clip(RoundedCornerShape(8.dp))
+                                        .clickable { screenModel.toggleCoverDialog() }
+                            )
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        val fullTitle = ((state.book.titlePrefix ?: " ") + state.book.title + (state.book.titleSuffix ?: " ")).trim()
+                        Text(
+                            text = fullTitle,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        state.contributors["Author"]?.let { authors ->
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(PaddingSmall),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Icon(
                                     icon = Icons.Default.Person,
                                     iconDescription = "Authors",
                                     iconSize = SmallIcon
                                 )
-                                Text(text = authors, style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    text = authors.joinToString(separator = ", "),
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
                             }
                         }
                     }
                 }
-                Text(text = state.book.toString())
+
+                // Basic Information
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        BookSection(title = "Basic Information") {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                state.book.publisher?.let { InfoRow("Publisher", it) }
+                                state.book.language?.let { InfoRow("Language", it) }
+                                state.book.format?.let { InfoRow("Format", it) }
+                                state.book.totalPages?.let { InfoRow("Total Pages", it.toString()) }
+                            }
+                        }
+                    }
+                }
+
+                // Purchase Information
+                if (state.book.purchaseFrom != null || state.book.purchasePrice != null || state.book.purchaseDate != null) {
+                    Card {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            BookSection(title = "Purchase Information") {
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    state.book.purchaseFrom?.let { InfoRow("Purchased From", it) }
+                                    state.book.purchasePrice?.let { InfoRow("Price", it.toString()) }
+                                    state.book.purchaseDate?.let { InfoRow("Purchase Date", it.toString()) }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Reading Status
+                Card {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        BookSection(title = "Reading Progress") {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                InfoRow("Status", state.book.readStatus?.toString() ?: "Not Started")
+                                state.book.readPages?.let { InfoRow("Pages Read", "$it/${state.book.totalPages ?: "?"}") }
+                                state.book.startReadingDate?.let { InfoRow("Started Reading", it.toString()) }
+                                state.book.finishedReadingDate?.let { InfoRow("Finished Reading", it.toString()) }
+                            }
+                        }
+                    }
+                }
+
+                // Lending Information
+                if (state.book.isLent) {
+                    Card {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            BookSection(title = "Lending Information") {
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    state.book.lentTo?.let { InfoRow("Lent To", it) }
+                                    state.book.lentDate?.let { InfoRow("Lent Date", it.toString()) }
+                                    state.book.lentReturned?.let { InfoRow("Returned", it.toString()) }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Other Contributors
+                state.contributors.forEach { (role, contributors) ->
+                    if (role != "Author") {
+                        Card {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                BookSection(title = role) {
+                                    Text(
+                                        text = contributors.joinToString(),
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -207,13 +297,55 @@ data class DetailsScreen(
                                 model = state.book.coverUri
                             )
                         } else {
-                            painterResource(id = R.drawable.ic_launcher_foreground)
+                            rememberVectorPainter(Icons.Default.AutoStories)
                         },
                     contentDescription = "Cover Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun BookSection(
+    title: String,
+    content: @Composable () -> Unit
+) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+        content()
+    }
+}
+
+@Composable
+private fun InfoRow(
+    label: String,
+    value: String?
+) {
+    if (value != null) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

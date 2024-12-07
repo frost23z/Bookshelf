@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.ui.detail
 
+import android.util.Log
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.frost23z.bookshelf.data.Books
@@ -24,29 +25,29 @@ class DetailsScreenModel(
     )
 
     init {
-        loadDetails()
-    }
-
-    fun loadDetails() {
         screenModelScope.launch {
-            val getContributors =
-                booksContributorsMapperRepository.getContributorsByBookId(state.value.book.id)
-            mutableState.update { state ->
-                state.copy(
-                    book = booksRepository.getBookById(bookId),
-                    contributors =
-                        getContributors.groupBy(
-                            keySelector = { it.role },
-                            valueTransform = {
-                                it.contributorId.let {
-                                    contributorsRepository
-                                        .getContributorById(
-                                            it
-                                        ).name
-                                }
-                            }
-                        )
-                )
+            try {
+                val loadedBook = booksRepository.getBookById(bookId)
+                mutableState.update { state ->
+                    state.copy(book = loadedBook)
+                }
+
+                val getContributors = booksContributorsMapperRepository.getContributorsByBookId(bookId)
+                val contributorsMap =
+                    getContributors.groupBy(
+                        keySelector = { it.role },
+                        valueTransform = { contributor ->
+                            contributorsRepository.getContributorById(contributor.contributorId).name
+                        }
+                    )
+
+                mutableState.update { state ->
+                    state.copy(contributors = contributorsMap)
+                }
+
+                Log.d("DetailsScreenModel", "Contributors loaded: $contributorsMap")
+            } catch (e: Exception) {
+                Log.e("DetailsScreenModel", "Error loading book details", e)
             }
         }
     }
