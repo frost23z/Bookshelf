@@ -16,7 +16,10 @@ class LentScreenModel(
         screenModelScope.launch {
             booksRepository.getAllBooksAsFlow().collect { books ->
                 mutableState.update { state ->
-                    state.copy(lentBooks = books.filter { it.isLent })
+                    state.copy(
+                        lentBooks = books.filter { it.isLent },
+                        isLoading = false
+                    )
                 }
             }
         }
@@ -45,6 +48,7 @@ class LentScreenModel(
     }
 
     data class State(
-        val lentBooks: List<Books> = emptyList()
+        val lentBooks: List<Books> = emptyList(),
+        val isLoading: Boolean = true
     )
 }
