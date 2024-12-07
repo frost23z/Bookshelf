@@ -69,12 +69,10 @@ data class AddEditScreen(
                 TopBar(
                     title = if (isEditing) "Edit Book" else "Add Book",
                     navigateUp = {
-                        if (isEditing) {
-                            if (state.hasUnsavedChanges) {
-                                screenModel.toggleDiscardDialog()
-                            } else {
-                                navigator.pop()
-                            }
+                        if (state.hasUnsavedChanges) {
+                            screenModel.toggleDiscardDialog()
+                        } else {
+                            navigator.pop()
                         }
                     },
                     searchEnabled = false,
