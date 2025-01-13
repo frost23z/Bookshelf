@@ -1,0 +1,14 @@
+[versions]
+agp = "8.8.0"
+kotlin = "2.1.0"
+spotless = "7.0.1"
+ktlint = "1.5.0"
+
+[libraries]
+ktlint-core = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
