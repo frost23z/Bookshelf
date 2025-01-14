@@ -3,6 +3,7 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlin.compose)
 	alias(libs.plugins.spotless)
+	alias(libs.plugins.sqldelight)
 }
 
 android {
@@ -46,10 +47,23 @@ dependencies {
 	implementation(platform(jetpack.compose.bom))
 	implementation(jetpack.bundles.compose)
 
+	implementation(libs.bundles.sqldelight)
+
 	testImplementation(testdebug.junit)
 	androidTestImplementation(testdebug.bundles.androidTest)
 	androidTestImplementation(platform(jetpack.compose.bom))
 	debugImplementation(testdebug.bundles.debug)
+}
+
+sqldelight {
+	databases {
+		create("AppDatabase") {
+			packageName.set("com.frost23z.bookshelf.data")
+			dialect(libs.sqldelight.dialects.sql)
+			// Additional configuration options if required
+			// https://sqldelight.github.io/sqldelight/2.0.2/android_sqlite/gradle/
+		}
+	}
 }
 
 spotless {
