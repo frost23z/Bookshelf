@@ -47,6 +47,7 @@ dependencies {
 	implementation(platform(jetpack.compose.bom))
 	implementation(jetpack.bundles.compose)
 
+	implementation(libs.bundles.kotlinx)
 	implementation(libs.bundles.sqldelight)
 
 	testImplementation(testdebug.junit)
@@ -97,9 +98,5 @@ spotless {
 	format("xml") {
 		target("**/*.xml")
 		trimTrailingWhitespace()
-	}
-	sql {
-		target("**/*.sq")
-		dbeaver()
 	}
 }

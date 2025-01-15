@@ -4,9 +4,13 @@ kotlin = "2.1.0"
 spotless = "7.0.1"
 ktlint = "1.5.0"
 sqldelight = "2.0.2"
+datetime = "0.6.1"
 
 [libraries]
 ktlint-core = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
+
+#kotlinx
+datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 
 # sqldelight
 sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
@@ -22,4 +26,5 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 [bundles]
+kotlinx = ["datetime"]
 sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-paging-extensions", "sqldelight-dialects-sql"]
