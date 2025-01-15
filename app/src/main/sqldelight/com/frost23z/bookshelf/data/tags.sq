@@ -1,0 +1,34 @@
+CREATE TABLE tags (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+getTagById:
+SELECT *
+FROM tags
+WHERE id = :id;
+
+getTagByName:
+SELECT id
+FROM tags
+WHERE name = :name;
+
+getAllTags:
+SELECT *
+FROM tags;
+
+getLastInsertedTagId:
+SELECT last_insert_rowid();
+
+insertTag:
+INSERT INTO tags(name)
+VALUES (:name);
+
+updateTag:
+UPDATE tags SET
+    name = :name
+WHERE id = :id;
+
+deleteTag:
+DELETE FROM tags
+WHERE id = :id;

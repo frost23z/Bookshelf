@@ -1,0 +1,143 @@
+import android.net.Uri;
+import com.frost23z.bookshelf.domain.model.BookFormat;
+import com.frost23z.bookshelf.domain.model.ReadingStatus;
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlin.Pair;
+import kotlin.String;
+import kotlin.collections.MutableSet;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE books (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    shelfId INTEGER DEFAULT NULL,
+    isFavorite INTEGER AS Boolean NOT NULL DEFAULT 0,
+    dateAdded INTEGER,
+    dateLastUpdated INTEGER,
+    -- -------------------
+    titlePrefix TEXT,
+    title TEXT NOT NULL,
+    titleSuffix TEXT,
+    volumeTitle TEXT,
+    -- -------------------
+    coverUri TEXT AS Uri,
+    description TEXT,
+    -- -------------------
+    publisherId INTEGER,
+    languageId INTEGER,
+    totalPages INTEGER,
+    format TEXT AS BookFormat,
+    -- -------------------
+    purchaseFrom TEXT,
+    purchasePrice REAL,
+    purchaseDate INTEGER AS LocalDate,
+    -- -------------------
+    readStatus TEXT AS ReadingStatus,
+    readPages INTEGER,
+    startReadingDate INTEGER AS LocalDate,
+    finishedReadingDate INTEGER AS LocalDate,
+    -- -------------------
+    seriesId INTEGER DEFAULT NULL,
+    volume INTEGER DEFAULT NULL,
+    -- -------------------
+    isLent INTEGER AS Boolean NOT NULL DEFAULT 0,
+    lentTo TEXT,
+    lentDate INTEGER AS LocalDate,
+    lentReturnDate INTEGER AS LocalDate,
+    -- -------------------
+    notes TEXT DEFAULT NULL,
+    quotes TEXT AS MutableSet<Pair<Int, String>>,
+    -- -------------------
+    UNIQUE(title, volumeTitle),
+    FOREIGN KEY(shelfId) REFERENCES shelves(id) ON DELETE SET NULL,
+    FOREIGN KEY(publisherId) REFERENCES publishers(id) ON DELETE SET NULL,
+    FOREIGN KEY(languageId) REFERENCES languages(id) ON DELETE SET NULL,
+    FOREIGN KEY(seriesId) REFERENCES series(id) ON DELETE SET NULL
+);
+
+getBookById:
+SELECT *
+FROM books
+WHERE id = :id;
+
+getBooksByShelfId:
+SELECT *
+FROM books
+WHERE shelfId = :shelfId;
+
+getBooksByPublisherId:
+SELECT *
+FROM books
+WHERE publisherId = :publisherId;
+
+getBooksByLanguageId:
+SELECT *
+FROM books
+WHERE languageId = :languageId;
+
+getAllBooks:
+SELECT *
+FROM books;
+
+getLastInsertedBookId:
+SELECT last_insert_rowid();
+
+insertBook:
+INSERT INTO books(
+    shelfId, isFavorite, dateAdded, dateLastUpdated,
+    titlePrefix, title, titleSuffix, volumeTitle,
+    coverUri, description,
+    publisherId, languageId, totalPages, format,
+    purchaseFrom, purchasePrice, purchaseDate,
+    readStatus, readPages, startReadingDate, finishedReadingDate,
+    seriesId, volume,
+    isLent, lentTo, lentDate, lentReturnDate,
+    notes, quotes
+)
+VALUES (
+    :seriesId,:isFavorite, :dateAdded, :dateLastUpdated,
+    :titlePrefix, :title, :titleSuffix, :volumeTitle,
+    :coverUri, :description,
+    :publisherId, :languageId, :totalPages, :format,
+    :purchaseFrom, :purchasePrice, :purchaseDate,
+    :readStatus, :readPages, :startReadingDate, :finishedReadingDate,
+    :seriesId, :volume,
+    :isLent, :lentTo, :lentDate, :lentReturnDate,
+    :notes, :quotes
+);
+
+updateBook:
+UPDATE books SET
+    shelfId = :shelfId,
+    isFavorite = coalesce(:isFavorite, isFavorite),
+    dateLastUpdated = :dateLastUpdated,
+    titlePrefix = :titlePrefix,
+    title = coalesce(:title, title),
+    titleSuffix = :titleSuffix,
+    volumeTitle = :volumeTitle,
+    coverUri = :coverUri,
+    description = :description,
+    publisherId = :publisherId,
+    languageId = :languageId,
+    totalPages = :totalPages,
+    format = :format,
+    purchaseFrom = :purchaseFrom,
+    purchasePrice = :purchasePrice,
+    purchaseDate = :purchaseDate,
+    readStatus = :readStatus,
+    readPages = :readPages,
+    startReadingDate = :startReadingDate,
+    finishedReadingDate = :finishedReadingDate,
+    seriesId = :seriesId,
+    volume = :volume,
+    isLent = coalesce(:isLent, isLent),
+    lentTo = :lentTo,
+    lentDate = :lentDate,
+    lentReturnDate = :lentReturnDate,
+    notes = :notes,
+    quotes = :quotes
+WHERE id = :id;
+
+deleteBook:
+DELETE FROM books
+WHERE id = :id;
