@@ -50,6 +50,9 @@ dependencies {
 	implementation(libs.bundles.kotlinx)
 	implementation(libs.bundles.sqldelight)
 
+	implementation(platform(libs.koin.bom))
+	implementation(libs.bundles.koin)
+
 	testImplementation(testdebug.junit)
 	androidTestImplementation(testdebug.bundles.androidTest)
 	androidTestImplementation(platform(jetpack.compose.bom))
@@ -100,3 +103,5 @@ spotless {
 		trimTrailingWhitespace()
 	}
 }
+
+tasks.getByName("preBuild").dependsOn(tasks.getByName("spotlessApply"))

@@ -5,6 +5,7 @@ spotless = "7.0.1"
 ktlint = "1.5.0"
 sqldelight = "2.0.2"
 datetime = "0.6.1"
+koin = "4.1.0-Beta5"
 
 [libraries]
 ktlint-core = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
@@ -18,6 +19,14 @@ sqldelight-coroutines-extensions = { group = "app.cash.sqldelight", name = "coro
 sqldelight-paging-extensions = { group = "app.cash.sqldelight", name = "androidx-paging3-extensions", version.ref = "sqldelight" }
 sqldelight-dialects-sql = { group = "app.cash.sqldelight", name = "sqlite-3-38-dialect", version.ref = "sqldelight" }
 
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose" }
+koin-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation" }
+koin-startup = { group = "io.insert-koin", name = "koin-androidx-startup" }
+koin-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager" }
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -28,3 +37,4 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 [bundles]
 kotlinx = ["datetime"]
 sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-paging-extensions", "sqldelight-dialects-sql"]
+koin = ["koin-android", "koin-compose", "koin-compose-navigation", "koin-startup", "koin-workmanager"]
