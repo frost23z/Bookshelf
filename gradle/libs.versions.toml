@@ -6,12 +6,14 @@ ktlint = "1.5.0"
 sqldelight = "2.0.2"
 datetime = "0.6.1"
 koin = "4.1.0-Beta5"
+serialization-json = "1.7.3"
 
 [libraries]
 ktlint-core = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 
 #kotlinx
 datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization-json" }
 
 # sqldelight
 sqldelight-driver = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
@@ -31,10 +33,11 @@ koin-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 [bundles]
-kotlinx = ["datetime"]
+kotlinx = ["datetime", "serialization-json"]
 sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-paging-extensions", "sqldelight-dialects-sql"]
 koin = ["koin-android", "koin-compose", "koin-compose-navigation", "koin-startup", "koin-workmanager"]
