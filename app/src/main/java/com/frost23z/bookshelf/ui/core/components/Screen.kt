@@ -9,4 +9,7 @@ interface Screen {
 
 	@Composable
 	fun Content()
+
+	@Composable
+	operator fun invoke() = Content()
 }
