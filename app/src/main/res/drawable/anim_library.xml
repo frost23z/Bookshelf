@@ -1,0 +1,28 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="960"
+            android:viewportHeight="960">
+            <path
+                android:name="path_1"
+                android:fillColor="#000"
+                android:pathData="M 400 560 L 560 560 L 560 480 L 400 480 L 400 560 Z M 400 440 L 720 440 L 720 360 L 400 360 L 400 440 Z M 400 320 L 720 320 L 720 240 L 400 240 L 400 320 Z M 320 720 Q 287 720 263.5 696.5 Q 240 673 240 640 L 240 160 Q 240 127 263.5 103.5 Q 287 80 320 80 L 800 80 Q 833 80 856.5 103.5 Q 880 127 880 160 L 880 640 Q 880 673 856.5 696.5 Q 833 720 800 720 L 320 720 Z M 320 640 L 800 640 L 800 160 L 320 160 L 320 640 Z M 160 880 Q 127 880 103.5 856.5 Q 80 833 80 800 L 80 240 L 160 240 L 160 800 L 720 800 L 720 880 L 160 880 Z M 320 160 L 320 640 L 320 160 Z"
+                android:strokeWidth="1" />
+        </vector>
+    </aapt:attr>
+    <target android:name="path_1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="300"
+                android:interpolator="@android:interpolator/fast_out_slow_in"
+                android:propertyName="pathData"
+                android:valueFrom="M 400 560 L 560 560 L 560 480 L 400 480 L 400 560 Z M 400 440 L 720 440 L 720 360 L 400 360 L 400 440 Z M 400 320 L 720 320 L 720 240 L 400 240 L 400 320 Z M 320 720 Q 287 720 263.5 696.5 Q 240 673 240 640 L 240 160 Q 240 127 263.5 103.5 Q 287 80 320 80 L 800 80 Q 833 80 856.5 103.5 Q 880 127 880 160 L 880 640 Q 880 673 856.5 696.5 Q 833 720 800 720 L 320 720 Z M 320 640 L 320 640 Q 440 640 560 640 Q 680 640 800 640 L 800 160 L 320 160 L 320 280 L 320 400 L 320 520 L 320 640 M 160 880 L 720 880 L 720 800 L 160 800 L 160 240 L 80 240 L 80 800 Q 80 833 103.5 856.5 Q 127 880 160 880 L 160 880 M 320 160 L 320 640 L 320 160 L 320 160"
+                android:valueTo="M 400 560 L 560 560 L 560 480 L 400 480 L 400 560 Z M 400 440 L 720 440 L 720 360 L 400 360 L 400 440 Z M 400 320 L 720 320 L 720 240 L 400 240 L 400 320 Z M 320 720 Q 287 720 263.5 696.5 Q 240 673 240 640 L 240 160 Q 240 127 263.5 103.5 Q 287 80 320 80 L 800 80 Q 833 80 856.5 103.5 Q 880 127 880 160 L 880 640 Q 880 673 856.5 696.5 Q 833 720 800 720 L 320 720 Z M 160 880 L 160 880 Q 127 880 103.5 856.5 Q 80 833 80 800 L 80 240 L 160 240 L 160 800 L 720 800 L 720 880 L 160 880 M 280 840 L 280 840 L 280 840 L 280 840 L 280 840 L 280 840 L 280 840 Q 280 840 280 840 Q 280 840 280 840 L 280 840 M 320 160 L 320 160 L 320 160 L 320 160"
+                android:valueType="pathType" />
+        </aapt:attr>
+    </target>
+</animated-vector>
