@@ -1,4 +1,4 @@
-import com.frost23z.bookshelf.domain.model.Role;
+import com.frost23z.bookshelf.domain.models.Role;
 
 CREATE TABLE mapperBooksContributors (
     bookId INTEGER NOT NULL,

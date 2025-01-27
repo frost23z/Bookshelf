@@ -1,4 +1,4 @@
-package com.frost23z.bookshelf.domain.model
+package com.frost23z.bookshelf.domain.models
 
 enum class BookFormat(val value: String) {
 	HARDCOVER("Hardcover"),

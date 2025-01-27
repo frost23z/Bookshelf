@@ -1,6 +1,6 @@
 import android.net.Uri;
-import com.frost23z.bookshelf.domain.model.BookFormat;
-import com.frost23z.bookshelf.domain.model.ReadingStatus;
+import com.frost23z.bookshelf.domain.models.BookFormat;
+import com.frost23z.bookshelf.domain.models.ReadingStatus;
 import kotlin.Boolean;
 import kotlin.Int;
 import kotlin.Pair;

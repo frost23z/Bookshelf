@@ -1,4 +1,4 @@
-package com.frost23z.bookshelf.domain.model
+package com.frost23z.bookshelf.domain.models
 
 enum class ReadingStatus(val value: String) {
 	NOT_STARTED("Not started"),

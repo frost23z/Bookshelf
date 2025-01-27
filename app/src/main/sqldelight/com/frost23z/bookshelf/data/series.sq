@@ -1,4 +1,4 @@
-import com.frost23z.bookshelf.domain.model.PublicationFrequency;
+import com.frost23z.bookshelf.domain.models.PublicationFrequency;
 import kotlinx.datetime.LocalDate;
 
 CREATE TABLE series (
