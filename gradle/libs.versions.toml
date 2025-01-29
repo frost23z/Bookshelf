@@ -28,7 +28,6 @@ koin-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-comp
 koin-startup = { group = "io.insert-koin", name = "koin-androidx-startup" }
 koin-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager" }
 
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
