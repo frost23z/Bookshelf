@@ -1,0 +1,60 @@
+import android.net.Uri;
+import com.frost23z.bookshelf.domain.models.AcquisitionType;
+import com.frost23z.bookshelf.domain.models.BookFormat;
+import com.frost23z.bookshelf.domain.models.Loan;
+import com.frost23z.bookshelf.domain.models.ReadingStatus;
+import kotlin.Boolean;
+import kotlin.Int;
+import kotlin.Pair;
+import kotlin.String;
+import kotlin.collections.List;
+import kotlin.collections.MutableSet;
+import kotlinx.datetime.LocalDate;
+
+CREATE TABLE books (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    shelfId INTEGER DEFAULT NULL,
+    isFavorite INTEGER AS Boolean NOT NULL DEFAULT 0,
+    dateAdded INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    dateLastUpdated INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- -------------------
+    titlePrefix TEXT,
+    title TEXT NOT NULL,
+    subtitle TEXT,
+    -- -------------------
+    coverUri TEXT AS Uri,
+    description TEXT,
+    -- -------------------
+    publisherId INTEGER,
+    publicationDate TEXT AS LocalDate,
+    languageId INTEGER,
+    totalPages INTEGER,
+    format TEXT AS BookFormat,
+    -- -------------------
+    acquisitionType TEXT AS AcquisitionType,
+    acquiredFrom TEXT,
+    acquiredDate TEXT AS LocalDate,
+    purchasePrice REAL,
+    -- -------------------
+    readStatus TEXT AS ReadingStatus,
+    readPages INTEGER,
+    startReadingDate TEXT AS LocalDate,
+    finishedReadingDate TEXT AS LocalDate,
+    additionalReadingDates TEXT AS List<Pair<LocalDate, LocalDate>>,
+    -- -------------------
+    seriesId INTEGER,
+    volume INTEGER,
+    -- -------------------
+    loan TEXT AS Loan NOT NULL DEFAULT 'NONE',
+    loanToOrFrom TEXT,
+    loanedDate TEXT AS LocalDate,
+    expectedReturnDate TEXT AS LocalDate,
+    -- -------------------
+    notes TEXT DEFAULT NULL,
+    quotes TEXT AS MutableSet<Pair<Int, String>>,
+    -- -------------------
+    FOREIGN KEY(shelfId) REFERENCES shelves(id) ON DELETE SET NULL,
+    FOREIGN KEY(publisherId) REFERENCES publishers(id) ON DELETE SET NULL,
+    FOREIGN KEY(languageId) REFERENCES languages(id) ON DELETE SET NULL,
+    FOREIGN KEY(seriesId) REFERENCES series(id) ON DELETE SET NULL
+);
