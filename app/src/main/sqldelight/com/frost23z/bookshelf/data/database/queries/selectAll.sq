@@ -1,0 +1,23 @@
+getAllBooks:
+SELECT * FROM books;
+
+getAllContributors:
+SELECT * FROM contributors;
+
+getAllTags:
+SELECT * FROM tags;
+
+getAllShelves:
+SELECT * FROM shelves;
+
+getAllPublishers:
+SELECT * FROM publishers;
+
+getAllLanguages:
+SELECT * FROM languages;
+
+getAllAcquiredFrom:
+SELECT * FROM acquiredFrom;
+
+getAllSeries:
+SELECT * FROM series;

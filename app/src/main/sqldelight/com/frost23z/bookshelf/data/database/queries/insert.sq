@@ -1,0 +1,61 @@
+insertBook:
+INSERT INTO books (
+    shelfId, isFavorite, dateAdded, dateLastUpdated,
+    titlePrefix, title, subtitle,
+    coverUri, description,
+    publisherId, publicationDate, languageId, totalPages, format,
+    acquisitionType, acquiredFrom, acquiredDate, purchasePrice,
+    readStatus, readPages, startReadingDate, finishedReadingDate, additionalReadingDates,
+    seriesId, volume,
+    loan, loanToOrFrom, loanedDate, expectedReturnDate,
+    notes, quotes
+) VALUES (
+    :shelfId, :isFavorite, :dateAdded, :dateLastUpdated,
+    :titlePrefix, :title, :subtitle,
+    :coverUri, :description,
+    :publisherId, :publicationDate, :languageId, :totalPages, :format,
+    :acquisitionType, :acquiredFrom, :acquiredDate, :purchasePrice,
+    :readStatus, :readPages, :startReadingDate, :finishedReadingDate, :additionalReadingDates,
+    :seriesId, :volume,
+    :loan, :loanToOrFrom, :loanedDate, :expectedReturnDate,
+    :notes, :quotes
+);
+
+insertContributor:
+INSERT INTO contributors(name)
+VALUES (:name);
+
+insertBookContributor:
+INSERT INTO mapperBooksContributors(bookId, contributorId, role)
+VALUES (:bookId, :contributorId, :role);
+
+insertTag:
+INSERT INTO tags(name)
+VALUES (:name);
+
+insertBookTag:
+INSERT INTO mapperBooksTags(bookId, tagId)
+VALUES (:bookId, :tagId);
+
+insertShelf:
+INSERT INTO shelves(name)
+VALUES (:name);
+
+insertPublisher:
+INSERT INTO publishers(name)
+VALUES (:name);
+
+insertLanguage:
+INSERT INTO languages(name)
+VALUES (:name);
+
+insertAcquiredFrom:
+INSERT INTO acquiredFrom(name)
+VALUES (:name);
+
+insertSeries:
+INSERT INTO series(
+    title, description, totalVolumes, publicationFrequency, firstPublicationDate
+) VALUES (
+    :title, :description, :totalVolumes, :publicationFrequency, :firstPublicationDate
+);

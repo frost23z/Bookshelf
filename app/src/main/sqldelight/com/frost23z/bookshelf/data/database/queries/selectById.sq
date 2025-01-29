@@ -1,0 +1,35 @@
+getBookById:
+SELECT * FROM books WHERE id = :id;
+
+getBooksbyContributorId:
+SELECT * FROM books WHERE id IN (SELECT bookId FROM mapperBooksContributors WHERE contributorId = :contributorId);
+
+getBooksByTagId:
+SELECT * FROM books WHERE id IN (SELECT bookId FROM mapperBooksTags WHERE tagId = :tagId);
+
+getContributorById:
+SELECT * FROM contributors WHERE id = :id;
+
+getContributorsByBookId:
+SELECT * FROM contributors WHERE id IN (SELECT contributorId FROM mapperBooksContributors WHERE bookId = :bookId);
+
+getTagById:
+SELECT * FROM tags WHERE id = :id;
+
+getTagsByBookId:
+SELECT * FROM tags WHERE id IN (SELECT tagId FROM mapperBooksTags WHERE bookId = :bookId);
+
+getShelfById:
+SELECT * FROM shelves WHERE id = :id;
+
+getPublisherById:
+SELECT * FROM publishers WHERE id = :id;
+
+getLanguageById:
+SELECT * FROM languages WHERE id = :id;
+
+getAcquiredFromById:
+SELECT * FROM acquiredFrom WHERE id = :id;
+
+getSeriesById:
+SELECT * FROM series WHERE id = :id;

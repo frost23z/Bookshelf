@@ -1,0 +1,39 @@
+deleteBook:
+DELETE FROM books
+WHERE id = :id;
+
+deleteContributor:
+DELETE FROM contributors
+WHERE id = :id;
+
+deleteBookContributor:
+DELETE FROM mapperBooksContributors
+WHERE bookId = :bookId AND contributorId = :contributorId;
+
+deleteTag:
+DELETE FROM tags
+WHERE id = :id;
+
+deleteBookTag:
+DELETE FROM mapperBooksTags
+WHERE bookId = :bookId AND tagId = :tagId;
+
+deleteShelf:
+DELETE FROM shelves
+WHERE id = :id;
+
+deletePublisher:
+DELETE FROM publishers
+WHERE id = :id;
+
+deleteLanguage:
+DELETE FROM languages
+WHERE id = :id;
+
+deleteAcquiredFrom:
+DELETE FROM acquiredFrom
+WHERE id = :id;
+
+deleteSeries:
+DELETE FROM series
+WHERE id = :id;

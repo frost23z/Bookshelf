@@ -1,0 +1,59 @@
+updateBook:
+UPDATE books
+SET
+    shelfId = :shelfId, isFavorite = :isFavorite, dateAdded = :dateAdded, dateLastUpdated = :dateLastUpdated,
+    titlePrefix = :titlePrefix, title = :title, subtitle = :subtitle,
+    coverUri = :coverUri, description = :description,
+    publisherId = :publisherId, publicationDate = :publicationDate, languageId = :languageId, totalPages = :totalPages, format = :format,
+    acquisitionType = :acquisitionType, acquiredFrom = :acquiredFrom, acquiredDate = :acquiredDate, purchasePrice = :purchasePrice,
+    readStatus = :readStatus, readPages = :readPages, startReadingDate = :startReadingDate, finishedReadingDate = :finishedReadingDate, additionalReadingDates = :additionalReadingDates,
+    seriesId = :seriesId, volume = :volume,
+    loan = :loan, loanToOrFrom = :loanToOrFrom, loanedDate = :loanedDate, expectedReturnDate = :expectedReturnDate,
+    notes = :notes, quotes = :quotes
+WHERE id = :id;
+
+updateContributor:
+UPDATE contributors
+SET name = :name
+WHERE id = :id;
+
+updateBookContributor:
+UPDATE mapperBooksContributors
+SET role = :role
+WHERE bookId = :bookId AND contributorId = :contributorId;
+
+updateTag:
+UPDATE tags
+SET name = :name
+WHERE id = :id;
+
+updateBookTag:
+UPDATE mapperBooksTags
+SET tagId = :tagId
+WHERE bookId = :bookId AND tagId = :tagId;
+
+updateShelf:
+UPDATE shelves
+SET name = :name
+WHERE id = :id;
+
+updatePublisher:
+UPDATE publishers
+SET name = :name
+WHERE id = :id;
+
+updateLanguage:
+UPDATE languages
+SET name = :name
+WHERE id = :id;
+
+updateAcquiredFrom:
+UPDATE acquiredFrom
+SET name = :name
+WHERE id = :id;
+
+updateSeries:
+UPDATE series
+SET
+    title = :title, description = :description, totalVolumes = :totalVolumes, publicationFrequency = :publicationFrequency, firstPublicationDate = :firstPublicationDate
+WHERE id = :id;
