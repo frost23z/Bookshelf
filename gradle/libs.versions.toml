@@ -6,7 +6,7 @@ ktlint = "1.5.0"
 sqldelight = "2.0.2"
 datetime = "0.6.1"
 koin = "4.1.0-Beta5"
-serialization-json = "1.7.3"
+serialization-json = "1.8.0"
 
 [libraries]
 ktlint-core = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
