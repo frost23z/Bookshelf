@@ -48,8 +48,8 @@ fun TextField(
 	maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
 	minLines: Int = 1,
 	cursorBrush: Brush = SolidColor(Color.Black),
-	placeholder: String? = null,
 	label: String? = null,
+	placeholder: String? = label,
 	labelTextStyle: TextStyle = TextStyle.textFieldLabelStyle(),
 	leadingIcon: ImageVector? = null,
 	trailingIcon: ImageVector? = null,
@@ -59,10 +59,10 @@ fun TextField(
 		TextFieldDecorationBox(
 			innerTextField = innerTextField,
 			value = value,
-			textStyle = textStyle,
-			placeholder = placeholder,
 			label = label,
 			labelTextStyle = labelTextStyle,
+			placeholder = placeholder,
+			textStyle = textStyle,
 			leadingIcon = leadingIcon,
 			trailingIcon = trailingIcon
 		)
@@ -89,10 +89,10 @@ fun TextField(
 private fun TextFieldDecorationBox(
 	innerTextField: @Composable () -> Unit,
 	value: String,
-	textStyle: TextStyle,
-	placeholder: String?,
 	label: String?,
 	labelTextStyle: TextStyle,
+	placeholder: String?,
+	textStyle: TextStyle,
 	leadingIcon: ImageVector?,
 	trailingIcon: ImageVector?
 ) {
@@ -135,7 +135,6 @@ private fun TextFieldPreview() {
 		TextField(
 			value = value,
 			onValueChange = { value = it },
-			placeholder = "Placeholder",
 			label = "Label",
 			leadingIcon = Icons.Outlined.Title,
 			trailingIcon = Icons.Outlined.Title
@@ -144,8 +143,8 @@ private fun TextFieldPreview() {
 		TextField(
 			value = value,
 			onValueChange = { value = it },
-			placeholder = "Placeholder",
 			label = "Label",
+			placeholder = "Placeholder",
 			leadingIcon = Icons.Outlined.People,
 			trailingIcon = Icons.Outlined.KeyboardArrowDown
 		)
