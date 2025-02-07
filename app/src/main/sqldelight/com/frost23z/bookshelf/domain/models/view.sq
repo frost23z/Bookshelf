@@ -1,0 +1,21 @@
+CREATE VIEW libraryBooks AS
+SELECT
+    books.id,
+    shelves.name AS shelf,
+    books.dateAdded,
+    books.dateLastUpdated,
+    books.titlePrefix,
+    books.title,
+    books.subtitle,
+    books.coverUri,
+    publishers.name AS publisher,
+    languages.name AS language,
+    books.format,
+    books.readStatus
+FROM books
+JOIN shelves
+ON books.shelfId = shelves.id
+JOIN publishers
+ON books.publisherId = publishers.id
+JOIN languages
+ON books.languageId = languages.id;
