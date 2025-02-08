@@ -18,6 +18,12 @@ class AddEditScreenModel : ScreenModel<UIState.AddEdit>(UIState.AddEdit()) {
 		}
 	}
 
+	fun updateLanguage(language: String) {
+		mutableState.update {
+			it.copy(language = language, hasUnsavedChanges = true)
+		}
+	}
+
 	fun toggleDatePickerVisibility() {
 		mutableState.update {
 			it.copy(isDatePickerVisible = !it.isDatePickerVisible)
