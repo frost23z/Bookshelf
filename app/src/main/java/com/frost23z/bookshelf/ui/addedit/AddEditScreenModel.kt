@@ -11,4 +11,16 @@ class AddEditScreenModel : ScreenModel<UIState.AddEdit>(UIState.AddEdit()) {
 			it.copy(book = it.book.update(), hasUnsavedChanges = true)
 		}
 	}
+
+	fun updatePublisher(publisher: String) {
+		mutableState.update {
+			it.copy(publisher = publisher, hasUnsavedChanges = true)
+		}
+	}
+
+	fun toggleDatePickerVisibility() {
+		mutableState.update {
+			it.copy(isDatePickerVisible = !it.isDatePickerVisible)
+		}
+	}
 }

@@ -12,33 +12,39 @@ import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.frost23z.bookshelf.domain.models.Books
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
+import com.frost23z.bookshelf.ui.core.components.DatePickerModal
+import com.frost23z.bookshelf.ui.core.models.UIState
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun AddEditScreen(
-	book: Books,
-	publisher: String,
+	state: UIState.AddEdit,
 	onTitleChange: (String) -> Unit,
 	onSubtitleChange: (String) -> Unit,
-	onPublisherChange: (String) -> Unit
+	onPublisherChange: (String) -> Unit,
+	onPublicationDateChange: (LocalDate?) -> Unit,
+	toggleDatePickerVisibility: () -> Unit,
+	modifier: Modifier = Modifier
 ) {
 	val keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, imeAction = ImeAction.Next)
 
 	LazyColumn(
-		modifier = Modifier.fillMaxSize(),
+		modifier = modifier.fillMaxSize(),
 		contentPadding = PaddingValues(16.dp),
 		verticalArrangement = Arrangement.spacedBy(16.dp)
 	) {
 		item(key = "TitleSection") {
 			TextFieldGroupContainer {
 				TextField(
-					value = book.title,
+					value = state.book.title,
 					onValueChange = { onTitleChange(it) },
 					keyboardOptions = keyboardOptions,
 					label = "Title",
@@ -46,7 +52,7 @@ fun AddEditScreen(
 				)
 				TextFieldSeparator()
 				TextField(
-					value = book.subtitle ?: "",
+					value = state.book.subtitle ?: "",
 					onValueChange = { onSubtitleChange(it) },
 					keyboardOptions = keyboardOptions,
 					label = "Subtitle"
@@ -56,7 +62,7 @@ fun AddEditScreen(
 		item(key = "InfoSection") {
 			TextFieldGroupContainer {
 				TextField(
-					value = publisher,
+					value = state.publisher,
 					onValueChange = { onPublisherChange(it) },
 					keyboardOptions = keyboardOptions,
 					label = "Publisher",
@@ -64,31 +70,41 @@ fun AddEditScreen(
 				)
 				TextFieldSeparator()
 				TextField(
-					value = book.publicationDate?.toString() ?: "",
+					value = state.book.publicationDate?.toString() ?: "",
 					onValueChange = { },
 					keyboardOptions = keyboardOptions,
 					label = "Publication Date",
 					placeholder = "YYYY-MM-DD",
 					trailingIcon = Icons.Outlined.CalendarToday,
-					trailingIconClick = {},
+					trailingIconClick = { toggleDatePickerVisibility() },
 					readOnly = true
 				)
 			}
 		}
-		item(key = "DataPreview") { Text("Book: $book") }
+		item(key = "DataPreview") { Text("Book: $state") }
+	}
+
+	if (state.isDatePickerVisible) {
+		DatePickerModal(
+			onDateSelected = { onPublicationDateChange(it) },
+			onDismiss = {
+				toggleDatePickerVisibility()
+			}
+		)
 	}
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AddEditScreenPreview() {
-	val screenModel = AddEditScreenModel()
+	val screenModel by remember { mutableStateOf(AddEditScreenModel()) }
 	val state by screenModel.state.collectAsStateWithLifecycle()
 	AddEditScreen(
-		book = state.book,
+		state = state,
 		onTitleChange = { screenModel.updateBook { copy(title = it) } },
 		onSubtitleChange = { screenModel.updateBook { copy(subtitle = it) } },
-		publisher = state.publisher,
-		onPublisherChange = { screenModel.state }
+		onPublisherChange = { screenModel.updatePublisher(it) },
+		onPublicationDateChange = { screenModel.updateBook { copy(publicationDate = it) } },
+		toggleDatePickerVisibility = { screenModel.toggleDatePickerVisibility() }
 	)
 }

@@ -14,5 +14,6 @@ sealed class UIState {
 		val hasUnsavedChanges: Boolean = false,
 		val publisher: String = "",
 		val language: String = "",
+		val isDatePickerVisible: Boolean = false,
 	)
 }
