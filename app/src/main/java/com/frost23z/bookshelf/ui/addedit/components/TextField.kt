@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.frost23z.bookshelf.ui.core.components.Icon
+import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.constants.IconSize
 import com.frost23z.bookshelf.ui.core.constants.textFieldLabelStyle
 import com.frost23z.bookshelf.ui.core.constants.textFieldStyle
@@ -53,6 +54,7 @@ fun TextField(
 	labelTextStyle: TextStyle = TextStyle.textFieldLabelStyle(),
 	leadingIcon: ImageVector? = null,
 	trailingIcon: ImageVector? = null,
+	trailingIconClick: () -> Unit = {},
 	decorationBox: @Composable (
 		innerTextField: @Composable () -> Unit,
 	) -> Unit = { innerTextField ->
@@ -64,7 +66,8 @@ fun TextField(
 			placeholder = placeholder,
 			textStyle = textStyle,
 			leadingIcon = leadingIcon,
-			trailingIcon = trailingIcon
+			trailingIcon = trailingIcon,
+			trailingIconClick = trailingIconClick
 		)
 	}
 ) {
@@ -94,7 +97,8 @@ private fun TextFieldDecorationBox(
 	placeholder: String?,
 	textStyle: TextStyle,
 	leadingIcon: ImageVector?,
-	trailingIcon: ImageVector?
+	trailingIcon: ImageVector?,
+	trailingIconClick: () -> Unit
 ) {
 	Row(
 		modifier = Modifier.fillMaxWidth(),
@@ -123,7 +127,7 @@ private fun TextFieldDecorationBox(
 				innerTextField()
 			}
 		}
-		trailingIcon?.let { Icon(it, containerSize = IconSize.Large) } ?: Spacer(modifier = Modifier.size(IconSize.Large))
+		trailingIcon?.let { IconButton(it, onClick = trailingIconClick) } ?: Spacer(modifier = Modifier.size(IconSize.Large))
 	}
 }
 
