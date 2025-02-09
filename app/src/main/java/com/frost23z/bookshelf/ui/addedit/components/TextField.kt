@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
@@ -42,13 +41,13 @@ fun TextField(
 	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	readOnly: Boolean = false,
-	textStyle: TextStyle = TextStyle.textFieldStyle(),
+	textStyle: TextStyle = TextStyle.textFieldStyle().copy(color = MaterialTheme.colorScheme.onBackground),
 	keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 	keyboardActions: KeyboardActions = KeyboardActions.Default,
 	singleLine: Boolean = true,
 	maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
 	minLines: Int = 1,
-	cursorBrush: Brush = SolidColor(Color.Black),
+	cursorBrush: Brush = SolidColor(MaterialTheme.colorScheme.onBackground),
 	label: String? = null,
 	placeholder: String? = label,
 	labelTextStyle: TextStyle = TextStyle.textFieldLabelStyle(),
