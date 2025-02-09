@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Note
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ExpandLess
@@ -26,9 +27,12 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.frost23z.bookshelf.domain.models.BookFormat
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
+import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
 import com.frost23z.bookshelf.ui.core.models.UIState
+import com.frost23z.bookshelf.ui.core.models.toDisplayString
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
 import kotlinx.datetime.LocalDate
 
@@ -41,7 +45,9 @@ fun AddEditScreen(
 	onPublicationDateChange: (LocalDate?) -> Unit,
 	onLanguageChange: (String) -> Unit,
 	onTotalPagesChange: (Long?) -> Unit,
+	onFormatChange: (BookFormat) -> Unit,
 	toggleDatePickerVisibility: () -> Unit,
+	toggleFormatDialogVisibility: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
 	val keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, imeAction = ImeAction.Next)
@@ -106,6 +112,17 @@ fun AddEditScreen(
 					label = "Total Pages",
 					leadingIcon = Icons.Outlined.AutoStories
 				)
+				TextFieldSeparator()
+				TextField(
+					value = state.book.format?.toDisplayString() ?: "",
+					onValueChange = { },
+					keyboardOptions = keyboardOptions,
+					label = "Format",
+					leadingIcon = Icons.AutoMirrored.Outlined.Note,
+					trailingIcon = if (state.isDatePickerVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+					trailingIconClick = { toggleFormatDialogVisibility() },
+					readOnly = true
+				)
 			}
 		}
 		item(key = "DataPreview") { Text("Book: $state") }
@@ -117,6 +134,14 @@ fun AddEditScreen(
 			onDismiss = {
 				toggleDatePickerVisibility()
 			}
+		)
+	}
+	if (state.isFormatDialogVisible) {
+		SingleChoiceDialog(
+			selectedOption = state.book.format,
+			displayString = { it.toDisplayString() },
+			onOptionSelected = { onFormatChange(it) },
+			onDismissRequest = { toggleFormatDialogVisibility() }
 		)
 	}
 }
@@ -136,7 +161,9 @@ private fun AddEditScreenPreview() {
 				onPublicationDateChange = { screenModel.updateBook { copy(publicationDate = it) } },
 				onLanguageChange = { screenModel.updateLanguage(it) },
 				onTotalPagesChange = { screenModel.updateBook { copy(totalPages = it) } },
-				toggleDatePickerVisibility = { screenModel.toggleDatePickerVisibility() }
+				onFormatChange = { screenModel.updateBook { copy(format = it) } },
+				toggleDatePickerVisibility = { screenModel.toggleDatePickerVisibility() },
+				toggleFormatDialogVisibility = { screenModel.toggleFormatDialogVisibility() }
 			)
 		}
 	}
