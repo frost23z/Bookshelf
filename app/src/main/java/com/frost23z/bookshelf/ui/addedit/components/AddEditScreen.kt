@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Publish
 import androidx.compose.material.icons.outlined.Title
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,13 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
 import com.frost23z.bookshelf.ui.core.models.UIState
+import com.frost23z.bookshelf.ui.theme.BookshelfTheme
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -119,19 +121,23 @@ fun AddEditScreen(
 	}
 }
 
-@Preview(showBackground = true)
+@PreviewLightDark
 @Composable
 private fun AddEditScreenPreview() {
 	val screenModel by remember { mutableStateOf(AddEditScreenModel()) }
 	val state by screenModel.state.collectAsStateWithLifecycle()
-	AddEditScreen(
-		state = state,
-		onTitleChange = { screenModel.updateBook { copy(title = it) } },
-		onSubtitleChange = { screenModel.updateBook { copy(subtitle = it) } },
-		onPublisherChange = { screenModel.updatePublisher(it) },
-		onPublicationDateChange = { screenModel.updateBook { copy(publicationDate = it) } },
-		onLanguageChange = { screenModel.updateLanguage(it) },
-		onTotalPagesChange = { screenModel.updateBook { copy(totalPages = it) } },
-		toggleDatePickerVisibility = { screenModel.toggleDatePickerVisibility() }
-	)
+	BookshelfTheme {
+		Surface {
+			AddEditScreen(
+				state = state,
+				onTitleChange = { screenModel.updateBook { copy(title = it) } },
+				onSubtitleChange = { screenModel.updateBook { copy(subtitle = it) } },
+				onPublisherChange = { screenModel.updatePublisher(it) },
+				onPublicationDateChange = { screenModel.updateBook { copy(publicationDate = it) } },
+				onLanguageChange = { screenModel.updateLanguage(it) },
+				onTotalPagesChange = { screenModel.updateBook { copy(totalPages = it) } },
+				toggleDatePickerVisibility = { screenModel.toggleDatePickerVisibility() }
+			)
+		}
+	}
 }
