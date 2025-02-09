@@ -15,5 +15,6 @@ sealed class UIState {
 		val publisher: String = "",
 		val language: String = "",
 		val isDatePickerVisible: Boolean = false,
+		val isFormatDialogVisible: Boolean = false
 	)
 }

@@ -29,4 +29,10 @@ class AddEditScreenModel : ScreenModel<UIState.AddEdit>(UIState.AddEdit()) {
 			it.copy(isDatePickerVisible = !it.isDatePickerVisible)
 		}
 	}
+
+	fun toggleFormatDialogVisibility() {
+		mutableState.update {
+			it.copy(isFormatDialogVisible = !it.isFormatDialogVisible)
+		}
+	}
 }
