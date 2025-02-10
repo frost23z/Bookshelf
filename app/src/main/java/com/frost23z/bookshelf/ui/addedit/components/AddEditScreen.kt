@@ -27,27 +27,16 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.frost23z.bookshelf.domain.models.BookFormat
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
 import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
-import com.frost23z.bookshelf.ui.core.models.UIState
 import com.frost23z.bookshelf.ui.core.models.toDisplayString
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
-import kotlinx.datetime.LocalDate
 
 @Composable
 fun AddEditScreen(
-	state: UIState.AddEdit,
-	onTitleChange: (String) -> Unit,
-	onSubtitleChange: (String) -> Unit,
-	onPublisherChange: (String) -> Unit,
-	onPublicationDateChange: (LocalDate?) -> Unit,
-	onLanguageChange: (String) -> Unit,
-	onTotalPagesChange: (Long?) -> Unit,
-	onFormatChange: (BookFormat) -> Unit,
-	toggleDatePickerVisibility: () -> Unit,
-	toggleFormatDialogVisibility: () -> Unit,
+	state: AddEditScreenState,
+	onAction: (AddEditScreenAction) -> Unit,
 	modifier: Modifier = Modifier
 ) {
 	val keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, imeAction = ImeAction.Next)
@@ -61,7 +50,7 @@ fun AddEditScreen(
 			TextFieldGroupContainer {
 				TextField(
 					value = state.book.title,
-					onValueChange = { onTitleChange(it) },
+					onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(title = it) }) },
 					keyboardOptions = keyboardOptions,
 					label = "Title",
 					leadingIcon = Icons.Outlined.Title
@@ -69,7 +58,7 @@ fun AddEditScreen(
 				TextFieldSeparator()
 				TextField(
 					value = state.book.subtitle ?: "",
-					onValueChange = { onSubtitleChange(it) },
+					onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(subtitle = it) }) },
 					keyboardOptions = keyboardOptions,
 					label = "Subtitle"
 				)
@@ -79,7 +68,7 @@ fun AddEditScreen(
 			TextFieldGroupContainer {
 				TextField(
 					value = state.publisher,
-					onValueChange = { onPublisherChange(it) },
+					onValueChange = { onAction(AddEditScreenAction.UpdatePublisher(it)) },
 					keyboardOptions = keyboardOptions,
 					label = "Publisher",
 					leadingIcon = Icons.Outlined.Publish
@@ -93,13 +82,13 @@ fun AddEditScreen(
 					placeholder = "YYYY-MM-DD",
 					leadingIcon = Icons.Outlined.CalendarToday,
 					trailingIcon = if (state.isDatePickerVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-					trailingIconClick = { toggleDatePickerVisibility() },
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility) },
 					readOnly = true
 				)
 				TextFieldSeparator()
 				TextField(
 					value = state.language,
-					onValueChange = { onLanguageChange(it) },
+					onValueChange = { onAction(AddEditScreenAction.UpdateLanguage(it)) },
 					keyboardOptions = keyboardOptions,
 					label = "Language",
 					leadingIcon = Icons.Outlined.Language
@@ -107,7 +96,11 @@ fun AddEditScreen(
 				TextFieldSeparator()
 				TextField(
 					value = state.book.totalPages?.toString() ?: "",
-					onValueChange = { if (it.length < 5 && it.isDigitsOnly()) onTotalPagesChange(it.toLongOrNull()) },
+					onValueChange = {
+						if (it.length < 5 && it.isDigitsOnly()) {
+							onAction(AddEditScreenAction.UpdateBook { copy(totalPages = it.toLongOrNull()) })
+						}
+					},
 					keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Number),
 					label = "Total Pages",
 					leadingIcon = Icons.Outlined.AutoStories
@@ -120,7 +113,7 @@ fun AddEditScreen(
 					label = "Format",
 					leadingIcon = Icons.AutoMirrored.Outlined.Note,
 					trailingIcon = if (state.isDatePickerVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-					trailingIconClick = { toggleFormatDialogVisibility() },
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleFormatDialogVisibility) },
 					readOnly = true
 				)
 			}
@@ -130,18 +123,16 @@ fun AddEditScreen(
 
 	if (state.isDatePickerVisible) {
 		DatePickerModal(
-			onDateSelected = { onPublicationDateChange(it) },
-			onDismiss = {
-				toggleDatePickerVisibility()
-			}
+			onDateSelected = { onAction(AddEditScreenAction.UpdateBook { copy(publicationDate = it) }) },
+			onDismiss = { onAction(AddEditScreenAction.ToggleDatePickerVisibility) }
 		)
 	}
 	if (state.isFormatDialogVisible) {
 		SingleChoiceDialog(
 			selectedOption = state.book.format,
 			displayString = { it.toDisplayString() },
-			onOptionSelected = { onFormatChange(it) },
-			onDismissRequest = { toggleFormatDialogVisibility() }
+			onOptionSelected = { onAction(AddEditScreenAction.UpdateBook { copy(format = it) }) },
+			onDismissRequest = { onAction(AddEditScreenAction.ToggleFormatDialogVisibility) },
 		)
 	}
 }
@@ -155,15 +146,7 @@ private fun AddEditScreenPreview() {
 		Surface {
 			AddEditScreen(
 				state = state,
-				onTitleChange = { screenModel.updateBook { copy(title = it) } },
-				onSubtitleChange = { screenModel.updateBook { copy(subtitle = it) } },
-				onPublisherChange = { screenModel.updatePublisher(it) },
-				onPublicationDateChange = { screenModel.updateBook { copy(publicationDate = it) } },
-				onLanguageChange = { screenModel.updateLanguage(it) },
-				onTotalPagesChange = { screenModel.updateBook { copy(totalPages = it) } },
-				onFormatChange = { screenModel.updateBook { copy(format = it) } },
-				toggleDatePickerVisibility = { screenModel.toggleDatePickerVisibility() },
-				toggleFormatDialogVisibility = { screenModel.toggleFormatDialogVisibility() }
+				onAction = screenModel::onAction
 			)
 		}
 	}
