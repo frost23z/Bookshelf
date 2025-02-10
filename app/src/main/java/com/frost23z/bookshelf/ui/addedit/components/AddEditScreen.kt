@@ -1,27 +1,38 @@
 package com.frost23z.bookshelf.ui.addedit.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Note
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Publish
+import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material.icons.outlined.Source
 import androidx.compose.material.icons.outlined.Title
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -31,9 +42,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.ui.addedit.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
+import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
 import com.frost23z.bookshelf.ui.core.models.toDisplayString
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
+import kotlin.math.roundToLong
 
 @Composable
 fun AddEditScreen(
@@ -42,6 +55,14 @@ fun AddEditScreen(
 	modifier: Modifier = Modifier
 ) {
 	val keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, imeAction = ImeAction.Next)
+	val animatedValue by animateFloatAsState(
+		targetValue = state.book.readPages?.toFloat() ?: 0f,
+		animationSpec = tween(durationMillis = 500),
+		label = "Float Animation"
+	)
+
+	val expandMore = Icons.Outlined.ExpandMore
+	val expandLess = Icons.Outlined.ExpandLess
 
 	LazyColumn(
 		modifier = modifier.fillMaxSize(),
@@ -83,8 +104,8 @@ fun AddEditScreen(
 					label = "Publication Date",
 					placeholder = "YYYY-MM-DD",
 					leadingIcon = Icons.Outlined.CalendarToday,
-					trailingIcon = if (state.isDatePickerVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-					trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility) },
+					trailingIcon = if (state.datePickerFor == DatePickerFor.PUBLICATION_DATE) expandLess else expandMore,
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility(DatePickerFor.PUBLICATION_DATE)) },
 					readOnly = true
 				)
 				TextFieldSeparator()
@@ -114,8 +135,8 @@ fun AddEditScreen(
 					keyboardOptions = keyboardOptions,
 					label = "Format",
 					leadingIcon = Icons.AutoMirrored.Outlined.Note,
-					trailingIcon = if (state.isDatePickerVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-					trailingIconClick = { onAction(AddEditScreenAction.ToggleFormatDialogVisibility) },
+					trailingIcon = if (state.datePickerFor == DatePickerFor.PUBLICATION_DATE) expandLess else expandMore,
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility(DatePickerFor.PUBLICATION_DATE)) },
 					readOnly = true
 				)
 			}
@@ -128,7 +149,11 @@ fun AddEditScreen(
 					keyboardOptions = keyboardOptions,
 					label = "Acquired Via",
 					leadingIcon = Icons.Outlined.Source,
-					trailingIcon = if (state.isAcquisitionDialogVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+					trailingIcon = if (state.isAcquisitionDialogVisible) {
+						Icons.Outlined.ExpandLess
+					} else {
+						Icons.Outlined.ExpandMore
+					},
 					trailingIconClick = { onAction(AddEditScreenAction.ToggleAcquisitionDialogVisibility) },
 					readOnly = true
 				)
@@ -148,8 +173,8 @@ fun AddEditScreen(
 						label = if (state.acquisition == AcquisitionType.PURCHASED) "Purchased Date" else "Received Date",
 						placeholder = "YYYY-MM-DD",
 						leadingIcon = Icons.Outlined.CalendarToday,
-						trailingIcon = if (state.isDatePickerVisible) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-						trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility) },
+						trailingIcon = if (state.datePickerFor == DatePickerFor.ACQUIRED_DATE) expandLess else expandMore,
+						trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility(DatePickerFor.ACQUIRED_DATE)) },
 						readOnly = true
 					)
 					if (state.acquisition == AcquisitionType.PURCHASED) {
@@ -164,13 +189,91 @@ fun AddEditScreen(
 				}
 			}
 		}
+		item(key = "ReadStatusSection") {
+			TextFieldGroupContainer {
+				TextField(
+					value = state.book.readStatus?.toDisplayString() ?: "",
+					onValueChange = { },
+					keyboardOptions = keyboardOptions,
+					label = "Read Status",
+					leadingIcon = Icons.Outlined.AutoStories,
+					trailingIcon = if (state.isReadStatusDialogVisible) {
+						Icons.Outlined.ExpandLess
+					} else {
+						Icons.Outlined.ExpandMore
+					},
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleReadStatusDialogVisibility) },
+					readOnly = true
+				)
+				TextFieldSeparator()
+				Row(
+					modifier = Modifier.fillMaxWidth(),
+					verticalAlignment = Alignment.CenterVertically,
+					horizontalArrangement = Arrangement.SpaceBetween
+				) {
+					IconButton(
+						icon = Icons.Outlined.RemoveCircleOutline,
+						onClick = { onAction(AddEditScreenAction.UpdateBook { copy(readPages = state.book.readPages!! - 1) }) },
+						enabled = state.book.readPages != null && state.book.readPages > 0
+					)
+					Box(contentAlignment = Alignment.CenterEnd) {
+						Text(text = animatedValue.toInt().toString())
+						Text(text = state.book.totalPages?.toString() ?: "0", color = Color.Transparent)
+					}
+					Slider(
+						value = animatedValue,
+						onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(readPages = it.roundToLong()) }) },
+						valueRange = 0f..(state.book.totalPages ?: 0).toFloat(),
+						steps = calculateSliderSteps(state.book.totalPages ?: 0),
+						modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
+					)
+					Text(text = state.book.totalPages?.toString() ?: "0")
+					IconButton(
+						icon = Icons.Outlined.AddCircleOutline,
+						onClick = { onAction(AddEditScreenAction.UpdateBook { copy(readPages = state.book.readPages!! + 1) }) },
+						enabled = state.book.readPages != null && state.book.readPages < state.book.totalPages!!
+					)
+				}
+				TextFieldSeparator()
+				TextField(
+					value = state.book.startReadingDate?.toString() ?: "",
+					onValueChange = { },
+					keyboardOptions = keyboardOptions,
+					label = "Started Reading On",
+					placeholder = "YYYY-MM-DD",
+					leadingIcon = Icons.Outlined.CalendarToday,
+					trailingIcon = if (state.datePickerFor == DatePickerFor.START_READING_DATE) expandLess else expandMore,
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility(DatePickerFor.START_READING_DATE)) },
+					readOnly = true
+				)
+				TextField(
+					value = state.book.finishedReadingDate?.toString() ?: "",
+					onValueChange = { },
+					keyboardOptions = keyboardOptions,
+					label = "Finished Reading On",
+					placeholder = "YYYY-MM-DD",
+					leadingIcon = Icons.Outlined.CalendarToday,
+					trailingIcon = if (state.datePickerFor == DatePickerFor.FINISHED_READING_DATE) expandLess else expandMore,
+					trailingIconClick = { onAction(AddEditScreenAction.ToggleDatePickerVisibility(DatePickerFor.FINISHED_READING_DATE)) },
+					readOnly = true
+				)
+			}
+		}
 		item(key = "DataPreview") { Text("Book: $state") }
 	}
 
-	if (state.isDatePickerVisible) {
+	if (state.datePickerFor != null) {
 		DatePickerModal(
-			onDateSelected = { onAction(AddEditScreenAction.UpdateBook { copy(publicationDate = it) }) },
-			onDismiss = { onAction(AddEditScreenAction.ToggleDatePickerVisibility) }
+			onDateSelected = { date ->
+				when (state.datePickerFor) {
+					DatePickerFor.PUBLICATION_DATE -> onAction(AddEditScreenAction.UpdateBook { copy(publicationDate = date) })
+					DatePickerFor.ACQUIRED_DATE -> onAction(AddEditScreenAction.UpdateBook { copy(acquiredDate = date) })
+					DatePickerFor.START_READING_DATE -> onAction(AddEditScreenAction.UpdateBook { copy(startReadingDate = date) })
+					DatePickerFor.FINISHED_READING_DATE -> onAction(AddEditScreenAction.UpdateBook { copy(finishedReadingDate = date) })
+				}
+				onAction(AddEditScreenAction.ToggleDatePickerVisibility(null))
+			},
+			onDismiss = { onAction(AddEditScreenAction.ToggleDatePickerVisibility(null)) }
 		)
 	}
 	if (state.isFormatDialogVisible) {
@@ -189,6 +292,20 @@ fun AddEditScreen(
 			onDismissRequest = { onAction(AddEditScreenAction.ToggleAcquisitionDialogVisibility) },
 		)
 	}
+	if (state.isReadStatusDialogVisible) {
+		SingleChoiceDialog(
+			selectedOption = state.book.readStatus,
+			displayString = { it.toDisplayString() },
+			onOptionSelected = { onAction(AddEditScreenAction.UpdateBook { copy(readStatus = it) }) },
+			onDismissRequest = { onAction(AddEditScreenAction.ToggleReadStatusDialogVisibility) },
+		)
+	}
+}
+
+private fun calculateSliderSteps(totalPages: Long): Int = when (totalPages) {
+	in 0..1 -> 0
+	in 2..50 -> totalPages.toInt() - 1
+	else -> 50
 }
 
 @PreviewLightDark
