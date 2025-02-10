@@ -4,7 +4,7 @@ INSERT INTO books (
     titlePrefix, title, subtitle,
     coverUri, description,
     publisherId, publicationDate, languageId, totalPages, format,
-    acquisitionType, acquiredFrom, acquiredDate, purchasePrice,
+    acquiredFromId, acquiredDate, purchasePrice,
     readStatus, readPages, startReadingDate, finishedReadingDate, additionalReadingDates,
     seriesId, volume,
     loan, loanToOrFrom, loanedDate, expectedReturnDate,
@@ -14,7 +14,7 @@ INSERT INTO books (
     :titlePrefix, :title, :subtitle,
     :coverUri, :description,
     :publisherId, :publicationDate, :languageId, :totalPages, :format,
-    :acquisitionType, :acquiredFrom, :acquiredDate, :purchasePrice,
+    :acquiredFromId, :acquiredDate, :purchasePrice,
     :readStatus, :readPages, :startReadingDate, :finishedReadingDate, :additionalReadingDates,
     :seriesId, :volume,
     :loan, :loanToOrFrom, :loanedDate, :expectedReturnDate,
@@ -50,8 +50,8 @@ INSERT INTO languages(name)
 VALUES (:name);
 
 insertAcquiredFrom:
-INSERT INTO acquiredFrom(name)
-VALUES (:name);
+INSERT INTO acquiredFrom(name, acquisitionType)
+VALUES (:name, :acquisitionType);
 
 insertSeries:
 INSERT INTO series(

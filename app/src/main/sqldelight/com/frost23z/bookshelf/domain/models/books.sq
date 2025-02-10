@@ -1,5 +1,4 @@
 import android.net.Uri;
-import com.frost23z.bookshelf.domain.models.AcquisitionType;
 import com.frost23z.bookshelf.domain.models.BookFormat;
 import com.frost23z.bookshelf.domain.models.Loan;
 import com.frost23z.bookshelf.domain.models.ReadingStatus;
@@ -31,10 +30,9 @@ CREATE TABLE books (
     totalPages INTEGER,
     format TEXT AS BookFormat,
     -- -------------------
-    acquisitionType TEXT AS AcquisitionType,
-    acquiredFrom TEXT,
+    acquiredFromId TEXT,
     acquiredDate TEXT AS LocalDate,
-    purchasePrice REAL,
+    purchasePrice INTEGER,
     -- -------------------
     readStatus TEXT AS ReadingStatus,
     readPages INTEGER,
@@ -56,5 +54,6 @@ CREATE TABLE books (
     FOREIGN KEY(shelfId) REFERENCES shelves(id) ON DELETE SET NULL,
     FOREIGN KEY(publisherId) REFERENCES publishers(id) ON DELETE SET NULL,
     FOREIGN KEY(languageId) REFERENCES languages(id) ON DELETE SET NULL,
+    FOREIGN KEY(acquiredFromId) REFERENCES acquiredFrom(id) ON DELETE SET NULL,
     FOREIGN KEY(seriesId) REFERENCES series(id) ON DELETE SET NULL
 );

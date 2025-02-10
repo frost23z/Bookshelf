@@ -5,7 +5,7 @@ SET
     titlePrefix = :titlePrefix, title = :title, subtitle = :subtitle,
     coverUri = :coverUri, description = :description,
     publisherId = :publisherId, publicationDate = :publicationDate, languageId = :languageId, totalPages = :totalPages, format = :format,
-    acquisitionType = :acquisitionType, acquiredFrom = :acquiredFrom, acquiredDate = :acquiredDate, purchasePrice = :purchasePrice,
+    acquiredFromId = :acquiredFrom, acquiredDate = :acquiredDate, purchasePrice = :purchasePrice,
     readStatus = :readStatus, readPages = :readPages, startReadingDate = :startReadingDate, finishedReadingDate = :finishedReadingDate, additionalReadingDates = :additionalReadingDates,
     seriesId = :seriesId, volume = :volume,
     loan = :loan, loanToOrFrom = :loanToOrFrom, loanedDate = :loanedDate, expectedReturnDate = :expectedReturnDate,
@@ -27,11 +27,6 @@ UPDATE tags
 SET name = :name
 WHERE id = :id;
 
-updateBookTag:
-UPDATE mapperBooksTags
-SET tagId = :tagId
-WHERE bookId = :bookId AND tagId = :tagId;
-
 updateShelf:
 UPDATE shelves
 SET name = :name
@@ -49,7 +44,8 @@ WHERE id = :id;
 
 updateAcquiredFrom:
 UPDATE acquiredFrom
-SET name = :name
+SET
+    name = :name, acquisitionType = :acquisitionType
 WHERE id = :id;
 
 updateSeries:
