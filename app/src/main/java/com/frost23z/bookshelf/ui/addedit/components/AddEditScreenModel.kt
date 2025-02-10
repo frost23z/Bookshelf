@@ -1,7 +1,5 @@
-package com.frost23z.bookshelf.ui.addedit
+package com.frost23z.bookshelf.ui.addedit.components
 
-import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenAction
-import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenState
 import com.frost23z.bookshelf.ui.core.components.ScreenModel
 import kotlinx.coroutines.flow.update
 
