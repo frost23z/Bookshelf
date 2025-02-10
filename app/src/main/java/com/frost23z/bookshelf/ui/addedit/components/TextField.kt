@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
@@ -42,7 +43,7 @@ fun TextField(
 	enabled: Boolean = true,
 	readOnly: Boolean = false,
 	textStyle: TextStyle = TextStyle.textFieldStyle().copy(color = MaterialTheme.colorScheme.onBackground),
-	keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+	keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, imeAction = ImeAction.Next),
 	keyboardActions: KeyboardActions = KeyboardActions.Default,
 	singleLine: Boolean = true,
 	maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,

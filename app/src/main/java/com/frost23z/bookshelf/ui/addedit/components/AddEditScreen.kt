@@ -33,13 +33,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.frost23z.bookshelf.domain.models.AcquisitionType
+import com.frost23z.bookshelf.ui.addedit.models.DatePickerFor
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
@@ -53,7 +53,6 @@ fun AddEditScreen(
 	onAction: (AddEditScreenAction) -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	val keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, imeAction = ImeAction.Next)
 	val animatedValue by animateFloatAsState(
 		targetValue = state.book.readPages?.toFloat() ?: 0f,
 		animationSpec = tween(durationMillis = 500),
@@ -73,7 +72,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.title,
 					onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(title = it) }) },
-					keyboardOptions = keyboardOptions,
 					label = "Title",
 					leadingIcon = Icons.Outlined.Title
 				)
@@ -81,7 +79,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.subtitle ?: "",
 					onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(subtitle = it) }) },
-					keyboardOptions = keyboardOptions,
 					label = "Subtitle"
 				)
 			}
@@ -91,7 +88,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.publisher,
 					onValueChange = { onAction(AddEditScreenAction.UpdatePublisher(it)) },
-					keyboardOptions = keyboardOptions,
 					label = "Publisher",
 					leadingIcon = Icons.Outlined.Publish
 				)
@@ -99,7 +95,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.publicationDate?.toString() ?: "",
 					onValueChange = { },
-					keyboardOptions = keyboardOptions,
 					label = "Publication Date",
 					placeholder = "YYYY-MM-DD",
 					leadingIcon = Icons.Outlined.CalendarToday,
@@ -111,7 +106,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.language,
 					onValueChange = { onAction(AddEditScreenAction.UpdateLanguage(it)) },
-					keyboardOptions = keyboardOptions,
 					label = "Language",
 					leadingIcon = Icons.Outlined.Language
 				)
@@ -123,7 +117,7 @@ fun AddEditScreen(
 							onAction(AddEditScreenAction.UpdateBook { copy(totalPages = it.toLongOrNull()) })
 						}
 					},
-					keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Number),
+					keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
 					label = "Total Pages",
 					leadingIcon = Icons.Outlined.AutoStories
 				)
@@ -131,7 +125,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.format?.toDisplayString() ?: "",
 					onValueChange = { },
-					keyboardOptions = keyboardOptions,
 					label = "Format",
 					leadingIcon = Icons.AutoMirrored.Outlined.Note,
 					trailingIcon = if (state.datePickerFor == DatePickerFor.PUBLICATION_DATE) expandLess else expandMore,
@@ -145,14 +138,9 @@ fun AddEditScreen(
 				TextField(
 					value = state.acquisition?.toDisplayString() ?: "",
 					onValueChange = { },
-					keyboardOptions = keyboardOptions,
 					label = "Acquired Via",
 					leadingIcon = Icons.Outlined.Source,
-					trailingIcon = if (state.isAcquisitionDialogVisible) {
-						Icons.Outlined.ExpandLess
-					} else {
-						Icons.Outlined.ExpandMore
-					},
+					trailingIcon = if (state.isAcquisitionDialogVisible) expandLess else expandMore,
 					trailingIconClick = { onAction(AddEditScreenAction.ToggleAcquisitionDialogVisibility) },
 					readOnly = true
 				)
@@ -161,14 +149,12 @@ fun AddEditScreen(
 					TextField(
 						value = state.acquiredFrom,
 						onValueChange = { onAction(AddEditScreenAction.UpdateAcquiredFrom(it)) },
-						keyboardOptions = keyboardOptions,
 						label = if (state.acquisition == AcquisitionType.PURCHASED) "Purchased From" else "Received From"
 					)
 					TextFieldSeparator()
 					TextField(
 						value = state.book.acquiredDate?.toString() ?: "",
 						onValueChange = { },
-						keyboardOptions = keyboardOptions,
 						label = if (state.acquisition == AcquisitionType.PURCHASED) "Purchased Date" else "Received Date",
 						placeholder = "YYYY-MM-DD",
 						leadingIcon = Icons.Outlined.CalendarToday,
@@ -181,7 +167,7 @@ fun AddEditScreen(
 						TextField(
 							value = state.book.purchasePrice?.toString() ?: "",
 							onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(purchasePrice = it.toLongOrNull()) }) },
-							keyboardOptions = keyboardOptions.copy(keyboardType = KeyboardType.Number),
+							keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
 							label = "Purchase Price"
 						)
 					}
@@ -193,14 +179,9 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.readStatus?.toDisplayString() ?: "",
 					onValueChange = { },
-					keyboardOptions = keyboardOptions,
 					label = "Read Status",
 					leadingIcon = Icons.Outlined.AutoStories,
-					trailingIcon = if (state.isReadStatusDialogVisible) {
-						Icons.Outlined.ExpandLess
-					} else {
-						Icons.Outlined.ExpandMore
-					},
+					trailingIcon = if (state.isReadStatusDialogVisible) expandLess else expandMore,
 					trailingIconClick = { onAction(AddEditScreenAction.ToggleReadStatusDialogVisibility) },
 					readOnly = true
 				)
@@ -237,7 +218,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.startReadingDate?.toString() ?: "",
 					onValueChange = { },
-					keyboardOptions = keyboardOptions,
 					label = "Started Reading On",
 					placeholder = "YYYY-MM-DD",
 					leadingIcon = Icons.Outlined.CalendarToday,
@@ -248,7 +228,6 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.finishedReadingDate?.toString() ?: "",
 					onValueChange = { },
-					keyboardOptions = keyboardOptions,
 					label = "Finished Reading On",
 					placeholder = "YYYY-MM-DD",
 					leadingIcon = Icons.Outlined.CalendarToday,
