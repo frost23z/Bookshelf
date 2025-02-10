@@ -7,6 +7,8 @@ sqldelight = "2.0.2"
 datetime = "0.6.1"
 koin = "4.1.0-Beta5"
 serialization-json = "1.8.0"
+coil = "3.1.0"
+ucrop = "2.2.10"
 
 [libraries]
 ktlint-core = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
@@ -21,12 +23,20 @@ sqldelight-coroutines-extensions = { group = "app.cash.sqldelight", name = "coro
 sqldelight-paging-extensions = { group = "app.cash.sqldelight", name = "androidx-paging3-extensions", version.ref = "sqldelight" }
 sqldelight-dialects-sql = { group = "app.cash.sqldelight", name = "sqlite-3-38-dialect", version.ref = "sqldelight" }
 
+# koin
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android" }
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose" }
 koin-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation" }
 koin-startup = { group = "io.insert-koin", name = "koin-androidx-startup" }
 koin-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager" }
+
+# coil
+coil-bom = { group = "io.coil-kt.coil3", name = "coil-bom", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp" }
+
+ucrop = { group = "com.github.yalantis", name = "ucrop", version.ref = "ucrop" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -40,3 +50,4 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 kotlinx = ["datetime", "serialization-json"]
 sqldelight = ["sqldelight-driver", "sqldelight-coroutines-extensions", "sqldelight-paging-extensions", "sqldelight-dialects-sql"]
 koin = ["koin-android", "koin-compose", "koin-compose-navigation", "koin-startup", "koin-workmanager"]
+coil = ["coil-compose", "coil-network-okhttp"]

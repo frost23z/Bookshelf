@@ -54,6 +54,10 @@ dependencies {
 	implementation(platform(libs.koin.bom))
 	implementation(libs.bundles.koin)
 
+	implementation(platform(libs.coil.bom))
+	implementation(libs.bundles.coil)
+	implementation(libs.ucrop)
+
 	testImplementation(testdebug.junit)
 	androidTestImplementation(testdebug.bundles.androidTest)
 	androidTestImplementation(platform(jetpack.compose.bom))
