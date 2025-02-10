@@ -5,6 +5,13 @@ import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.domain.models.Books
 import com.frost23z.bookshelf.ui.core.models.booksInit
 
+enum class DatePickerFor {
+	PUBLICATION_DATE,
+	ACQUIRED_DATE,
+	START_READING_DATE,
+	FINISHED_READING_DATE
+}
+
 @Immutable
 data class AddEditScreenState(
 	val book: Books = booksInit(),
@@ -13,7 +20,8 @@ data class AddEditScreenState(
 	val language: String = "",
 	val acquisition: AcquisitionType? = null,
 	val acquiredFrom: String = "",
-	val isDatePickerVisible: Boolean = false,
+	val datePickerFor: DatePickerFor? = null,
 	val isFormatDialogVisible: Boolean = false,
-	val isAcquisitionDialogVisible: Boolean = false
+	val isAcquisitionDialogVisible: Boolean = false,
+	val isReadStatusDialogVisible: Boolean = false,
 )

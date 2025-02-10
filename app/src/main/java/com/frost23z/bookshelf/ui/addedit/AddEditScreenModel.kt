@@ -13,10 +13,13 @@ class AddEditScreenModel : ScreenModel<AddEditScreenState>(AddEditScreenState())
 			is AddEditScreenAction.UpdateLanguage -> updateState { copy(language = action.language, hasUnsavedChanges = true) }
 			is AddEditScreenAction.UpdateAcquisition -> updateState { copy(acquisition = action.acquisition, hasUnsavedChanges = true) }
 			is AddEditScreenAction.UpdateAcquiredFrom -> updateState { copy(acquiredFrom = action.acquiredFrom, hasUnsavedChanges = true) }
-			AddEditScreenAction.ToggleDatePickerVisibility -> updateState { copy(isDatePickerVisible = !isDatePickerVisible) }
+			is AddEditScreenAction.ToggleDatePickerVisibility -> updateState { copy(datePickerFor = action.datePickerFor) }
 			AddEditScreenAction.ToggleFormatDialogVisibility -> updateState { copy(isFormatDialogVisible = !isFormatDialogVisible) }
 			AddEditScreenAction.ToggleAcquisitionDialogVisibility -> updateState {
 				copy(isAcquisitionDialogVisible = !isAcquisitionDialogVisible)
+			}
+			AddEditScreenAction.ToggleReadStatusDialogVisibility -> updateState {
+				copy(isReadStatusDialogVisible = !isReadStatusDialogVisible)
 			}
 		}
 	}

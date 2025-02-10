@@ -14,9 +14,11 @@ sealed class AddEditScreenAction {
 
 	data class UpdateAcquiredFrom(val acquiredFrom: String) : AddEditScreenAction()
 
-	data object ToggleDatePickerVisibility : AddEditScreenAction()
+	data class ToggleDatePickerVisibility(val datePickerFor: DatePickerFor?) : AddEditScreenAction()
 
 	data object ToggleFormatDialogVisibility : AddEditScreenAction()
 
 	data object ToggleAcquisitionDialogVisibility : AddEditScreenAction()
+
+	data object ToggleReadStatusDialogVisibility : AddEditScreenAction()
 }
