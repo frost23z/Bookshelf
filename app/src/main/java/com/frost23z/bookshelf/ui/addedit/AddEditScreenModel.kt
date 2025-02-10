@@ -1,38 +1,22 @@
 package com.frost23z.bookshelf.ui.addedit
 
-import com.frost23z.bookshelf.domain.models.Books
+import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenAction
+import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenState
 import com.frost23z.bookshelf.ui.core.components.ScreenModel
-import com.frost23z.bookshelf.ui.core.models.UIState
 import kotlinx.coroutines.flow.update
 
-class AddEditScreenModel : ScreenModel<UIState.AddEdit>(UIState.AddEdit()) {
-	fun updateBook(update: Books.() -> Books) {
-		mutableState.update {
-			it.copy(book = it.book.update(), hasUnsavedChanges = true)
+class AddEditScreenModel : ScreenModel<AddEditScreenState>(AddEditScreenState()) {
+	fun onAction(action: AddEditScreenAction) {
+		when (action) {
+			is AddEditScreenAction.UpdateBook -> updateState { copy(book = action.updateBook(book), hasUnsavedChanges = true) }
+			is AddEditScreenAction.UpdatePublisher -> updateState { copy(publisher = action.publisher, hasUnsavedChanges = true) }
+			is AddEditScreenAction.UpdateLanguage -> updateState { copy(language = action.language, hasUnsavedChanges = true) }
+			AddEditScreenAction.ToggleDatePickerVisibility -> updateState { copy(isDatePickerVisible = !isDatePickerVisible) }
+			AddEditScreenAction.ToggleFormatDialogVisibility -> updateState { copy(isFormatDialogVisible = !isFormatDialogVisible) }
 		}
 	}
 
-	fun updatePublisher(publisher: String) {
-		mutableState.update {
-			it.copy(publisher = publisher, hasUnsavedChanges = true)
-		}
-	}
-
-	fun updateLanguage(language: String) {
-		mutableState.update {
-			it.copy(language = language, hasUnsavedChanges = true)
-		}
-	}
-
-	fun toggleDatePickerVisibility() {
-		mutableState.update {
-			it.copy(isDatePickerVisible = !it.isDatePickerVisible)
-		}
-	}
-
-	fun toggleFormatDialogVisibility() {
-		mutableState.update {
-			it.copy(isFormatDialogVisible = !it.isFormatDialogVisible)
-		}
+	private fun updateState(update: AddEditScreenState.() -> AddEditScreenState) {
+		mutableState.update { it.update() }
 	}
 }
