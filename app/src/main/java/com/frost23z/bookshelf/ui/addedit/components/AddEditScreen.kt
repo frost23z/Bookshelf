@@ -2,6 +2,9 @@ package com.frost23z.bookshelf.ui.addedit.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +12,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Note
@@ -18,31 +23,40 @@ import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.InsertPhoto
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Publish
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material.icons.outlined.Source
 import androidx.compose.material.icons.outlined.Title
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.domain.models.AcquisitionType
+import com.frost23z.bookshelf.ui.addedit.models.CoverSelectionState
 import com.frost23z.bookshelf.ui.addedit.models.DatePickerFor
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
+import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
+import com.frost23z.bookshelf.ui.core.constants.IconSize
 import com.frost23z.bookshelf.ui.core.models.toDisplayString
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
 import kotlin.math.roundToLong
@@ -65,8 +79,50 @@ fun AddEditScreen(
 	LazyColumn(
 		modifier = modifier.fillMaxSize(),
 		contentPadding = PaddingValues(16.dp),
-		verticalArrangement = Arrangement.spacedBy(16.dp)
+		verticalArrangement = Arrangement.spacedBy(16.dp),
+		horizontalAlignment = Alignment.CenterHorizontally
 	) {
+		item(key = "CoverSection") {
+			if (state.book.coverUri == null) {
+				Box(
+					modifier = Modifier
+						.size(120.dp, 180.dp)
+						.clip(RoundedCornerShape(8.dp))
+						.clickable { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) }
+						.background(MaterialTheme.colorScheme.secondaryContainer),
+					contentAlignment = Alignment.Center
+				) {
+					Icon(icon = Icons.Outlined.InsertPhoto, iconSize = IconSize.XXLarge)
+				}
+			} else {
+				Image(
+					painter = rememberAsyncImagePainter(
+						model = state.book.coverUri
+					),
+					contentDescription = "Selected cover image",
+					contentScale = ContentScale.Crop,
+					modifier = Modifier
+						.size(120.dp, 180.dp)
+						.clip(RoundedCornerShape(8.dp))
+						.clickable { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },
+				)
+			}
+
+			if (state.book.coverUri == null) {
+				TextButton(onClick = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },) {
+					Text(text = "Select Image")
+				}
+			} else {
+				Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+					TextButton(onClick = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },) {
+						Text(text = "Change Image")
+					}
+					TextButton(onClick = { onAction(AddEditScreenAction.UpdateBook { copy(coverUri = null) }) },) {
+						Text(text = "Remove Image")
+					}
+				}
+			}
+		}
 		item(key = "TitleSection") {
 			TextFieldGroupContainer {
 				TextField(
@@ -238,6 +294,20 @@ fun AddEditScreen(
 			}
 		}
 		item(key = "DataPreview") { Text("Book: $state") }
+	}
+
+	when (state.coverSelectionState) {
+		CoverSelectionState.SELECT_SOURCE -> {
+			CoverSourceDialog(
+				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+				onPickFromGallery = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.OPEN_GALLERY)) },
+				onTakePhoto = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.OPEN_CAMERA)) },
+				onConfirm = { },
+				onCancel = {},
+				onUrlOptionSelected = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.ENTER_URL)) }
+			)
+		}
+		else -> {}
 	}
 
 	if (state.datePickerFor != null) {
