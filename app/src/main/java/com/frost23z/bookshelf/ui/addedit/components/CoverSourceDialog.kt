@@ -28,8 +28,6 @@ import com.frost23z.bookshelf.ui.core.constants.IconSize
 @Composable
 fun CoverSourceDialog(
 	onDismissRequest: () -> Unit,
-	onConfirm: () -> Unit,
-	onCancel: (() -> Unit)? = null,
 	onPickFromGallery: () -> Unit,
 	onTakePhoto: () -> Unit,
 	onUrlOptionSelected: () -> Unit,
@@ -40,8 +38,6 @@ fun CoverSourceDialog(
 		iconSize = IconSize.Large,
 		title = "Select cover source",
 		onDismissRequest = onDismissRequest,
-		onConfirm = onConfirm,
-		onCancel = onCancel,
 		modifier = modifier
 	) {
 		val coverSourceOptions = listOf(

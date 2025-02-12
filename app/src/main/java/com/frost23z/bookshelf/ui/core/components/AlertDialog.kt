@@ -36,8 +36,8 @@ fun AlertDialog(
 	confirmButtonEnabled: Boolean = true,
 	confirmButtonText: String = "OK",
 	cancelButtonText: String = "Cancel",
-	onConfirm: () -> Unit,
-	onCancel: (() -> Unit)? = null,
+	onConfirm: (() -> Unit)? = null,
+	onCancel: (() -> Unit)? = if (onConfirm == null) onDismissRequest else null,
 	content: @Composable () -> Unit
 ) {
 	Dialog(
@@ -79,16 +79,14 @@ fun AlertDialog(
 					}
 					content()
 					Row(
-						modifier = Modifier.fillMaxWidth(),
+						modifier = Modifier.fillMaxWidth().padding(ContentPadding),
 						horizontalArrangement = Arrangement.spacedBy(Padding.Small, Alignment.End),
 					) {
-						if (onCancel != null) {
-							TextButton(onClick = onCancel) {
-								Text(cancelButtonText)
-							}
+						if (onCancel != null && onConfirm != null) {
+							TextButton(onClick = onCancel) { Text(cancelButtonText) }
 						}
-						TextButton(onClick = onConfirm, enabled = confirmButtonEnabled) {
-							Text(confirmButtonText)
+						if (onConfirm != null) {
+							TextButton(onClick = onConfirm, enabled = confirmButtonEnabled) { Text(confirmButtonText) }
 						}
 					}
 				}
@@ -104,7 +102,7 @@ internal val DialogMaxWidth = 560.dp
 private val DialogPadding = PaddingValues(all = 24.dp)
 private val IconPadding = PaddingValues(bottom = 16.dp)
 private val TitlePadding = PaddingValues(bottom = 16.dp)
-private val ContentPadding = PaddingValues(bottom = 24.dp)
+private val ContentPadding = PaddingValues(top = 8.dp)
 
 @Preview
 @Composable

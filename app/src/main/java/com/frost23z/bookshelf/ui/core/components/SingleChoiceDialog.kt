@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
@@ -15,10 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -34,28 +35,28 @@ inline fun <reified T : Enum<T>> SingleChoiceDialog(
 	properties: DialogProperties = DialogProperties()
 ) {
 	val enumEntries = enumValues<T>().toList()
-	var selected by rememberSaveable { mutableStateOf(selectedOption) }
 
 	AlertDialog(
 		onDismissRequest = onDismissRequest,
 		properties = properties,
 		modifier = modifier,
-		confirmButtonEnabled = selected != null,
-		onConfirm = {
-			selected?.let { onOptionSelected(it) }
-			onDismissRequest()
-		},
 		onCancel = { onDismissRequest() }
 	) {
 		Column {
 			enumEntries.forEach { value ->
 				Row(
 					verticalAlignment = Alignment.CenterVertically,
-					modifier = Modifier.clickable { selected = value }
+					modifier = Modifier.clip(shape = RoundedCornerShape(8.dp)).clickable {
+						onOptionSelected(value)
+						onDismissRequest()
+					}
 				) {
 					RadioButton(
-						selected = value == selected,
-						onClick = { selected = value }
+						selected = value == selectedOption,
+						onClick = {
+							onOptionSelected(value)
+							onDismissRequest()
+						}
 					)
 					Spacer(modifier = Modifier.width(8.dp))
 					Text(
