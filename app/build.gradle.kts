@@ -47,6 +47,7 @@ dependencies {
 	implementation(jetpack.bundles.core)
 	implementation(platform(jetpack.compose.bom))
 	implementation(jetpack.bundles.compose)
+	implementation(jetpack.bundles.camera)
 
 	implementation(libs.bundles.kotlinx)
 	implementation(libs.bundles.sqldelight)

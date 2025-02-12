@@ -3,6 +3,7 @@ coreKtx = "1.15.0"
 lifecycle = "2.8.7"
 activity-compose = "1.10.0"
 compose-bom = "2025.01.01"
+camera = "1.4.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -18,8 +19,15 @@ ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 
+# camera
+camera = { group = "androidx.camera", name = "camera-camera2", version.ref = "camera" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camera" }
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
+camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "camera" }
+
 [plugins]
 
 [bundles]
 core = ["core-ktx", "lifecycle-runtime-ktx", "activity-compose"]
 compose = ["animation-graphics", "material3", "materialIcons", "ui", "ui-graphics", "ui-tooling-preview"]
+camera = ["camera", "camera-lifecycle", "camera-view", "camera-extensions"]
