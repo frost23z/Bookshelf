@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -30,6 +31,7 @@ fun AlertDialog(
 	onDismissRequest: () -> Unit,
 	properties: DialogProperties = DialogProperties(),
 	icon: ImageVector? = null,
+	iconSize: Dp = 24.dp,
 	title: String? = null,
 	confirmButtonEnabled: Boolean = true,
 	confirmButtonText: String = "OK",
@@ -56,7 +58,7 @@ fun AlertDialog(
 						Box(
 							Modifier.padding(IconPadding).align(Alignment.CenterHorizontally)
 						) {
-							Icon(icon = icon)
+							Icon(icon = icon, iconSize = iconSize)
 						}
 					}
 					title?.let {
