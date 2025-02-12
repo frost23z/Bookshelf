@@ -46,10 +46,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.domain.models.AcquisitionType
+import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.models.CoverSelectionState
 import com.frost23z.bookshelf.ui.addedit.models.DatePickerFor
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
@@ -300,14 +304,24 @@ fun AddEditScreen(
 		CoverSelectionState.SELECT_SOURCE -> {
 			CoverSourceDialog(
 				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
-				onPickFromGallery = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.OPEN_GALLERY)) },
 				onTakePhoto = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.OPEN_CAMERA)) },
-				onConfirm = { },
-				onCancel = {},
+				onPickFromGallery = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.OPEN_GALLERY)) },
 				onUrlOptionSelected = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.ENTER_URL)) }
 			)
 		}
 		else -> {}
+	}
+
+	if (state.coverSelectionState == CoverSelectionState.OPEN_CAMERA) {
+		Dialog(
+			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+			properties = DialogProperties(usePlatformDefaultWidth = false)
+		) {
+			CameraScreen { uri ->
+				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE))
+			}
+		}
 	}
 
 	if (state.datePickerFor != null) {
