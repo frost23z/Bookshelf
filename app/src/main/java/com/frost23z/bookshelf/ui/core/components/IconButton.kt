@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 
 /**
  * A customizable IconButton composable that integrates with the custom [Icon] composable.
@@ -48,7 +49,7 @@ fun IconButton(
 	iconSize: Dp = 24.dp,
 	iconTint: Color = LocalContentColor.current,
 	tooltip: String? = null,
-	buttonSize: Dp = 48.dp
+	buttonSize: Dp = 2 * iconSize
 ) {
 	TooltipBox(
 		positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
