@@ -9,13 +9,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.frost23z.bookshelf.R
+import com.frost23z.bookshelf.ui.addedit.components.AddEditScreen
+import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.NavigationBarItemData
 import com.frost23z.bookshelf.ui.core.components.NavigationBarItemScreen
-import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
 import kotlinx.serialization.Serializable
+import org.koin.compose.koinInject
 
 @Serializable
 object AddEditScreen : NavigationBarItemScreen {
@@ -33,7 +37,14 @@ object AddEditScreen : NavigationBarItemScreen {
 		Scaffold(
 			topBar = { TopAppBar(title = { Text("Add/Edit") }) }
 		) { innerPadding ->
-			EmptyScreen(message = "AddEditScreen", modifier = Modifier.padding(innerPadding))
+			val screenModel = koinInject<AddEditScreenModel>()
+			val state by screenModel.state.collectAsStateWithLifecycle()
+
+			AddEditScreen(
+				state = state,
+				onAction = screenModel::onAction,
+				modifier = Modifier.padding(innerPadding)
+			)
 		}
 	}
 }
