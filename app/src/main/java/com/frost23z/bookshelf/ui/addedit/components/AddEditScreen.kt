@@ -50,10 +50,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
+import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
 import com.frost23z.bookshelf.ui.addedit.models.CoverSelectionState
 import com.frost23z.bookshelf.ui.addedit.models.DatePickerFor
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
@@ -318,6 +318,18 @@ fun AddEditScreen(
 			properties = DialogProperties(usePlatformDefaultWidth = false)
 		) {
 			CameraScreen { uri ->
+				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
+			}
+		}
+	}
+
+	if (state.coverSelectionState == CoverSelectionState.CROP_IMAGE) {
+		Dialog(
+			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+			properties = DialogProperties(usePlatformDefaultWidth = false)
+		) {
+			CropImage(state.book.coverUri!!) { uri ->
 				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
 				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE))
 			}
