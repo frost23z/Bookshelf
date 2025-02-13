@@ -54,6 +54,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
+import com.frost23z.bookshelf.ui.addedit.components.camera.ImagePicker
 import com.frost23z.bookshelf.ui.addedit.models.CoverSelectionState
 import com.frost23z.bookshelf.ui.addedit.models.DatePickerFor
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
@@ -113,15 +114,15 @@ fun AddEditScreen(
 			}
 
 			if (state.book.coverUri == null) {
-				TextButton(onClick = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },) {
+				TextButton(onClick = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) }) {
 					Text(text = "Select Image")
 				}
 			} else {
 				Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-					TextButton(onClick = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },) {
+					TextButton(onClick = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) }) {
 						Text(text = "Change Image")
 					}
-					TextButton(onClick = { onAction(AddEditScreenAction.UpdateBook { copy(coverUri = null) }) },) {
+					TextButton(onClick = { onAction(AddEditScreenAction.UpdateBook { copy(coverUri = null) }) }) {
 						Text(text = "Remove Image")
 					}
 				}
@@ -309,23 +310,31 @@ fun AddEditScreen(
 				onUrlOptionSelected = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.ENTER_URL)) }
 			)
 		}
-		else -> {}
-	}
 
-	if (state.coverSelectionState == CoverSelectionState.OPEN_CAMERA) {
-		Dialog(
-			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
-			properties = DialogProperties(usePlatformDefaultWidth = false)
-		) {
-			CameraScreen { uri ->
-				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
-				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
+		CoverSelectionState.NONE -> {}
+		CoverSelectionState.OPEN_CAMERA ->
+			Dialog(
+				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+				properties = DialogProperties(usePlatformDefaultWidth = false)
+			) {
+				CameraScreen { uri ->
+					onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+					onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
+				}
 			}
-		}
-	}
 
-	if (state.coverSelectionState == CoverSelectionState.CROP_IMAGE) {
-		Dialog(
+		CoverSelectionState.OPEN_GALLERY ->
+			Dialog(
+				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+				properties = DialogProperties(usePlatformDefaultWidth = false)
+			) {
+				ImagePicker { uri ->
+					onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+					onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
+				}
+			}
+		CoverSelectionState.ENTER_URL -> TODO()
+		CoverSelectionState.CROP_IMAGE -> Dialog(
 			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
 			properties = DialogProperties(usePlatformDefaultWidth = false)
 		) {
