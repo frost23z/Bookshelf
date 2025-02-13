@@ -102,7 +102,7 @@ internal val DialogMaxWidth = 560.dp
 private val DialogPadding = PaddingValues(all = 24.dp)
 private val IconPadding = PaddingValues(bottom = 16.dp)
 private val TitlePadding = PaddingValues(bottom = 16.dp)
-private val ContentPadding = PaddingValues(top = 8.dp)
+private val ContentPadding = PaddingValues(top = 16.dp)
 
 @Preview
 @Composable

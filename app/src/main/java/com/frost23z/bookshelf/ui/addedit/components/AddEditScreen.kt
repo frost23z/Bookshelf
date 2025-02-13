@@ -55,6 +55,7 @@ import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
 import com.frost23z.bookshelf.ui.addedit.components.camera.ImagePicker
+import com.frost23z.bookshelf.ui.addedit.components.camera.ImageUrlInputDialog
 import com.frost23z.bookshelf.ui.addedit.models.CoverSelectionState
 import com.frost23z.bookshelf.ui.addedit.models.DatePickerFor
 import com.frost23z.bookshelf.ui.core.components.DatePickerModal
@@ -93,8 +94,13 @@ fun AddEditScreen(
 					modifier = Modifier
 						.size(120.dp, 180.dp)
 						.clip(RoundedCornerShape(8.dp))
-						.clickable { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) }
-						.background(MaterialTheme.colorScheme.secondaryContainer),
+						.clickable {
+							onAction(
+								AddEditScreenAction.UpdateCoverSelectionState(
+									CoverSelectionState.SELECT_SOURCE
+								)
+							)
+						}.background(MaterialTheme.colorScheme.secondaryContainer),
 					contentAlignment = Alignment.Center
 				) {
 					Icon(icon = Icons.Outlined.InsertPhoto, iconSize = IconSize.XXLarge)
@@ -109,7 +115,13 @@ fun AddEditScreen(
 					modifier = Modifier
 						.size(120.dp, 180.dp)
 						.clip(RoundedCornerShape(8.dp))
-						.clickable { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },
+						.clickable {
+							onAction(
+								AddEditScreenAction.UpdateCoverSelectionState(
+									CoverSelectionState.SELECT_SOURCE
+								)
+							)
+						},
 				)
 			}
 
@@ -266,7 +278,9 @@ fun AddEditScreen(
 						onValueChange = { onAction(AddEditScreenAction.UpdateBook { copy(readPages = it.roundToLong()) }) },
 						valueRange = 0f..(state.book.totalPages ?: 0).toFloat(),
 						steps = calculateSliderSteps(state.book.totalPages ?: 0),
-						modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
+						modifier = Modifier
+							.weight(1f)
+							.padding(horizontal = 8.dp)
 					)
 					Text(text = state.book.totalPages?.toString() ?: "0")
 					IconButton(
@@ -302,6 +316,7 @@ fun AddEditScreen(
 	}
 
 	when (state.coverSelectionState) {
+		CoverSelectionState.NONE -> {}
 		CoverSelectionState.SELECT_SOURCE -> {
 			CoverSourceDialog(
 				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
@@ -310,30 +325,32 @@ fun AddEditScreen(
 				onUrlOptionSelected = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.ENTER_URL)) }
 			)
 		}
-
-		CoverSelectionState.NONE -> {}
-		CoverSelectionState.OPEN_CAMERA ->
-			Dialog(
-				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
-				properties = DialogProperties(usePlatformDefaultWidth = false)
-			) {
-				CameraScreen { uri ->
-					onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
-					onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
-				}
+		CoverSelectionState.OPEN_CAMERA -> Dialog(
+			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+			properties = DialogProperties(usePlatformDefaultWidth = false)
+		) {
+			CameraScreen { uri ->
+				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
 			}
-
-		CoverSelectionState.OPEN_GALLERY ->
-			Dialog(
-				onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
-				properties = DialogProperties(usePlatformDefaultWidth = false)
-			) {
-				ImagePicker { uri ->
-					onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
-					onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
-				}
+		}
+		CoverSelectionState.OPEN_GALLERY -> Dialog(
+			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+			properties = DialogProperties(usePlatformDefaultWidth = false)
+		) {
+			ImagePicker { uri ->
+				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
 			}
-		CoverSelectionState.ENTER_URL -> TODO()
+		}
+		// TODO: Crop Dialog not showing for some reason
+		CoverSelectionState.ENTER_URL -> ImageUrlInputDialog(
+			onDismiss = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
+			onUriEntered = { uri ->
+				onAction(AddEditScreenAction.UpdateBook { copy(coverUri = uri) })
+				onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.CROP_IMAGE))
+			}
+		)
 		CoverSelectionState.CROP_IMAGE -> Dialog(
 			onDismissRequest = { onAction(AddEditScreenAction.UpdateCoverSelectionState(CoverSelectionState.NONE)) },
 			properties = DialogProperties(usePlatformDefaultWidth = false)
