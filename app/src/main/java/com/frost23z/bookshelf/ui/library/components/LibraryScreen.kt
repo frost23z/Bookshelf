@@ -11,7 +11,7 @@ fun LibraryScreen(
 	onEvent: (LibraryScreenEvent) -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	LazyColumn {
+	LazyColumn(modifier = modifier) {
 		items(state.library) { book ->
 			LibraryListViewItem(
 				headlineContent = book.title,

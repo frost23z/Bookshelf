@@ -43,6 +43,7 @@ fun LibraryListViewItem(
 		overlineContent = overlineContent,
 		supportingContent = supportingContent,
 		leadingContent = {
+			// TODO: This uses Subcomposition, which should be avoided in high-performance scenarios like LazyRow/LazyColumn.  If performance degrades, consider optimizing or finding an alternative approach.
 			SubcomposeAsyncImage(
 				model = ImageRequest
 					.Builder(LocalContext.current)
