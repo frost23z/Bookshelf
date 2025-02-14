@@ -2,7 +2,6 @@ package com.frost23z.bookshelf.ui.addedit.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +28,7 @@ import androidx.compose.material.icons.outlined.Publish
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material.icons.outlined.Source
 import androidx.compose.material.icons.outlined.Title
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -50,7 +51,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.rememberAsyncImagePainter
+import coil3.compose.SubcomposeAsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
@@ -89,29 +92,25 @@ fun AddEditScreen(
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		item(key = "CoverSection") {
-			if (state.book.coverUri == null) {
-				Box(
-					modifier = Modifier
-						.size(120.dp, 180.dp)
-						.clip(RoundedCornerShape(8.dp))
-						.clickable {
-							onEvent(AddEditScreenEvent.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE))
-						}.background(MaterialTheme.colorScheme.secondaryContainer),
-					contentAlignment = Alignment.Center
-				) {
-					Icon(icon = Icons.Outlined.InsertPhoto, iconSize = IconSize.XXLarge)
-				}
-			} else {
-				Image(
-					painter = rememberAsyncImagePainter(
-						model = state.book.coverUri
-					),
-					contentDescription = "Selected cover image",
+			Box(
+				modifier = Modifier
+					.size(120.dp, 180.dp)
+					.clip(RoundedCornerShape(8.dp))
+					.clickable {
+						onEvent(AddEditScreenEvent.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE))
+					}.background(MaterialTheme.colorScheme.secondaryContainer),
+				contentAlignment = Alignment.Center
+			) {
+				SubcomposeAsyncImage(
+					model = ImageRequest
+						.Builder(LocalContext.current)
+						.data(state.book.coverUri)
+						.crossfade(true)
+						.build(),
+					contentDescription = "Book Cover",
+					loading = { CircularProgressIndicator() },
+					error = { Icon(icon = Icons.Outlined.InsertPhoto, iconSize = IconSize.XXLarge) },
 					contentScale = ContentScale.Crop,
-					modifier = Modifier
-						.size(120.dp, 180.dp)
-						.clip(RoundedCornerShape(8.dp))
-						.clickable { onEvent(AddEditScreenEvent.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) },
 				)
 			}
 
