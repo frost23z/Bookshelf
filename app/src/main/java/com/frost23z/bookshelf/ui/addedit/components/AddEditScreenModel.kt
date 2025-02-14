@@ -4,20 +4,20 @@ import com.frost23z.bookshelf.ui.core.components.ScreenModel
 import kotlinx.coroutines.flow.update
 
 class AddEditScreenModel : ScreenModel<AddEditScreenState>(AddEditScreenState()) {
-	fun onAction(action: AddEditScreenAction) {
-		when (action) {
-			is AddEditScreenAction.UpdateBook -> updateState { copy(book = action.updateBook(book), hasUnsavedChanges = true) }
-			is AddEditScreenAction.UpdateCoverSelectionState -> updateState { copy(coverSelectionState = action.coverSelectionState) }
-			is AddEditScreenAction.UpdatePublisher -> updateState { copy(publisher = action.publisher, hasUnsavedChanges = true) }
-			is AddEditScreenAction.UpdateLanguage -> updateState { copy(language = action.language, hasUnsavedChanges = true) }
-			is AddEditScreenAction.UpdateAcquisition -> updateState { copy(acquisition = action.acquisition, hasUnsavedChanges = true) }
-			is AddEditScreenAction.UpdateAcquiredFrom -> updateState { copy(acquiredFrom = action.acquiredFrom, hasUnsavedChanges = true) }
-			is AddEditScreenAction.ToggleDatePickerVisibility -> updateState { copy(datePickerFor = action.datePickerFor) }
-			AddEditScreenAction.ToggleFormatDialogVisibility -> updateState { copy(isFormatDialogVisible = !isFormatDialogVisible) }
-			AddEditScreenAction.ToggleAcquisitionDialogVisibility -> updateState {
+	fun onEvent(event: AddEditScreenEvent) {
+		when (event) {
+			is AddEditScreenEvent.UpdateBook -> updateState { copy(book = event.updateBook(book), hasUnsavedChanges = true) }
+			is AddEditScreenEvent.UpdateCoverSelectionState -> updateState { copy(coverSelectionState = event.coverSelectionState) }
+			is AddEditScreenEvent.UpdatePublisher -> updateState { copy(publisher = event.publisher, hasUnsavedChanges = true) }
+			is AddEditScreenEvent.UpdateLanguage -> updateState { copy(language = event.language, hasUnsavedChanges = true) }
+			is AddEditScreenEvent.UpdateAcquisition -> updateState { copy(acquisition = event.acquisition, hasUnsavedChanges = true) }
+			is AddEditScreenEvent.UpdateAcquiredFrom -> updateState { copy(acquiredFrom = event.acquiredFrom, hasUnsavedChanges = true) }
+			is AddEditScreenEvent.ToggleDatePickerVisibility -> updateState { copy(datePickerFor = event.datePickerFor) }
+			AddEditScreenEvent.ToggleFormatDialogVisibility -> updateState { copy(isFormatDialogVisible = !isFormatDialogVisible) }
+			AddEditScreenEvent.ToggleAcquisitionDialogVisibility -> updateState {
 				copy(isAcquisitionDialogVisible = !isAcquisitionDialogVisible)
 			}
-			AddEditScreenAction.ToggleReadStatusDialogVisibility -> updateState {
+			AddEditScreenEvent.ToggleReadStatusDialogVisibility -> updateState {
 				copy(isReadStatusDialogVisible = !isReadStatusDialogVisible)
 			}
 		}

@@ -51,9 +51,7 @@ object LibraryScreen : NavigationBarItemScreen {
 					subtitle = "Add some books to your library to get started",
 					modifier = Modifier.padding(innerPadding)
 				)
-				else -> {
-					LibraryScreen(state = state, onAction = screenModel::onAction, modifier = Modifier.padding(innerPadding))
-				}
+				else -> LibraryScreen(state = state, onEvent = screenModel::onEvent, modifier = Modifier.padding(innerPadding))
 			}
 		}
 	}

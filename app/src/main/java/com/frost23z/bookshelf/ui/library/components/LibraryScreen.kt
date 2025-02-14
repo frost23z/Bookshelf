@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun LibraryScreen(
 	state: LibraryScreenState,
-	onAction: (LibraryScreenAction) -> Unit,
+	onEvent: (LibraryScreenEvent) -> Unit,
 	modifier: Modifier = Modifier
 ) {
 	LazyColumn {

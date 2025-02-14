@@ -4,7 +4,7 @@ import com.frost23z.bookshelf.ui.core.components.ScreenModel
 import kotlinx.coroutines.flow.update
 
 class LibraryScreenModel : ScreenModel<LibraryScreenState>(LibraryScreenState()) {
-	fun onAction(action: LibraryScreenAction) {
+	fun onEvent(event: LibraryScreenEvent) {
 	}
 
 	private fun updateState(update: LibraryScreenState.() -> LibraryScreenState) {

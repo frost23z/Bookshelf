@@ -42,7 +42,7 @@ object AddEditScreen : NavigationBarItemScreen {
 
 			AddEditScreen(
 				state = state,
-				onAction = screenModel::onAction,
+				onEvent = screenModel::onEvent,
 				modifier = Modifier.padding(innerPadding)
 			)
 		}
