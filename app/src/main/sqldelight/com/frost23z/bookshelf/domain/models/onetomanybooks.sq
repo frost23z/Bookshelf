@@ -1,5 +1,4 @@
 import com.frost23z.bookshelf.domain.models.AcquisitionType;
-import com.frost23z.bookshelf.domain.models.PublicationFrequency;
 import kotlinx.datetime.LocalDate;
 
 CREATE TABLE shelves (
@@ -29,6 +28,5 @@ CREATE TABLE series (
     description TEXT,
     latestOwnedVolume INTEGER DEFAULT NULL,
     totalVolumes INTEGER,
-    publicationFrequency TEXT AS PublicationFrequency,
     firstPublicationDate TEXT AS LocalDate
 );

@@ -7,7 +7,7 @@ import kotlin.Int;
 import kotlin.Pair;
 import kotlin.String;
 import kotlin.collections.List;
-import kotlin.collections.MutableSet;
+import kotlin.collections.Set;
 import kotlinx.datetime.LocalDate;
 
 CREATE TABLE books (
@@ -49,7 +49,7 @@ CREATE TABLE books (
     expectedReturnDate TEXT AS LocalDate,
     -- -------------------
     notes TEXT DEFAULT NULL,
-    quotes TEXT AS MutableSet<Pair<Int, String>>,
+    quotes TEXT AS Set<Pair<Int, String>>,
     -- -------------------
     FOREIGN KEY(shelfId) REFERENCES shelves(id) ON DELETE SET NULL,
     FOREIGN KEY(publisherId) REFERENCES publishers(id) ON DELETE SET NULL,
