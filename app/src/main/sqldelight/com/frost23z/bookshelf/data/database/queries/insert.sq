@@ -55,7 +55,7 @@ VALUES (:name, :acquisitionType);
 
 insertSeries:
 INSERT INTO series(
-    title, description, totalVolumes, publicationFrequency, firstPublicationDate
+    title, description, totalVolumes, firstPublicationDate
 ) VALUES (
-    :title, :description, :totalVolumes, :publicationFrequency, :firstPublicationDate
+    :title, :description, :totalVolumes, :firstPublicationDate
 );

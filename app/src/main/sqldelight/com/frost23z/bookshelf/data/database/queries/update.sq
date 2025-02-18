@@ -51,5 +51,5 @@ WHERE id = :id;
 updateSeries:
 UPDATE series
 SET
-    title = :title, description = :description, totalVolumes = :totalVolumes, publicationFrequency = :publicationFrequency, firstPublicationDate = :firstPublicationDate
+    title = :title, description = :description, totalVolumes = :totalVolumes, firstPublicationDate = :firstPublicationDate
 WHERE id = :id;
