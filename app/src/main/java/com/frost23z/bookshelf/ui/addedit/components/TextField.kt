@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
@@ -37,8 +38,8 @@ import com.frost23z.bookshelf.ui.core.constants.textFieldStyle
 
 @Composable
 fun TextField(
-	value: String,
-	onValueChange: (String) -> Unit,
+	value: TextFieldValue,
+	onValueChange: (TextFieldValue) -> Unit,
 	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	readOnly: Boolean = false,
@@ -91,7 +92,7 @@ fun TextField(
 @Composable
 private fun TextFieldDecorationBox(
 	innerTextField: @Composable () -> Unit,
-	value: String,
+	value: TextFieldValue,
 	label: String?,
 	labelTextStyle: TextStyle,
 	placeholder: String?,
@@ -117,7 +118,7 @@ private fun TextFieldDecorationBox(
 				)
 			}
 			Box {
-				if (value.isEmpty() && placeholder != null) {
+				if (value.text.isEmpty() && placeholder != null) {
 					Text(
 						text = placeholder,
 						color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
@@ -137,16 +138,16 @@ private fun TextFieldPreview() {
 	var value by remember { mutableStateOf("") }
 	TextFieldGroupContainer {
 		TextField(
-			value = value,
-			onValueChange = { value = it },
+			value = TextFieldValue(value),
+			onValueChange = { value = it.text },
 			label = "Label",
 			leadingIcon = Icons.Outlined.Title,
 			trailingIcon = Icons.Outlined.Title
 		)
 		TextFieldSeparator()
 		TextField(
-			value = value,
-			onValueChange = { value = it },
+			value = TextFieldValue(value),
+			onValueChange = { value = it.text },
 			label = "Label",
 			placeholder = "Placeholder",
 			leadingIcon = Icons.Outlined.People,
