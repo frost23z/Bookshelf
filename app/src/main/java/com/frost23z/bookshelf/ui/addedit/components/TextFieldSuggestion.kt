@@ -49,7 +49,10 @@ fun TextFieldSuggestion(
 	) {
 		TextField(
 			value = value,
-			onValueChange = onValueChange,
+			onValueChange = {
+				onValueChange(it)
+				isFocused = true
+			},
 			label = label,
 			placeholder = placeholder,
 			leadingIcon = leadingIcon,
