@@ -38,8 +38,8 @@ import com.frost23z.bookshelf.ui.core.constants.textFieldStyle
 
 @Composable
 fun TextField(
-	value: TextFieldValue,
-	onValueChange: (TextFieldValue) -> Unit,
+	value: String,
+	onValueChange: (String) -> Unit,
 	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	readOnly: Boolean = false,
@@ -92,7 +92,7 @@ fun TextField(
 @Composable
 private fun TextFieldDecorationBox(
 	innerTextField: @Composable () -> Unit,
-	value: TextFieldValue,
+	value: String,
 	label: String?,
 	labelTextStyle: TextStyle,
 	placeholder: String?,
@@ -118,7 +118,7 @@ private fun TextFieldDecorationBox(
 				)
 			}
 			Box {
-				if (value.text.isEmpty() && placeholder != null) {
+				if (value.isEmpty() && placeholder != null) {
 					Text(
 						text = placeholder,
 						color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
@@ -138,16 +138,16 @@ private fun TextFieldPreview() {
 	var value by remember { mutableStateOf("") }
 	TextFieldGroupContainer {
 		TextField(
-			value = TextFieldValue(value),
-			onValueChange = { value = it.text },
+			value = value,
+			onValueChange = { value = it },
 			label = "Label",
 			leadingIcon = Icons.Outlined.Title,
 			trailingIcon = Icons.Outlined.Title
 		)
 		TextFieldSeparator()
 		TextField(
-			value = TextFieldValue(value),
-			onValueChange = { value = it.text },
+			value = value,
+			onValueChange = { value = it },
 			label = "Label",
 			placeholder = "Placeholder",
 			leadingIcon = Icons.Outlined.People,
