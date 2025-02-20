@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.ui.addedit.components
 
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -15,14 +16,13 @@ import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextFieldSuggestion(
-	value: TextFieldValue,
-	onValueChange: (TextFieldValue) -> Unit,
+	value: String,
+	onValueChange: (String) -> Unit,
 	label: String? = null,
 	placeholder: String? = label,
 	leadingIcon: ImageVector? = null,
@@ -34,8 +34,8 @@ fun TextFieldSuggestion(
 ) {
 	var isFocused by rememberSaveable { mutableStateOf(false) }
 
-	val filteredSuggestions = rememberSaveable(suggestion, value.text) {
-		suggestion.filter { it.contains(value.text, ignoreCase = true) }
+	val filteredSuggestions = rememberSaveable(suggestion, value) {
+		suggestion.filter { it.contains(value, ignoreCase = true) }
 	}
 
 	val isMenuExpanded = filteredSuggestions.isNotEmpty() && isFocused
@@ -63,17 +63,14 @@ fun TextFieldSuggestion(
 		ExposedDropdownMenu(
 			expanded = isMenuExpanded,
 			onDismissRequest = { isFocused = false },
+			modifier = Modifier.heightIn(max = 200.dp)
 		) {
 			filteredSuggestions.forEach { suggestion ->
 				DropdownMenuItem(
 					text = { Text(suggestion) },
 					onClick = {
-						onValueChange(
-							TextFieldValue(
-								text = suggestion,
-								selection = TextRange(suggestion.length)
-							)
-						)
+						onValueChange(suggestion)
+						isFocused = false
 					}
 				)
 			}
