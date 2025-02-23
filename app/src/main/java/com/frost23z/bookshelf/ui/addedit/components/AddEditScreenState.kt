@@ -10,14 +10,13 @@ import com.frost23z.bookshelf.ui.core.models.booksInit
 @Immutable
 data class AddEditScreenState(
 	val book: Books = booksInit(),
-	val hasUnsavedChanges: Boolean = false,
 	val coverSelectionState: CoverSelectionState = CoverSelectionState.NONE,
 	val publisher: String = "",
+	val publisherSuggestions: List<String> = emptyList(),
 	val language: String = "",
 	val acquisition: AcquisitionType? = null,
 	val acquiredFrom: String = "",
 	val datePickerFor: DatePickerFor? = null,
-	val isFormatDialogVisible: Boolean = false,
-	val isAcquisitionDialogVisible: Boolean = false,
-	val isReadStatusDialogVisible: Boolean = false,
+	val dialogFor: DialogFor? = null,
+	val hasUnsavedChanges: Boolean = false
 )

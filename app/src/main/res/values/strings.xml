@@ -25,4 +25,18 @@
     <string name="translator">Translator</string>
     <string name="editor">Editor</string>
     <string name="publisher">Publisher</string>
+    <string name="select_image">Select Image</string>
+    <string name="change_image">Change Image</string>
+    <string name="remove_image">Remove Image</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="publication_date">Publication Date</string>
+    <string name="yyyy_mm_dd">YYYY-MM-DD</string>
+    <string name="language">Language</string>
+    <string name="total_pages">Total Pages</string>
+    <string name="format">Format</string>
+    <string name="acquired_via">Acquired Via</string>
+    <string name="purchase_price">Purchase Price</string>
+    <string name="read_status">Read Status</string>
+    <string name="started_reading_on">Started Reading On</string>
+    <string name="finished_reading_on">Finished Reading On</string>
 </resources>

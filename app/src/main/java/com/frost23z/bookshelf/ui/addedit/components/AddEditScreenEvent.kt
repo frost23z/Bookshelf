@@ -18,11 +18,7 @@ sealed class AddEditScreenEvent {
 
 	data class UpdateAcquiredFrom(val acquiredFrom: String) : AddEditScreenEvent()
 
-	data class ToggleDatePickerVisibility(val datePickerFor: DatePickerFor?) : AddEditScreenEvent()
+	data class ShowDatePickerFor(val datePickerFor: DatePickerFor?) : AddEditScreenEvent()
 
-	data object ToggleFormatDialogVisibility : AddEditScreenEvent()
-
-	data object ToggleAcquisitionDialogVisibility : AddEditScreenEvent()
-
-	data object ToggleReadStatusDialogVisibility : AddEditScreenEvent()
+	data class ShowDialogFor(val dialogFor: DialogFor?) : AddEditScreenEvent()
 }

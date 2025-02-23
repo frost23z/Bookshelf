@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -54,6 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.domain.models.AcquisitionType
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
@@ -66,6 +68,7 @@ import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
 import com.frost23z.bookshelf.ui.core.constants.IconSize
+import com.frost23z.bookshelf.ui.core.constants.Padding
 import com.frost23z.bookshelf.ui.core.models.toDisplayString
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
 import kotlin.math.roundToLong
@@ -87,8 +90,8 @@ fun AddEditScreen(
 
 	LazyColumn(
 		modifier = modifier.fillMaxSize(),
-		contentPadding = PaddingValues(16.dp),
-		verticalArrangement = Arrangement.spacedBy(16.dp),
+		contentPadding = PaddingValues(Padding.Medium),
+		verticalArrangement = Arrangement.spacedBy(Padding.Medium),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		item(key = "CoverSection") {
@@ -116,15 +119,15 @@ fun AddEditScreen(
 
 			if (state.book.coverUri == null) {
 				TextButton(onClick = { onEvent(AddEditScreenEvent.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) }) {
-					Text(text = "Select Image")
+					Text(text = stringResource(R.string.select_image))
 				}
 			} else {
-				Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+				Row(horizontalArrangement = Arrangement.spacedBy(Padding.XSmall)) {
 					TextButton(onClick = { onEvent(AddEditScreenEvent.UpdateCoverSelectionState(CoverSelectionState.SELECT_SOURCE)) }) {
-						Text(text = "Change Image")
+						Text(text = stringResource(R.string.change_image))
 					}
 					TextButton(onClick = { onEvent(AddEditScreenEvent.UpdateBook { copy(coverUri = null) }) }) {
-						Text(text = "Remove Image")
+						Text(text = stringResource(R.string.remove_image))
 					}
 				}
 			}
@@ -134,63 +137,71 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.title,
 					onValueChange = { onEvent(AddEditScreenEvent.UpdateBook { copy(title = it) }) },
-					label = "Title",
+					label = stringResource(R.string.title),
 					leadingIcon = Icons.Outlined.Title
 				)
 				TextFieldSeparator()
 				TextField(
 					value = state.book.subtitle ?: "",
 					onValueChange = { onEvent(AddEditScreenEvent.UpdateBook { copy(subtitle = it) }) },
-					label = "Subtitle"
+					label = stringResource(R.string.subtitle)
 				)
 			}
 		}
 		item(key = "InfoSection") {
 			TextFieldGroupContainer {
-				TextField(
+				TextFieldSuggestion(
 					value = state.publisher,
 					onValueChange = { onEvent(AddEditScreenEvent.UpdatePublisher(it)) },
-					label = "Publisher",
-					leadingIcon = Icons.Outlined.Publish
+					label = stringResource(R.string.publisher),
+					placeholder = stringResource(R.string.publisher),
+					leadingIcon = Icons.Outlined.Publish,
+					suggestion = state.publisherSuggestions
 				)
 				TextFieldSeparator()
 				TextField(
 					value = state.book.publicationDate?.toString() ?: "",
 					onValueChange = { },
-					label = "Publication Date",
-					placeholder = "YYYY-MM-DD",
+					label = stringResource(R.string.publication_date),
+					placeholder = stringResource(R.string.yyyy_mm_dd),
 					leadingIcon = Icons.Outlined.CalendarToday,
 					trailingIcon = if (state.datePickerFor == DatePickerFor.PUBLICATION_DATE) expandLess else expandMore,
-					trailingIconClick = { onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(DatePickerFor.PUBLICATION_DATE)) },
+					trailingIconClick = { onEvent(AddEditScreenEvent.ShowDatePickerFor(DatePickerFor.PUBLICATION_DATE)) },
 					readOnly = true
 				)
 				TextFieldSeparator()
 				TextField(
 					value = state.language,
 					onValueChange = { onEvent(AddEditScreenEvent.UpdateLanguage(it)) },
-					label = "Language",
+					label = stringResource(R.string.language),
 					leadingIcon = Icons.Outlined.Language
 				)
 				TextFieldSeparator()
 				TextField(
 					value = state.book.totalPages?.toString() ?: "",
 					onValueChange = {
-						if (it.length < 5 && it.isDigitsOnly()) {
-							onEvent(AddEditScreenEvent.UpdateBook { copy(totalPages = it.toLongOrNull()) })
+						if (it.isBlank()) {
+							onEvent(AddEditScreenEvent.UpdateBook { copy(totalPages = null, readPages = null) })
+						} else if (it.length < 5 && it.isDigitsOnly()) {
+							if (it.toLong() < (state.book.readPages ?: 0)) {
+								onEvent(AddEditScreenEvent.UpdateBook { copy(totalPages = it.toLong(), readPages = it.toLong()) })
+							} else {
+								onEvent(AddEditScreenEvent.UpdateBook { copy(totalPages = it.toLong()) })
+							}
 						}
 					},
 					keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-					label = "Total Pages",
+					label = stringResource(R.string.total_pages),
 					leadingIcon = Icons.Outlined.AutoStories
 				)
 				TextFieldSeparator()
 				TextField(
 					value = state.book.format?.toDisplayString() ?: "",
 					onValueChange = { },
-					label = "Format",
+					label = stringResource(R.string.format),
 					leadingIcon = Icons.AutoMirrored.Outlined.Note,
 					trailingIcon = if (state.datePickerFor == DatePickerFor.PUBLICATION_DATE) expandLess else expandMore,
-					trailingIconClick = { onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(DatePickerFor.PUBLICATION_DATE)) },
+					trailingIconClick = { onEvent(AddEditScreenEvent.ShowDialogFor(DialogFor.FORMAT)) },
 					readOnly = true
 				)
 			}
@@ -200,10 +211,10 @@ fun AddEditScreen(
 				TextField(
 					value = state.acquisition?.toDisplayString() ?: "",
 					onValueChange = { },
-					label = "Acquired Via",
+					label = stringResource(R.string.acquired_via),
 					leadingIcon = Icons.Outlined.Source,
-					trailingIcon = if (state.isAcquisitionDialogVisible) expandLess else expandMore,
-					trailingIconClick = { onEvent(AddEditScreenEvent.ToggleAcquisitionDialogVisibility) },
+					trailingIcon = if (state.dialogFor == DialogFor.ACQUISITION_METHOD) expandLess else expandMore,
+					trailingIconClick = { onEvent(AddEditScreenEvent.ShowDialogFor(DialogFor.ACQUISITION_METHOD)) },
 					readOnly = true
 				)
 				if (state.acquisition != null) {
@@ -218,10 +229,10 @@ fun AddEditScreen(
 						value = state.book.acquiredDate?.toString() ?: "",
 						onValueChange = { },
 						label = if (state.acquisition == AcquisitionType.PURCHASED) "Purchased Date" else "Received Date",
-						placeholder = "YYYY-MM-DD",
+						placeholder = stringResource(R.string.yyyy_mm_dd),
 						leadingIcon = Icons.Outlined.CalendarToday,
 						trailingIcon = if (state.datePickerFor == DatePickerFor.ACQUIRED_DATE) expandLess else expandMore,
-						trailingIconClick = { onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(DatePickerFor.ACQUIRED_DATE)) },
+						trailingIconClick = { onEvent(AddEditScreenEvent.ShowDatePickerFor(DatePickerFor.ACQUIRED_DATE)) },
 						readOnly = true
 					)
 					if (state.acquisition == AcquisitionType.PURCHASED) {
@@ -230,7 +241,7 @@ fun AddEditScreen(
 							value = state.book.purchasePrice?.toString() ?: "",
 							onValueChange = { onEvent(AddEditScreenEvent.UpdateBook { copy(purchasePrice = it.toLongOrNull()) }) },
 							keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-							label = "Purchase Price"
+							label = stringResource(R.string.purchase_price)
 						)
 					}
 				}
@@ -241,10 +252,10 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.readStatus?.toDisplayString() ?: "",
 					onValueChange = { },
-					label = "Read Status",
+					label = stringResource(R.string.read_status),
 					leadingIcon = Icons.Outlined.AutoStories,
-					trailingIcon = if (state.isReadStatusDialogVisible) expandLess else expandMore,
-					trailingIconClick = { onEvent(AddEditScreenEvent.ToggleReadStatusDialogVisibility) },
+					trailingIcon = if (state.dialogFor == DialogFor.READ_STATUS) expandLess else expandMore,
+					trailingIconClick = { onEvent(AddEditScreenEvent.ShowDialogFor(DialogFor.READ_STATUS)) },
 					readOnly = true
 				)
 				TextFieldSeparator()
@@ -282,21 +293,21 @@ fun AddEditScreen(
 				TextField(
 					value = state.book.startReadingDate?.toString() ?: "",
 					onValueChange = { },
-					label = "Started Reading On",
-					placeholder = "YYYY-MM-DD",
+					label = stringResource(R.string.started_reading_on),
+					placeholder = stringResource(R.string.yyyy_mm_dd),
 					leadingIcon = Icons.Outlined.CalendarToday,
 					trailingIcon = if (state.datePickerFor == DatePickerFor.START_READING_DATE) expandLess else expandMore,
-					trailingIconClick = { onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(DatePickerFor.START_READING_DATE)) },
+					trailingIconClick = { onEvent(AddEditScreenEvent.ShowDatePickerFor(DatePickerFor.START_READING_DATE)) },
 					readOnly = true
 				)
 				TextField(
 					value = state.book.finishedReadingDate?.toString() ?: "",
 					onValueChange = { },
-					label = "Finished Reading On",
-					placeholder = "YYYY-MM-DD",
+					label = stringResource(R.string.finished_reading_on),
+					placeholder = stringResource(R.string.yyyy_mm_dd),
 					leadingIcon = Icons.Outlined.CalendarToday,
 					trailingIcon = if (state.datePickerFor == DatePickerFor.FINISHED_READING_DATE) expandLess else expandMore,
-					trailingIconClick = { onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(DatePickerFor.FINISHED_READING_DATE)) },
+					trailingIconClick = { onEvent(AddEditScreenEvent.ShowDatePickerFor(DatePickerFor.FINISHED_READING_DATE)) },
 					readOnly = true
 				)
 			}
@@ -360,34 +371,38 @@ fun AddEditScreen(
 					DatePickerFor.START_READING_DATE -> onEvent(AddEditScreenEvent.UpdateBook { copy(startReadingDate = date) })
 					DatePickerFor.FINISHED_READING_DATE -> onEvent(AddEditScreenEvent.UpdateBook { copy(finishedReadingDate = date) })
 				}
-				onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(null))
+				onEvent(AddEditScreenEvent.ShowDatePickerFor(null))
 			},
-			onDismiss = { onEvent(AddEditScreenEvent.ToggleDatePickerVisibility(null)) }
+			onDismiss = { onEvent(AddEditScreenEvent.ShowDatePickerFor(null)) }
 		)
 	}
-	if (state.isFormatDialogVisible) {
-		SingleChoiceDialog(
-			selectedOption = state.book.format,
-			displayString = { it.toDisplayString() },
-			onOptionSelected = { onEvent(AddEditScreenEvent.UpdateBook { copy(format = it) }) },
-			onDismissRequest = { onEvent(AddEditScreenEvent.ToggleFormatDialogVisibility) },
-		)
-	}
-	if (state.isAcquisitionDialogVisible) {
-		SingleChoiceDialog(
-			selectedOption = state.acquisition,
-			displayString = { it.toDisplayString() },
-			onOptionSelected = { onEvent(AddEditScreenEvent.UpdateAcquisition(it)) },
-			onDismissRequest = { onEvent(AddEditScreenEvent.ToggleAcquisitionDialogVisibility) },
-		)
-	}
-	if (state.isReadStatusDialogVisible) {
-		SingleChoiceDialog(
-			selectedOption = state.book.readStatus,
-			displayString = { it.toDisplayString() },
-			onOptionSelected = { onEvent(AddEditScreenEvent.UpdateBook { copy(readStatus = it) }) },
-			onDismissRequest = { onEvent(AddEditScreenEvent.ToggleReadStatusDialogVisibility) },
-		)
+	if (state.dialogFor != null) {
+		when (state.dialogFor) {
+			DialogFor.FORMAT -> {
+				SingleChoiceDialog(
+					selectedOption = state.book.format,
+					displayString = { it.toDisplayString() },
+					onOptionSelected = { onEvent(AddEditScreenEvent.UpdateBook { copy(format = it) }) },
+					onDismissRequest = { onEvent(AddEditScreenEvent.ShowDialogFor(null)) }
+				)
+			}
+			DialogFor.ACQUISITION_METHOD -> {
+				SingleChoiceDialog(
+					selectedOption = state.acquisition,
+					displayString = { it.toDisplayString() },
+					onOptionSelected = { onEvent(AddEditScreenEvent.UpdateAcquisition(it)) },
+					onDismissRequest = { onEvent(AddEditScreenEvent.ShowDialogFor(null)) }
+				)
+			}
+			DialogFor.READ_STATUS -> {
+				SingleChoiceDialog(
+					selectedOption = state.book.readStatus,
+					displayString = { it.toDisplayString() },
+					onOptionSelected = { onEvent(AddEditScreenEvent.UpdateBook { copy(readStatus = it) }) },
+					onDismissRequest = { onEvent(AddEditScreenEvent.ShowDialogFor(null)) }
+				)
+			}
+		}
 	}
 }
 

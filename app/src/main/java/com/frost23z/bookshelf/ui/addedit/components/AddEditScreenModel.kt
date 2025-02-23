@@ -12,14 +12,8 @@ class AddEditScreenModel : ScreenModel<AddEditScreenState>(AddEditScreenState())
 			is AddEditScreenEvent.UpdateLanguage -> updateState { copy(language = event.language, hasUnsavedChanges = true) }
 			is AddEditScreenEvent.UpdateAcquisition -> updateState { copy(acquisition = event.acquisition, hasUnsavedChanges = true) }
 			is AddEditScreenEvent.UpdateAcquiredFrom -> updateState { copy(acquiredFrom = event.acquiredFrom, hasUnsavedChanges = true) }
-			is AddEditScreenEvent.ToggleDatePickerVisibility -> updateState { copy(datePickerFor = event.datePickerFor) }
-			AddEditScreenEvent.ToggleFormatDialogVisibility -> updateState { copy(isFormatDialogVisible = !isFormatDialogVisible) }
-			AddEditScreenEvent.ToggleAcquisitionDialogVisibility -> updateState {
-				copy(isAcquisitionDialogVisible = !isAcquisitionDialogVisible)
-			}
-			AddEditScreenEvent.ToggleReadStatusDialogVisibility -> updateState {
-				copy(isReadStatusDialogVisible = !isReadStatusDialogVisible)
-			}
+			is AddEditScreenEvent.ShowDatePickerFor -> updateState { copy(datePickerFor = event.datePickerFor) }
+			is AddEditScreenEvent.ShowDialogFor -> updateState { copy(dialogFor = event.dialogFor) }
 		}
 	}
 
