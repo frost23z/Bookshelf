@@ -33,3 +33,6 @@ SELECT * FROM acquiredFrom WHERE id = :id;
 
 getSeriesById:
 SELECT * FROM series WHERE id = :id;
+
+getLastInsertId:
+SELECT last_insert_rowid();

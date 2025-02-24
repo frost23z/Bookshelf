@@ -42,7 +42,7 @@ INSERT INTO shelves(name)
 VALUES (:name);
 
 insertPublisher:
-INSERT INTO publishers(name)
+INSERT OR IGNORE INTO publishers(name)
 VALUES (:name);
 
 insertLanguage:

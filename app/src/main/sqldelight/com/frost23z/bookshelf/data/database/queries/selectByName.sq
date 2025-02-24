@@ -1,0 +1,4 @@
+getPublisherId:
+SELECT id
+FROM publishers
+WHERE name = :name;
