@@ -2,6 +2,7 @@ package com.frost23z.bookshelf.di
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.EnumColumnAdapter
+import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.frost23z.bookshelf.data.AppDatabase
 import com.frost23z.bookshelf.data.adapters.LocalDateAdapter
@@ -15,7 +16,7 @@ import com.frost23z.bookshelf.domain.models.Series
 import org.koin.dsl.module
 
 val appModule = module {
-	single {
+	single<SqlDriver> {
 		AndroidSqliteDriver(
 			schema = AppDatabase.Schema,
 			context = get(),
