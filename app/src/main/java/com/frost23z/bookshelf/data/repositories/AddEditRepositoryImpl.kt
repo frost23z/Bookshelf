@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.data.repositories
 
+import android.util.Log
 import com.frost23z.bookshelf.data.AppDatabase
 import com.frost23z.bookshelf.domain.models.Books
 import com.frost23z.bookshelf.domain.repositories.AddEditRepository
@@ -10,8 +11,14 @@ class AddEditRepositoryImpl(
 	private val db: AppDatabase,
 	private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AddEditRepository {
-	override suspend fun insert(books: Books) {
+	override suspend fun insert(
+		books: Books,
+		publisher: String,
+	) {
 		db.transaction {
+			db.insertQueries.insertPublisher(publisher)
+			val publisherId = db.selectByNameQueries.getPublisherId(publisher).executeAsOneOrNull()
+				?: db.selectByIdQueries.getLastInsertId().executeAsOne()
 			db.insertQueries.insertBook(
 				shelfId = books.shelfId,
 				isFavorite = books.isFavorite,
@@ -22,7 +29,7 @@ class AddEditRepositoryImpl(
 				subtitle = books.subtitle,
 				coverUri = books.coverUri,
 				description = books.description,
-				publisherId = books.publisherId,
+				publisherId = publisherId,
 				publicationDate = books.publicationDate,
 				languageId = books.languageId,
 				totalPages = books.totalPages,
@@ -44,6 +51,7 @@ class AddEditRepositoryImpl(
 				notes = books.notes,
 				quotes = books.quotes,
 			)
+			Log.d("AddEditRepositoryImpl", "Inserted book with id: ${db.selectByIdQueries.getLastInsertId().executeAsOne()}")
 		}
 	}
 }
