@@ -57,6 +57,8 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.domain.models.AcquisitionType
+import com.frost23z.bookshelf.domain.models.Books
+import com.frost23z.bookshelf.domain.repositories.AddEditRepository
 import com.frost23z.bookshelf.ui.addedit.components.camera.CameraScreen
 import com.frost23z.bookshelf.ui.addedit.components.camera.CropImage
 import com.frost23z.bookshelf.ui.addedit.components.camera.ImagePicker
@@ -415,7 +417,15 @@ private fun calculateSliderSteps(totalPages: Long): Int = when (totalPages) {
 @PreviewLightDark
 @Composable
 private fun AddEditScreenPreview() {
-	val screenModel by remember { mutableStateOf(AddEditScreenModel()) }
+	class FakeAddEditRepository : AddEditRepository {
+		override suspend fun insert(
+			books: Books,
+			publisher: String
+		) {
+			// For preview purposes
+		}
+	}
+	val screenModel by remember { mutableStateOf(AddEditScreenModel(FakeAddEditRepository())) }
 	val state by screenModel.state.collectAsStateWithLifecycle()
 	BookshelfTheme {
 		Surface {
