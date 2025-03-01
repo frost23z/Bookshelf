@@ -21,4 +21,6 @@ sealed class AddEditScreenEvent {
 	data class ShowDatePickerFor(val datePickerFor: DatePickerFor?) : AddEditScreenEvent()
 
 	data class ShowDialogFor(val dialogFor: DialogFor?) : AddEditScreenEvent()
+
+	data object SaveBook : AddEditScreenEvent()
 }
