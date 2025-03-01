@@ -4,6 +4,8 @@ import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -14,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.addedit.components.AddEditScreen
+import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenEvent
 import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.Icon
+import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.NavigationBarItemData
 import com.frost23z.bookshelf.ui.core.components.NavigationBarItemScreen
 import kotlinx.serialization.Serializable
@@ -34,11 +38,19 @@ object AddEditScreen : NavigationBarItemScreen {
 	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	override fun Content() {
+		val screenModel = koinInject<AddEditScreenModel>()
+		val state by screenModel.state.collectAsStateWithLifecycle()
+
 		Scaffold(
-			topBar = { TopAppBar(title = { Text("Add/Edit") }) }
+			topBar = {
+				TopAppBar(title = { Text("Add/Edit") }, actions = {
+					IconButton(
+						icon = Icons.Outlined.Save,
+						onClick = { screenModel.onEvent(AddEditScreenEvent.SaveBook) }
+					)
+				})
+			}
 		) { innerPadding ->
-			val screenModel = koinInject<AddEditScreenModel>()
-			val state by screenModel.state.collectAsStateWithLifecycle()
 
 			AddEditScreen(
 				state = state,
