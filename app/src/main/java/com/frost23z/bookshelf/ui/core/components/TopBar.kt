@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.ui.core.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,13 +42,16 @@ fun TopBar(
 	TopAppBar(
 		title = {
 			when {
-				searchOptions?.query != null -> TextField(
-					value = searchOptions.query,
-					onValueChange = searchOptions.onSearchQueryChange,
-					placeholder = "Search...",
-					trailingIcon = Icons.Outlined.Close,
-					trailingIconClick = { searchOptions.onSearchQueryChange("") }
-				)
+				searchOptions?.query != null -> Box(contentAlignment = Alignment.CenterStart) {
+					TextField(
+						value = searchOptions.query,
+						onValueChange = searchOptions.onSearchQueryChange,
+						placeholder = "Search...",
+						useSpacerIfNoLeadingIcon = false,
+						trailingIcon = Icons.Outlined.Close,
+						trailingIconClick = { searchOptions.onSearchQueryChange("") }
+					)
+				}
 				else -> {
 					Text(text = title)
 				}
@@ -55,7 +60,10 @@ fun TopBar(
 		modifier = modifier,
 		navigationIcon = {
 			when {
-				searchOptions?.query != null -> IconButton(icon = Icons.AutoMirrored.Outlined.ArrowBack, onClick = searchOptions.onCancelSearch)
+				searchOptions?.query != null -> IconButton(
+					icon = Icons.AutoMirrored.Outlined.ArrowBack,
+					onClick = searchOptions.onCancelSearch
+				)
 				else -> navigationIcon?.let { IconButton(icon = navigationIcon.icon, onClick = navigationIcon.onClick) }
 			}
 		},
