@@ -53,6 +53,7 @@ fun TextField(
 	placeholder: String? = label,
 	labelTextStyle: TextStyle = TextStyle.textFieldLabelStyle(),
 	leadingIcon: ImageVector? = null,
+	useSpacerIfNoLeadingIcon: Boolean = true,
 	trailingIcon: ImageVector? = null,
 	trailingIconClick: () -> Unit = {},
 	decorationBox: @Composable (
@@ -66,6 +67,7 @@ fun TextField(
 			placeholder = placeholder,
 			textStyle = textStyle,
 			leadingIcon = leadingIcon,
+			useSpacerIfNoLeadingIcon = useSpacerIfNoLeadingIcon,
 			trailingIcon = trailingIcon,
 			trailingIconClick = trailingIconClick
 		)
@@ -97,6 +99,7 @@ private fun TextFieldDecorationBox(
 	placeholder: String?,
 	textStyle: TextStyle,
 	leadingIcon: ImageVector?,
+	useSpacerIfNoLeadingIcon: Boolean,
 	trailingIcon: ImageVector?,
 	trailingIconClick: () -> Unit
 ) {
@@ -104,7 +107,10 @@ private fun TextFieldDecorationBox(
 		modifier = Modifier.fillMaxWidth(),
 		verticalAlignment = Alignment.CenterVertically
 	) {
-		leadingIcon?.let { Icon(it, containerSize = IconSize.Large) } ?: Spacer(modifier = Modifier.size(IconSize.Large))
+		leadingIcon?.let { Icon(it, containerSize = IconSize.Large) } ?: if (useSpacerIfNoLeadingIcon) {
+			Spacer(modifier = Modifier.size(IconSize.Large))
+		} else {
+		}
 		Column(
 			modifier = Modifier.weight(1f),
 			verticalArrangement = Arrangement.Center
