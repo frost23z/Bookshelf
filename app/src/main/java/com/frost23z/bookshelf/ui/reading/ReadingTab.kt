@@ -1,4 +1,4 @@
-package com.frost23z.bookshelf.ui.more
+package com.frost23z.bookshelf.ui.reading
 
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -12,28 +12,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.core.components.Icon
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemData
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemScreen
+import com.frost23z.bookshelf.ui.core.components.TabOptions
+import com.frost23z.bookshelf.ui.core.components.Tab
 import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-object MoreScreen : NavigationBarItemScreen {
+object ReadingTab : Tab {
 	@OptIn(ExperimentalAnimationGraphicsApi::class)
-	override val navigationItemData: NavigationBarItemData
+	override val navigationItemData: TabOptions
 		@Composable
-		get() = NavigationBarItemData(
-			label = "More",
-			icon = Icon.Animated(AnimatedImageVector.animatedVectorResource(R.drawable.anim_more))
+		get() = TabOptions(
+			label = "Reading",
+			icon = Icon.Animated(AnimatedImageVector.animatedVectorResource(R.drawable.anim_reading))
 		)
 
 	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	override fun Content() {
 		Scaffold(
-			topBar = { TopAppBar(title = { Text("More") }) }
+			topBar = { TopAppBar(title = { Text("Reading") }) }
 		) { innerPadding ->
-			EmptyScreen(message = "MoreScreen", modifier = Modifier.padding(innerPadding))
+			EmptyScreen(message = "ReadingTab", modifier = Modifier.padding(innerPadding))
 		}
 	}
 }

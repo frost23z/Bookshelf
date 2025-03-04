@@ -20,17 +20,19 @@ import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenEvent
 import com.frost23z.bookshelf.ui.addedit.components.AddEditScreenModel
 import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemData
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemScreen
+import com.frost23z.bookshelf.ui.core.components.TabOptions
+import com.frost23z.bookshelf.ui.core.components.Tab
+import com.frost23z.bookshelf.ui.core.navigation.LocalNavigator
+import com.frost23z.bookshelf.ui.core.navigation.NavBarDestinations
 import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 
 @Serializable
-object AddEditScreen : NavigationBarItemScreen {
+object AddEditTab : Tab {
 	@OptIn(ExperimentalAnimationGraphicsApi::class)
-	override val navigationItemData: NavigationBarItemData
+	override val navigationItemData: TabOptions
 		@Composable
-		get() = NavigationBarItemData(
+		get() = TabOptions(
 			label = "Add/Edit",
 			icon = Icon.Animated(AnimatedImageVector.animatedVectorResource(R.drawable.anim_add))
 		)
@@ -41,12 +43,17 @@ object AddEditScreen : NavigationBarItemScreen {
 		val screenModel = koinInject<AddEditScreenModel>()
 		val state by screenModel.state.collectAsStateWithLifecycle()
 
+		val navigator = LocalNavigator.current
+
 		Scaffold(
 			topBar = {
 				TopAppBar(title = { Text("Add/Edit") }, actions = {
 					IconButton(
 						icon = Icons.Outlined.Save,
-						onClick = { screenModel.onEvent(AddEditScreenEvent.SaveBook) }
+						onClick = {
+							screenModel.onEvent(AddEditScreenEvent.SaveBook)
+							navigator.switchTab(NavBarDestinations.Library)
+						}
 					)
 				})
 			}

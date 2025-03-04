@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.core.components.Icon
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemData
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemScreen
+import com.frost23z.bookshelf.ui.core.components.TabOptions
+import com.frost23z.bookshelf.ui.core.components.Tab
 import com.frost23z.bookshelf.ui.core.components.SearchOptions
 import com.frost23z.bookshelf.ui.core.components.TopBar
 import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
@@ -27,11 +27,11 @@ import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 
 @Serializable
-object LibraryScreen : NavigationBarItemScreen {
+object LibraryTab : Tab {
 	@OptIn(ExperimentalAnimationGraphicsApi::class)
-	override val navigationItemData: NavigationBarItemData
+	override val navigationItemData: TabOptions
 		@Composable
-		get() = NavigationBarItemData(
+		get() = TabOptions(
 			label = "Library",
 			icon = Icon.Animated(AnimatedImageVector.animatedVectorResource(R.drawable.anim_library))
 		)
