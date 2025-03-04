@@ -2,7 +2,7 @@ package com.frost23z.bookshelf.ui.core.navigation
 
 import kotlinx.serialization.Serializable
 
-sealed interface NavigationBarDestinations {
+sealed interface NavBarDestinations {
 	@Serializable
 	object Library
 
@@ -19,7 +19,7 @@ sealed interface NavigationBarDestinations {
 	object More
 
 	companion object {
-		val navItems = listOf(
+		val navBarItems = listOf(
 			Library,
 			Reading,
 			AddEdit,

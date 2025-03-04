@@ -21,7 +21,7 @@ fun AppNavHost(
 ) {
 	NavHost(
 		navController = navController,
-		startDestination = NavigationBarDestinations.Library,
+		startDestination = NavBarDestinations.Library,
 		modifier = modifier
 	) {
 		libraryGraph()
@@ -33,7 +33,7 @@ fun AppNavHost(
 }
 
 fun NavGraphBuilder.libraryGraph() {
-	navigation<NavigationBarDestinations.Library>(startDestination = LibraryScreen) {
+	navigation<NavBarDestinations.Library>(startDestination = LibraryScreen) {
 		composable<LibraryScreen> {
 			LibraryScreen()
 		}
@@ -41,7 +41,7 @@ fun NavGraphBuilder.libraryGraph() {
 }
 
 fun NavGraphBuilder.readingGraph() {
-	navigation<NavigationBarDestinations.Reading>(startDestination = ReadingScreen) {
+	navigation<NavBarDestinations.Reading>(startDestination = ReadingScreen) {
 		composable<ReadingScreen> {
 			ReadingScreen()
 		}
@@ -49,7 +49,7 @@ fun NavGraphBuilder.readingGraph() {
 }
 
 fun NavGraphBuilder.addEditGraph() {
-	navigation<NavigationBarDestinations.AddEdit>(startDestination = AddEditScreen) {
+	navigation<NavBarDestinations.AddEdit>(startDestination = AddEditScreen) {
 		composable<AddEditScreen> {
 			AddEditScreen()
 		}
@@ -57,7 +57,7 @@ fun NavGraphBuilder.addEditGraph() {
 }
 
 fun NavGraphBuilder.lentBorrowedGraph() {
-	navigation<NavigationBarDestinations.LentBorrowed>(startDestination = LentScreen) {
+	navigation<NavBarDestinations.LentBorrowed>(startDestination = LentScreen) {
 		composable<LentScreen> {
 			LentScreen()
 		}
@@ -68,7 +68,7 @@ fun NavGraphBuilder.lentBorrowedGraph() {
 }
 
 fun NavGraphBuilder.moreGraph() {
-	navigation<NavigationBarDestinations.More>(startDestination = MoreScreen) {
+	navigation<NavBarDestinations.More>(startDestination = MoreScreen) {
 		composable<MoreScreen> {
 			MoreScreen()
 		}
