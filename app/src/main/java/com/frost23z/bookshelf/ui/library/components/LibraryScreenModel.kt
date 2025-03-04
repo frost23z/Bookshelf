@@ -10,6 +10,9 @@ class LibraryScreenModel(
 	private val repository: LibraryRepository
 ) : ScreenModel<LibraryScreenState>(LibraryScreenState()) {
 	fun onEvent(event: LibraryScreenEvent) {
+		when (event) {
+			is LibraryScreenEvent.UpdateQuery -> updateState { copy(query = event.query) }
+		}
 	}
 
 	private fun updateState(update: LibraryScreenState.() -> LibraryScreenState) {

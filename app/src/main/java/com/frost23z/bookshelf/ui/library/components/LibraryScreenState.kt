@@ -6,5 +6,6 @@ import com.frost23z.bookshelf.domain.models.LibraryBooks
 @Immutable
 data class LibraryScreenState(
 	val isLoading: Boolean = true,
-	val library: List<LibraryBooks> = emptyList()
+	val library: List<LibraryBooks> = emptyList(),
+	val query: String? = null
 )
