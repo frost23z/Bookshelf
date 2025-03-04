@@ -13,9 +13,9 @@ sealed class Icon {
 		constructor(val animatedIcon: AnimatedImageVector) : Icon()
 }
 
-data class NavigationBarItemData(val label: String, val icon: Icon)
+data class TabOptions(val label: String, val icon: Icon)
 
-interface NavigationBarItemScreen : Screen {
-	val navigationItemData: NavigationBarItemData
+interface Tab : Screen {
+	val navigationItemData: TabOptions
 		@Composable get
 }
