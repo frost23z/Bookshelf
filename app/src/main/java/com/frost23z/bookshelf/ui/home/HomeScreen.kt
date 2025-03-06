@@ -1,6 +1,5 @@
 package com.frost23z.bookshelf.ui.home
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,131 +17,87 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.frost23z.bookshelf.ui.addedit.AddEditScreen
+import com.frost23z.bookshelf.ui.addedit.AddEditTab
 import com.frost23z.bookshelf.ui.core.components.Icon
-import com.frost23z.bookshelf.ui.core.components.NavigationBarItemScreen
 import com.frost23z.bookshelf.ui.core.components.Screen
+import com.frost23z.bookshelf.ui.core.components.Tab
 import com.frost23z.bookshelf.ui.core.navigation.AppNavHost
-import com.frost23z.bookshelf.ui.core.navigation.NavigationBarDestinations
+import com.frost23z.bookshelf.ui.core.navigation.LocalNavigator
+import com.frost23z.bookshelf.ui.core.navigation.NavBarDestinations
+import com.frost23z.bookshelf.ui.core.navigation.rememberNavigator
 import com.frost23z.bookshelf.ui.lentborrowed.BorrowedScreen
-import com.frost23z.bookshelf.ui.lentborrowed.LentScreen
-import com.frost23z.bookshelf.ui.library.LibraryScreen
-import com.frost23z.bookshelf.ui.more.MoreScreen
-import com.frost23z.bookshelf.ui.reading.ReadingScreen
+import com.frost23z.bookshelf.ui.lentborrowed.LentTab
+import com.frost23z.bookshelf.ui.library.LibraryTab
+import com.frost23z.bookshelf.ui.more.MoreTab
+import com.frost23z.bookshelf.ui.reading.ReadingTab
 
 object HomeScreen : Screen {
-	@SuppressLint("UnusedContentLambdaTargetStateParameter")
 	@Composable
 	override fun Content() {
-		val navController = rememberNavController()
-		val entry by navController.currentBackStackEntryAsState()
-		val currentDestination = entry?.destination
+		val navigator = rememberNavigator()
 
 		var currentIndex by remember { mutableIntStateOf(0) }
 		var previousIndex by remember { mutableIntStateOf(0) }
 
-		var showSecondaryScreen by remember { mutableStateOf(false) }
-
-		Scaffold(
-			bottomBar = {
-				NavigationBar {
-					NavigationBarDestinations.navItems.forEachIndexed { index, destination ->
-						NavigationBarItem(
-							screen = getCurrentScreen(destination, showSecondaryScreen),
-							selected = currentDestination?.hierarchy?.any {
-								it.hasRoute(destination::class)
-							} == true,
-							onClick = {
-								previousIndex = currentIndex
-								currentIndex = index
-								navigateToDestination(navController, destination)
-								showSecondaryScreen = false
-							},
-							onDoubleClick = {
-								previousIndex = currentIndex
-								currentIndex = index
-								navigateToDestination(
-									navController,
-									destination,
-									true,
-									showSecondaryScreen
-								)
-								showSecondaryScreen =
-									destination == NavigationBarDestinations.LentBorrowed &&
-									!showSecondaryScreen
-							}
-						)
+		CompositionLocalProvider(LocalNavigator provides navigator) {
+			Scaffold(
+				bottomBar = {
+					NavigationBar {
+						NavBarDestinations.navBarItems.forEachIndexed { index, destination ->
+							NavigationBarItem(
+								screen = getCurrentScreen(destination),
+								selected = LocalNavigator.current.isTabSelected(destination),
+								onClick = {
+									navigator.switchTab(destination)
+									previousIndex = currentIndex
+									currentIndex = index
+								}
+							)
+						}
 					}
-				}
-			},
-			contentWindowInsets = WindowInsets(0)
-		) { innerPadding ->
-			AnimatedContent(
-				targetState = currentDestination,
-				transitionSpec = {
-					when {
-						currentIndex == previousIndex -> fadeIn() togetherWith fadeOut()
-						currentIndex > previousIndex -> slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
-						else -> slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
+				},
+				contentWindowInsets = WindowInsets(0)
+			) { innerPadding ->
+				AnimatedContent(
+					targetState = LocalNavigator.current.current,
+					transitionSpec = {
+						when {
+							currentIndex == previousIndex -> fadeIn() togetherWith fadeOut()
+							currentIndex > previousIndex -> slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
+							else -> slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
+						}
 					}
+				) { _ ->
+					AppNavHost(
+						navController = navigator.navController,
+						modifier = Modifier.padding(innerPadding)
+					)
 				}
-			) {
-				AppNavHost(
-					navController = navController,
-					modifier = Modifier.padding(innerPadding)
-				)
 			}
-		}
-	}
-
-	private fun navigateToDestination(
-		navController: NavController,
-		destination: Any,
-		isDoubleClick: Boolean = false,
-		showSecondaryScreen: Boolean = false
-	) {
-		val targetScreen =
-			if (isDoubleClick && destination == NavigationBarDestinations.LentBorrowed) {
-				if (showSecondaryScreen) LentScreen else BorrowedScreen
-			} else {
-				destination
-			}
-		navController.navigate(targetScreen) {
-			popUpTo(navController.graph.findStartDestination().id) {
-				saveState = true
-			}
-			launchSingleTop = true
-			restoreState = true
 		}
 	}
 
 	private fun getCurrentScreen(
 		destination: Any,
 		showSecondaryScreen: Boolean = false
-	): NavigationBarItemScreen = when (destination) {
-		is NavigationBarDestinations.Library -> LibraryScreen
-		is NavigationBarDestinations.Reading -> ReadingScreen
-		is NavigationBarDestinations.AddEdit -> AddEditScreen
-		is NavigationBarDestinations.LentBorrowed -> if (showSecondaryScreen) BorrowedScreen else LentScreen
-		is NavigationBarDestinations.More -> MoreScreen
-		else -> LibraryScreen
+	): Tab = when (destination) {
+		is NavBarDestinations.Library -> LibraryTab
+		is NavBarDestinations.Reading -> ReadingTab
+		is NavBarDestinations.AddEdit -> AddEditTab
+		is NavBarDestinations.LentBorrowed -> if (showSecondaryScreen) BorrowedScreen else LentTab
+		is NavBarDestinations.More -> MoreTab
+		else -> LibraryTab
 	}
 
 	@Composable
 	private fun RowScope.NavigationBarItem(
-		screen: NavigationBarItemScreen,
+		screen: Tab,
 		selected: Boolean,
 		onClick: () -> Unit,
 		onDoubleClick: (() -> Unit)? = null
