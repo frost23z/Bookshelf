@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.core.components.Icon
-import com.frost23z.bookshelf.ui.core.components.TabOptions
 import com.frost23z.bookshelf.ui.core.components.Tab
+import com.frost23z.bookshelf.ui.core.components.TabOptions
 import com.frost23z.bookshelf.ui.core.screen.EmptyScreen
 import kotlinx.serialization.Serializable
 
