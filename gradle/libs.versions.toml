@@ -1,6 +1,6 @@
 [versions]
-agp = "8.8.0"
-kotlin = "2.1.0"
+agp = "8.8.2"
+kotlin = "2.1.10"
 spotless = "7.0.1"
 ktlint = "1.5.0"
 sqldelight = "2.0.2"
