@@ -13,6 +13,11 @@ import com.frost23z.bookshelf.domain.models.AcquiredFrom
 import com.frost23z.bookshelf.domain.models.Books
 import com.frost23z.bookshelf.domain.models.MapperBooksContributors
 import com.frost23z.bookshelf.domain.models.Series
+import com.frost23z.bookshelf.ui.core.navigation.DefaultNavigator
+import com.frost23z.bookshelf.ui.core.navigation.Destination
+import com.frost23z.bookshelf.ui.core.navigation.Navigator
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 
 val appModule = module {
@@ -56,4 +61,8 @@ val appModule = module {
 			)
 		)
 	}
+
+	single<Navigator> { DefaultNavigator(startDestination = Destination.LibraryGraph) }
+
+	single<CoroutineDispatcher> { Dispatchers.IO }
 }
