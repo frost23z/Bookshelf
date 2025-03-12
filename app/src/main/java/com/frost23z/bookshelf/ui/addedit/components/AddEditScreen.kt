@@ -72,7 +72,9 @@ import com.frost23z.bookshelf.ui.core.components.SingleChoiceDialog
 import com.frost23z.bookshelf.ui.core.constants.IconSize
 import com.frost23z.bookshelf.ui.core.constants.Padding
 import com.frost23z.bookshelf.ui.core.models.toDisplayString
+import com.frost23z.bookshelf.ui.core.navigation.Navigator
 import com.frost23z.bookshelf.ui.theme.BookshelfTheme
+import org.koin.compose.koinInject
 import kotlin.math.roundToLong
 
 @Composable
@@ -425,7 +427,8 @@ private fun AddEditScreenPreview() {
 			// For preview purposes
 		}
 	}
-	val screenModel by remember { mutableStateOf(AddEditScreenModel(FakeAddEditRepository())) }
+	val navigator = koinInject<Navigator>()
+	val screenModel by remember { mutableStateOf(AddEditScreenModel(FakeAddEditRepository(), navigator)) }
 	val state by screenModel.state.collectAsStateWithLifecycle()
 	BookshelfTheme {
 		Surface {

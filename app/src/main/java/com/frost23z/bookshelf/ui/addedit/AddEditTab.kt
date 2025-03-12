@@ -22,8 +22,6 @@ import com.frost23z.bookshelf.ui.core.components.Icon
 import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.Tab
 import com.frost23z.bookshelf.ui.core.components.TabOptions
-import com.frost23z.bookshelf.ui.core.navigation.LocalNavigator
-import com.frost23z.bookshelf.ui.core.navigation.NavBarDestinations
 import kotlinx.serialization.Serializable
 import org.koin.compose.koinInject
 
@@ -43,8 +41,6 @@ object AddEditTab : Tab {
 		val screenModel = koinInject<AddEditScreenModel>()
 		val state by screenModel.state.collectAsStateWithLifecycle()
 
-		val navigator = LocalNavigator.current
-
 		Scaffold(
 			topBar = {
 				TopAppBar(title = { Text("Add/Edit") }, actions = {
@@ -52,13 +48,11 @@ object AddEditTab : Tab {
 						icon = Icons.Outlined.Save,
 						onClick = {
 							screenModel.onEvent(AddEditScreenEvent.SaveBook)
-							navigator.switchTab(NavBarDestinations.Library)
 						}
 					)
 				})
 			}
 		) { innerPadding ->
-
 			AddEditScreen(
 				state = state,
 				onEvent = screenModel::onEvent,

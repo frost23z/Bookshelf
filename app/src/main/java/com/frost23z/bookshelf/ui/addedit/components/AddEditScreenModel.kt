@@ -3,11 +3,14 @@ package com.frost23z.bookshelf.ui.addedit.components
 import androidx.lifecycle.viewModelScope
 import com.frost23z.bookshelf.domain.repositories.AddEditRepository
 import com.frost23z.bookshelf.ui.core.components.ScreenModel
+import com.frost23z.bookshelf.ui.core.navigation.Destination
+import com.frost23z.bookshelf.ui.core.navigation.Navigator
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddEditScreenModel(
-	private val repository: AddEditRepository
+	private val repository: AddEditRepository,
+	private val navigator: Navigator
 ) : ScreenModel<AddEditScreenState>(AddEditScreenState()) {
 	fun onEvent(event: AddEditScreenEvent) {
 		when (event) {
@@ -22,6 +25,10 @@ class AddEditScreenModel(
 			AddEditScreenEvent.SaveBook -> viewModelScope.launch {
 				saveBook()
 				updateState { copy(hasUnsavedChanges = false) }
+				navigator.navigate(Destination.LibraryGraph) {
+					popUpTo(Destination.LibraryGraph) { inclusive = true }
+					launchSingleTop = true
+				}
 			}
 		}
 	}
