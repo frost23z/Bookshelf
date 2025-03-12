@@ -8,11 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.frost23z.bookshelf.ui.addedit.AddEditTab
-import com.frost23z.bookshelf.ui.lentborrowed.BorrowedScreen
 import com.frost23z.bookshelf.ui.lentborrowed.LentTab
 import com.frost23z.bookshelf.ui.library.LibraryTab
 import com.frost23z.bookshelf.ui.more.MoreTab
 import com.frost23z.bookshelf.ui.reading.ReadingTab
+import org.koin.compose.koinInject
 
 @Composable
 fun AppNavHost(
@@ -21,7 +21,7 @@ fun AppNavHost(
 ) {
 	NavHost(
 		navController = navController,
-		startDestination = NavBarDestinations.Library,
+		startDestination = koinInject<Navigator>().startDestination,
 		modifier = modifier
 	) {
 		libraryGraph()
@@ -33,43 +33,43 @@ fun AppNavHost(
 }
 
 fun NavGraphBuilder.libraryGraph() {
-	navigation<NavBarDestinations.Library>(startDestination = LibraryTab) {
-		composable<LibraryTab> {
+	navigation<Destination.LibraryGraph>(startDestination = Destination.Library) {
+		composable<Destination.Library> {
 			LibraryTab()
+		}
+		composable<Destination.Detail> {
+			// DetailScreen()
 		}
 	}
 }
 
 fun NavGraphBuilder.readingGraph() {
-	navigation<NavBarDestinations.Reading>(startDestination = ReadingTab) {
-		composable<ReadingTab> {
+	navigation<Destination.ReadingGraph>(startDestination = Destination.Reading) {
+		composable<Destination.Reading> {
 			ReadingTab()
 		}
 	}
 }
 
 fun NavGraphBuilder.addEditGraph() {
-	navigation<NavBarDestinations.AddEdit>(startDestination = AddEditTab) {
-		composable<AddEditTab> {
+	navigation<Destination.AddEditGraph>(startDestination = Destination.AddEdit) {
+		composable<Destination.AddEdit> {
 			AddEditTab()
 		}
 	}
 }
 
 fun NavGraphBuilder.lentBorrowedGraph() {
-	navigation<NavBarDestinations.LentBorrowed>(startDestination = LentTab) {
-		composable<LentTab> {
+	navigation<Destination.LentGraph>(startDestination = Destination.Lent) {
+		composable<Destination.Lent> {
 			LentTab()
-		}
-		composable<BorrowedScreen> {
-			BorrowedScreen()
 		}
 	}
 }
 
 fun NavGraphBuilder.moreGraph() {
-	navigation<NavBarDestinations.More>(startDestination = MoreTab) {
-		composable<MoreTab> {
+	navigation<Destination.MoreGraph>(startDestination = Destination.More) {
+		composable<Destination.More> {
 			MoreTab()
 		}
 	}
