@@ -24,7 +24,7 @@ import com.frost23z.bookshelf.ui.library.components.LibraryScreen
 import com.frost23z.bookshelf.ui.library.components.LibraryScreenEvent
 import com.frost23z.bookshelf.ui.library.components.LibraryScreenModel
 import kotlinx.serialization.Serializable
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
 @Serializable
 object LibraryTab : Tab {
@@ -39,7 +39,7 @@ object LibraryTab : Tab {
 	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	override fun Content() {
-		val screenModel = koinInject<LibraryScreenModel>()
+		val screenModel = koinViewModel<LibraryScreenModel>()
 		val state by screenModel.state.collectAsStateWithLifecycle()
 		Scaffold(
 			topBar = {
