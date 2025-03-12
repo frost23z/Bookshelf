@@ -39,4 +39,5 @@
     <string name="read_status">Read Status</string>
     <string name="started_reading_on">Started Reading On</string>
     <string name="finished_reading_on">Finished Reading On</string>
+    <string name="add">Add</string>
 </resources>
