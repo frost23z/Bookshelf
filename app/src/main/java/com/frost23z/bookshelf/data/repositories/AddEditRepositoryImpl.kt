@@ -4,12 +4,10 @@ import android.util.Log
 import com.frost23z.bookshelf.data.AppDatabase
 import com.frost23z.bookshelf.domain.models.Books
 import com.frost23z.bookshelf.domain.repositories.AddEditRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 class AddEditRepositoryImpl(
 	private val db: AppDatabase,
-	private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+	private val dispatcher: CoroutineDispatcher
 ) : AddEditRepository {
 	override suspend fun insert(
 		books: Books,
