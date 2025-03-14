@@ -45,10 +45,21 @@ class HomeScreenModel(
 		mutableState.update { it.update() }
 	}
 
+	private fun gotoAddBook() {
+		viewModelScope.launch {
+			navigator.navigate(Destination.AddEdit) {
+				launchSingleTop = true
+				restoreState = true
+			}
+		}
+	}
+
 	fun onEvent(event: HomeScreenEvent) {
 		when (event) {
 			HomeScreenEvent.ToggleAddOptionsBottomsheet -> updateState { copy(isAddOptionsVisible = !isAddOptionsVisible) }
 			HomeScreenEvent.ToggleBottomBarVisibility -> updateState { copy(isBottomBarVisible = !isBottomBarVisible) }
+			HomeScreenEvent.AddBook -> gotoAddBook()
+			is HomeScreenEvent.SwitchTab -> TODO()
 		}
 	}
 }
@@ -64,4 +75,8 @@ sealed class HomeScreenEvent {
 	data object ToggleBottomBarVisibility : HomeScreenEvent()
 
 	data object ToggleAddOptionsBottomsheet : HomeScreenEvent()
+
+	data class SwitchTab(val destination: Destination) : HomeScreenEvent()
+
+	data object AddBook : HomeScreenEvent()
 }

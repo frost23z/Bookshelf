@@ -21,16 +21,19 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -64,7 +67,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 object HomeScreen : Screen {
-	@OptIn(ExperimentalAnimationGraphicsApi::class)
+	@OptIn(ExperimentalAnimationGraphicsApi::class, ExperimentalMaterial3Api::class)
 	@Composable
 	override fun Content() {
 		val navController = rememberNavController()
@@ -88,10 +91,18 @@ object HomeScreen : Screen {
 		val screenModel = koinViewModel<HomeScreenModel>()
 		val state by screenModel.state.collectAsStateWithLifecycle()
 
+		val destination = navController.currentBackStackEntryAsState().value?.destination
+		val isLibrary = destination?.hierarchy?.any { it.hasRoute(Destination.Library::class) } == true
+		val isReading = destination?.hierarchy?.any { it.hasRoute(Destination.Reading::class) } == true
+		val isLent = destination?.hierarchy?.any { it.hasRoute(Destination.Lent::class) } == true
+		val isMore = destination?.hierarchy?.any { it.hasRoute(Destination.More::class) } == true
+
+		val showBottomBar = isLibrary || isReading || isLent || isMore
+
 		Scaffold(
 			bottomBar = {
 				AnimatedVisibility(
-					visible = state.isBottomBarVisible,
+					visible = showBottomBar,
 					enter = expandHorizontally(),
 					exit = shrinkVertically()
 				) {
@@ -126,7 +137,7 @@ object HomeScreen : Screen {
 			},
 			floatingActionButton = {
 				AnimatedVisibility(
-					visible = state.isBottomBarVisible,
+					visible = showBottomBar,
 					enter = expandHorizontally(),
 					exit = shrinkVertically()
 				) {
@@ -164,6 +175,18 @@ object HomeScreen : Screen {
 					navController = navController,
 					modifier = Modifier.padding(innerPadding)
 				)
+			}
+		}
+		if (state.isAddOptionsVisible) {
+			ModalBottomSheet(
+				onDismissRequest = { screenModel.onEvent(HomeScreenEvent.ToggleAddOptionsBottomsheet) }
+			) {
+				TextButton(onClick = {
+					screenModel.onEvent(HomeScreenEvent.AddBook)
+					screenModel.onEvent(HomeScreenEvent.ToggleAddOptionsBottomsheet)
+				}) {
+					Text(text = stringResource(R.string.add))
+				}
 			}
 		}
 	}
