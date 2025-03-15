@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.frost23z.bookshelf.ui.addedit.AddEditTab
+import com.frost23z.bookshelf.ui.detail.DetailScreen
 import com.frost23z.bookshelf.ui.lentborrowed.LentTab
 import com.frost23z.bookshelf.ui.library.LibraryTab
 import com.frost23z.bookshelf.ui.more.MoreTab
@@ -38,7 +39,7 @@ fun NavGraphBuilder.libraryGraph() {
 			LibraryTab()
 		}
 		composable<Destination.Detail> {
-			// DetailScreen()
+			DetailScreen()
 		}
 	}
 }
