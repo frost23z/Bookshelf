@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.di
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.db.SqlDriver
@@ -65,4 +66,6 @@ val appModule = module {
 	single<Navigator> { DefaultNavigator(startDestination = Destination.LibraryGraph) }
 
 	single<CoroutineDispatcher> { Dispatchers.IO }
+
+	single<SavedStateHandle> { SavedStateHandle() }
 }
