@@ -10,7 +10,7 @@ sealed interface Destination {
 	data object Library : Destination
 
 	@Serializable
-	data object Detail : Destination
+	data class Detail(val id: Long) : Destination
 
 	@Serializable
 	data object ReadingGraph : Destination
