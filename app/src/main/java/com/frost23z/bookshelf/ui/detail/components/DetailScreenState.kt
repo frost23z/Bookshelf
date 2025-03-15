@@ -5,5 +5,5 @@ import com.frost23z.bookshelf.ui.core.models.booksInit
 
 data class DetailScreenState(
 	val bookID: Long = 0,
-	val books: Books = booksInit()
+	val book: Books = booksInit()
 )
