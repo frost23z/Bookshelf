@@ -21,6 +21,6 @@ fun DetailScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun gf() {
+private fun DetailScreenPreview() {
 	DetailScreen(state = DetailScreenState(), onEvent = {})
 }
