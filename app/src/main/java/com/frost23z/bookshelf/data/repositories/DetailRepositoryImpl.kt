@@ -9,5 +9,5 @@ class DetailRepositoryImpl(
 	private val db: AppDatabase,
 	private val dispatcher: CoroutineDispatcher
 ) : DetailRepository {
-	override suspend fun getBook(bookID: Long): Books = db.selectByIdQueries.getBookById(bookID).executeAsOne()
+	override suspend fun getBook(bookID: Long): Books? = db.selectByIdQueries.getBookById(bookID).executeAsOneOrNull()
 }
