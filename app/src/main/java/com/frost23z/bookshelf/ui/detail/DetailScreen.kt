@@ -1,10 +1,8 @@
 package com.frost23z.bookshelf.ui.detail
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,16 +16,13 @@ import com.frost23z.bookshelf.ui.core.components.Screen
 import com.frost23z.bookshelf.ui.detail.components.DetailScreen
 import com.frost23z.bookshelf.ui.detail.components.DetailScreenEvent
 import com.frost23z.bookshelf.ui.detail.components.DetailScreenModel
-import kotlinx.serialization.Serializable
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
-@Serializable
-class DetailScreen : Screen {
+object DetailScreen : Screen {
 	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	override fun Content() {
-		Log.d("Detail", "Detailjhjjj")
-		val screenModel = koinInject<DetailScreenModel>()
+		val screenModel = koinViewModel<DetailScreenModel>()
 		val state by screenModel.state.collectAsStateWithLifecycle()
 
 		Scaffold(

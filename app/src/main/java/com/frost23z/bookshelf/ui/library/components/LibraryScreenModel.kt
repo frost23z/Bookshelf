@@ -1,6 +1,5 @@
 package com.frost23z.bookshelf.ui.library.components
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.frost23z.bookshelf.domain.repositories.LibraryRepository
 import com.frost23z.bookshelf.ui.core.components.ScreenModel
@@ -19,7 +18,6 @@ class LibraryScreenModel(
 			is LibraryScreenEvent.OpenDetail -> {
 				viewModelScope.launch {
 					navigator.navigate(Destination.Detail(event.bookID))
-					Log.d("LibraryScreenModel", "OpenDetail")
 				}
 			}
 		}

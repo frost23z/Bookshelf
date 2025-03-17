@@ -1,5 +1,6 @@
 package com.frost23z.bookshelf.ui.detail.components
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -34,7 +35,7 @@ class DetailScreenModel(
 
 	init {
 		viewModelScope.launch {
-			repository.getBook(id).let {
+			repository.getBook(id)?.let {
 				updateState { copy(book = it) }
 			}
 		}
