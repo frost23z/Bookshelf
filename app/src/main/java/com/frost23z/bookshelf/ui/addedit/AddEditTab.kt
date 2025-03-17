@@ -23,7 +23,7 @@ import com.frost23z.bookshelf.ui.core.components.IconButton
 import com.frost23z.bookshelf.ui.core.components.Tab
 import com.frost23z.bookshelf.ui.core.components.TabOptions
 import kotlinx.serialization.Serializable
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
 @Serializable
 object AddEditTab : Tab {
@@ -38,7 +38,7 @@ object AddEditTab : Tab {
 	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	override fun Content() {
-		val screenModel = koinInject<AddEditScreenModel>()
+		val screenModel = koinViewModel<AddEditScreenModel>()
 		val state by screenModel.state.collectAsStateWithLifecycle()
 
 		Scaffold(
