@@ -27,7 +27,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -50,6 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import com.frost23z.bookshelf.R
 import com.frost23z.bookshelf.ui.addedit.AddEditTab
 import com.frost23z.bookshelf.ui.core.components.Icon
+import com.frost23z.bookshelf.ui.core.components.NavigationBar
 import com.frost23z.bookshelf.ui.core.components.Screen
 import com.frost23z.bookshelf.ui.core.components.Tab
 import com.frost23z.bookshelf.ui.core.navigation.AppNavHost
