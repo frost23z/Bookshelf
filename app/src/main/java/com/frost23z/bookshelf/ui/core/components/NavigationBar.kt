@@ -5,15 +5,14 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
@@ -21,6 +20,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Rect
@@ -43,16 +43,28 @@ import kotlin.math.sin
 fun NavigationBar(
 	modifier: Modifier = Modifier,
 	containerColor: Color = NavigationBarDefaults.containerColor,
+	fabOnClick: () -> Unit,
+	fabContent: @Composable () -> Unit,
 	content: @Composable (RowScope.() -> Unit)
 ) {
 	val density = LocalDensity.current
-	Row(
-		modifier = modifier
-			.clip(
-				shape = BottomAppBarCutoutShape(radiusPx = with(density) { 40.dp.toPx() })
-			).background(color = containerColor)
-	) {
-		content()
+	Box(){
+		FloatingActionButton(
+			onClick = fabOnClick,
+			containerColor = MaterialTheme.colorScheme.primary,
+			shape = CircleShape,
+			modifier = Modifier.align(Alignment.Center)
+		) {
+			fabContent()
+		}
+		Row(
+			modifier = modifier
+				.clip(
+					shape = BottomAppBarCutoutShape(radiusPx = with(density) { 40.dp.toPx() })
+				).background(color = containerColor)
+		) {
+			content()
+		}
 	}
 }
 
@@ -115,7 +127,19 @@ class BottomAppBarCutoutShape(private val radiusPx: Float) : Shape {
 private fun NavigationBarPreview() {
 	Scaffold(
 		bottomBar = {
-			NavigationBar {
+			NavigationBar(
+				fabOnClick = {},
+				fabContent = {
+					androidx.compose.material3.Icon(
+						rememberAnimatedVectorPainter(
+							animatedImageVector =
+							AnimatedImageVector.animatedVectorResource(R.drawable.anim_add),
+							atEnd = true
+						),
+						contentDescription = "Add"
+					)
+				}
+			) {
 				NavigationBarItem(
 					selected = true,
 					icon = { Icon(Icons.Default.Home) },
@@ -136,24 +160,24 @@ private fun NavigationBarPreview() {
 				)
 			}
 		},
-		floatingActionButton = {
-			FloatingActionButton(
-				onClick = { },
-				containerColor = MaterialTheme.colorScheme.primary,
-				shape = CircleShape,
-				modifier = Modifier.offset(y = 44.dp),
-			) {
-				androidx.compose.material3.Icon(
-					rememberAnimatedVectorPainter(
-						animatedImageVector =
-							AnimatedImageVector.animatedVectorResource(R.drawable.anim_add),
-						atEnd = true
-					),
-					contentDescription = "Add"
-				)
-			}
-		},
-		floatingActionButtonPosition = FabPosition.Center
+//		floatingActionButton = {
+//			FloatingActionButton(
+//				onClick = { },
+//				containerColor = MaterialTheme.colorScheme.primary,
+//				shape = CircleShape,
+//				modifier = Modifier.offset(y = 44.dp),
+//			) {
+//				androidx.compose.material3.Icon(
+//					rememberAnimatedVectorPainter(
+//						animatedImageVector =
+//							AnimatedImageVector.animatedVectorResource(R.drawable.anim_add),
+//						atEnd = true
+//					),
+//					contentDescription = "Add"
+//				)
+//			}
+//		},
+//		floatingActionButtonPosition = FabPosition.Center
 	) { innerPadding ->
 	}
 }
