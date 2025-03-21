@@ -63,20 +63,3 @@ class HomeScreenModel(
 		}
 	}
 }
-
-data class HomeScreenState(
-	val currentTab: Int = Destination.navBarItems.indexOf(Destination.Library),
-	val previousTab: Int = Destination.navBarItems.indexOf(Destination.Library),
-	val isBottomBarVisible: Boolean = true,
-	val isAddOptionsVisible: Boolean = false
-)
-
-sealed class HomeScreenEvent {
-	data object ToggleBottomBarVisibility : HomeScreenEvent()
-
-	data object ToggleAddOptionsBottomsheet : HomeScreenEvent()
-
-	data class SwitchTab(val destination: Destination) : HomeScreenEvent()
-
-	data object AddBook : HomeScreenEvent()
-}
